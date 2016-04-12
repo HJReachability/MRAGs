@@ -1,0 +1,32 @@
+function obs = createObstacle2D(g, obs, obs_type)
+% function obs = createObstacles4D(g, obs, obs_type)
+% Creates an 2D obstacle based on fields in obs
+%
+% Inputs:
+%   g           - grid structure
+%   obs         - obstacle structure
+%   obs_type    - obstacle shape
+%
+% Outputs:
+%   obs         - level set representation of the obstacle (<0 means
+%                   inside)
+%
+% Mo Chen, Sept. 26, 2013
+%
+
+if nargin<3, obs_type = 'rect'; end
+
+switch obs_type
+    case 'rect'
+        % Obstacle in attacker space
+        obs = ones(g.N(1), g.N(2));
+        obs(g.xs{1}>=obs1.xmin-clrc & grid.x<=obs1.xmax+clrc & ...
+            grid.y>=obs1.ymin-clrc & grid.y<=obs1.ymax+clrc) = -1;
+        
+        
+        
+%     case 'circ'
+    otherwise
+        error('Unknown obstacle type!')
+end
+end

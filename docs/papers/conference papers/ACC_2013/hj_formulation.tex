@@ -1,0 +1,187 @@
+\section{Hamilton-Jacobi Reachability}
+\label{sec:hj_formulation}
+
+As discussed in the previous section, there are some difficulties in characterizing the winning zones for the attacking and defending players completely using analytic methods, due to the complex interactions between the two stages of the capture the flag game.  In this section, we describe a computational method for characterizing the winning zones using a Hamilton-Jacobi formulation of reachability analysis for dynamic games \cite{j:mitchell-TAC-2005}.
+
+\subsection{Background on Reachability Analysis Using Hamilton-Jacobi Equations}
+\label{subsec:hj_background}
+
+Reachability analysis using Hamilton-Jacobi equation has its roots in \cite{b:isaacs-1967}, where ideas from optimal control are used to calculate the winning zones for two competing players in a pursuit-evasion game.  It was subsequently discovered that a particular weak solution to the Hamilton-Jacobi partial differential equation (PDE), called the \emph{viscosity solution} \cite{j:Crandall-TAMS-1983}, provide the unique dynamic programming solution of certain continuous time optimal control problems, including two player differential games \cite{j:Evans-IUMJ-1984,b:bardi-1997}.  
+
+The problem studied in this paper falls naturally under the framework of differential games due to the competing objectives of the attacking and defending players.  This allows us to characterize the winning zones as the solution of a time dependent reachable set calculation using Hamilton-Jacobi equations \cite{j:mitchell-TAC-2005}, and take advantage of the accompanying numerical computation tools \cite{j:mitchell-jsc-2008}.  As a further benefit, the solution of this computation allow us to construct approximate winning control policies for the respective players.
+
+In order to characterize the various sets described in Section \ref{sec:problem} as Hamilton-Jacobi reachable sets, some preliminary discussions are needed on the continuous system model and the permissible control policies.  For the rest of this section, we refer to the two players in a differential game as player I and player II.
+
+We assume that the continuous system dynamics is modeled by the ordinary differential equation 
+\begin{equation}
+\label{eq:dynamics}
+\dot{x} = f(x, u, d), \ x(0) = x_0
+\end{equation}
+where $x \in \mathbb{R}^n$ is the system state,  $u$ is the control of player I, $d$ is the control of player II, and $x_0$ is the initial condition.  The input ranges of player I and player II will be denoted by $\mathbb{U}$ and $\mathbb{D}$, respectively.  
+
+Over some finite time horizon $[0, T]$, player I selects controls $u(t), t \in [0,T]$, satisfying $u(t) \in \mathbb{U}$, possibly as a function of the state $x(t)$.  This describes an admissible control policy $\pi(T)$.  We denote by $P(T)$ the set of admissible control policies for player I.   Similarly, player II selects controls $d(t), t \in [0,T]$, satisfying $d(t) \in \mathbb{D}$.  However, we allow this selection to be a function of both the state $x(t)$ and the control of player I $u(t)$.  In general, this confers a slight advantage for player II.  We denote by $\Gamma(T)$ the set of admissible control policies $\gamma(T)$ for player II.
+
+In this paper, we will be specifically interested in the following reachable set calculation: suppose we are given sets $R, A \subset \mathbb{R}^n$ and time horizon $[0, T]$, find the set of initial conditions $x_0 \in \mathbb{R}^n$ for which there exists some choice of player I control policy $\pi(T) \in P(T)$, such that regardless of the choice of player II control policy $\gamma(t) \in \Gamma(T)$, the state trajectory $x(\cdot)$ under model (\ref{eq:dynamics}) satisfies $x(t) \in R$ for some $t \in [0,T]$ and $x(s) \notin A$, $\forall s \in [0,t]$.  Namely, we would like to compute the set of initial conditions that can be controlled into $R$ within finite time by player I, while avoiding $A$ at all times, regardless of the control policy of player II.  We denote this set by $\mathcal{RA}_T(R,A)$, and refer to it as the \emph{reach-avoid} set over $[0,T]$.
+
+Under suitable technical conditions, given in~\cite{j:mitchell-TAC-2005} and~\cite{mitchell-thesis}, the set $\mathcal{RA}_T(R,A)$ can be computed as the solution of a constrained Hamilton-Jacobi PDE.  To perform the computation,
+we resort to level set representation of sets.  Specifically, a set $G \subset \mathbb{R}^n$ is defined implicitly as the sublevel set of a function $\phi_G: X \rightarrow \mathbb{R}$, such that $G = \left\{x\in \mathbb{R}^n, \phi_G (x) \leq 0\right\}$.  We refer to $\phi_G$ as the level set representation of $G$.
+
+Let $\phi: X \times [-T,0] \rightarrow \mathbb{R}$ be the viscosity solution of the following constrained terminal value Hamilton-Jacobi PDE,
+\begin{equation}
+	\label{eq:HJ_PDE_reachavoid}
+	\frac{\partial \phi}{\partial t} + \min \left[0, H\left(x,\frac{\partial \phi}{\partial x}\right)\right] = 0,\;\phi(x,0) = \phi_R(x)	 
+\end{equation}
+subject to 
+$$\phi(x,t) \geq -\phi_A(x)$$
+where	the optimal Hamiltonian is given by
+$$H\left(x,p\right) = \min_{u \in \mathbb{U}} \max_{d \in \mathbb{D}} p^T f(x,u,d)$$
+and $\phi_R, \phi_A$ are the level set representations of $R$ and $A$ respectively.
+
+Then by the argument presented in~\cite{j:mitchell-TAC-2005} and~\cite{mitchell-thesis}, the reach-avoid set is given by $\mathcal{RA}_T(R,A) = \left\{x\in X, \phi (x,-T) \leq 0\right\}$.  For the problem considered in this paper, the solution of equation (\ref{eq:HJ_PDE_reachavoid}) is computed using the numerical toolbox described in \cite{j:mitchell-jsc-2008}.
+
+With some further technical assumptions~\cite{j:Lygeros-automatica-1999,j:Tomlin-ProcIEEE-2000}, the solution of the above computation also allows us synthesize controls for player I and player II.  Speaking somewhat informally, for $x \in \mathcal{RA}_T(R,A)$, the control policy that allows player I to achieve the desired objectives regardless of the control policy of player II is described by
+\begin{equation}
+	\label{eq:opt_ctrl_u}
+  u^*(x,t) = \arg \min_{u \in \mathbb{U}} \max_{d \in \mathbb{D}} p(x,-t)^T f(x,u,d), \ t \in [0,T] 
+\end{equation}
+where $p = \frac{\partial \phi}{\partial x}$ are the directional derivatives of the solution to (\ref{eq:HJ_PDE_reachavoid}), sometimes also referred to as the \emph{co-state}.
+Similarly, for $x \notin \mathcal{RA}_T(R,A)$, the player II control policy that is guaranteed to prevent player I from achieving the desired objectives is given by
+\begin{equation}
+	\label{eq:opt_ctrl_d}
+  d^*(x,t) = \arg \max_{d \in \mathbb{D}} p(x,-t)^T f(x,u^*,d), \ t \in [0,T] 
+\end{equation}
+
+The implementation of these control laws, however, depends upon the availability of the co-state $p$.  In some special cases, a closed form expression can be obtained for the co-state $p$, allowing exact implementation of the control laws (\ref{eq:opt_ctrl_u}) and (\ref{eq:opt_ctrl_d}).  When this is not the case, approximate control laws can be obtained by discretizing these control laws, for example at sampling instants $kT, k = 0,1,...$, and computing $p$ via numerical derivatives of $\phi(x,-kT)$.  
+
+On the other hand, if we are only interested in long term strategies and suppose that the solution to (\ref{eq:HJ_PDE_reachavoid}) converges, namely $\lim_{t \rightarrow -\infty} \phi(x,t) = \phi_\infty(x)$, for some $\phi_\infty: \mathbb{R}^n \rightarrow \mathbb{R}$, then stationary control policies approximating (\ref{eq:opt_ctrl_u}) and (\ref{eq:opt_ctrl_d}) can be constructed.  Specifically, suppose $\phi$ is computed numerically at time steps $-kT_s, k = 0,1,...$, we can select a time index $k^*$ at which $||\phi(\cdot, -k^*T_s) - \phi(\cdot, -(k^*+1)T_s)||_\infty < \epsilon$, for some tolerance $\epsilon > 0$.  If $\epsilon$ is chosen sufficiently small, we can reasonably assume that for all $t > k^*T_s$, $\phi(\cdot, -t) \approx \phi(\cdot, -k^*T_s)$.  This allows us to approximate the long term strategies of player I and player II by
+\begin{align}
+	\label{eq:opt_ctrl_inf_u}
+  u^*(x) &\approx \arg \min_{u \in \mathbb{U}} \max_{d \in \mathbb{D}} p(x,-k^*T_s)^T f(x,u,d) \\
+  \label{eq:opt_ctrl_inf_d}
+  d^*(x) &\approx \arg \max_{d \in \mathbb{D}} p(x,-k^*T_s)^T f(x,u^*,d) 
+\end{align}
+
+\subsection{Application of Hamilton-Jacobi Reachability to Capture the Flag Game}
+\label{subsec:hj_application}
+
+In the specific case of the capture the flag game, the continuous dynamics of the
+attacking and defending players are described simply as
+\begin{equation}
+\label{eq:ctf_dynamics}
+\dot{x}^a = u, \ \dot{x}^d = d
+\end{equation}
+where $u$ and $d$ are the inputs of the attacker and defender, respectively.  The
+corresponding input ranges are given by 
+$\mathbb{U} = \left\{u \in \mathbb{R}^2: || u ||_2 \leq V_{a,max}\right\}$ and
+$\mathbb{D} = \left\{d \in \mathbb{R}^2: || d ||_2 \leq V_{d,max}\right\}$.
+
+Suppose we allow $T_1$ time units for the first phase of the game,
+then the goal of the attacker during this phase is to arrive in 
+the flag region $F$ within $[0,T_1]$, while avoiding capture by the defender.  
+On the other hand, the goal of the defender is to capture the attacker, 
+while satisfying the physical constraints placed upon his/her movement, 
+consisting of the boundaries of $D$, the defender base region $R$,
+and the flag region $F$.
+
+Since the defender loses the game if he violates the physical constraints, the 
+winning condition for the attacker in this stage of the game is given by
+$O_1 \vee O_2$, where
+\begin{align*}
+&O_1 = \left\{\exists t \in [0,T_1], x^a(t) \in F \wedge x(s) \notin C, \forall s \in [0,t]\right\} \\ 
+&O_2 = \left\{\exists t \in [0,T_1], x^d(t) \in F \cup R \cup D^C \wedge x(s) \notin C, \right. \\
+&\left.  \forall s \in [0,t]\right\}
+\end{align*}
+Here $x$ denote the joint state vector $(x^a, x^d)$ and $r_f$ is the radius of the flag region.
+
+Now define subsets of the joint state space, $G_1 = \left\{x \in \mathbb{R}^4: x^a \in F \right\}$, 
+$G_2 = \left\{x \in \mathbb{R}^4: x^d \in F \cup R \cup D^C \right\}$,
+then from the winning condition, we can deduce that 
+\begin{equation}
+F_a = \mathcal{RA}_{T_1}(G_1 \cup G_2, C)
+\end{equation}
+
+Similarly, suppose we allow $T_2$ time units for the second phase of the game,
+then the goal of the attacker during this phase is to arrive in 
+the base region $R$ within $[0,T_2]$, while avoiding capture by the defender.  
+On the other hand, the goal of the defender is still to capture the attacker, 
+while satisfying the physical constraints placed upon his/her movement.  Thus, the 
+winning condition for the attacker in this stage of the game is given by
+$O_3 \vee O_2$, where
+\begin{align*}
+&O_3 = \left\{\exists t \in [0,T_2], x^a(t) \in R \wedge x(s) \notin C, \forall s \in [0,t]\right\}
+\end{align*}
+and $O_2$ is as defined previously.
+
+Now define a subset of the joint state space, $G_3 = \left\{x \in \mathbb{R}^4: x^a \in R \right\}$, 
+then from the winning condition, we can deduce that 
+\begin{equation}
+R_a = \mathcal{RA}_{T_2}(G_3 \cup G_2, C)
+\end{equation}
+
+In order to construct the winning region $W_a$, we first perform
+a reachability computation to determine $R_a$.  
+If $R_a \cap G_1 = \emptyset$, then it is infeasible for the attacker
+to achieve his/her game objectives, namely $W_a = \emptyset$.  Otherwise,
+the set of termination states for the first phase of the 
+game ensuring victory for the attacker
+is given by $\tilde{R}_a = R_a \cap G_1$.  Thus, in order to guarantee
+that the capture flag and return to base objectives can be achieved in
+sequence, regardless of the choice of defender control policy,
+the attacker objective during the first phase of the game becomes
+$O_4 \vee O_2$, where
+\begin{align*}
+&O_4 = \left\{\exists t \in [0,T_1], x(t) \in \tilde{R}_a \wedge x(s) \notin C, \forall s \in [0,t]\right\}
+\end{align*}
+
+From this, we can compute the winning region as
+\begin{equation}
+W_a = \mathcal{RA}_{T_1}(\tilde{R}_a \cup G_2, C)
+\end{equation}
+
+As described previously, the results of the reachability analysis also
+allow us to construct approximate winning strategies.  In this case,
+the optimal Hamiltonian is given by
+$$H\left(x,p\right) = \min_{u \in \mathbb{U}} \max_{d \in \mathbb{D}} p_u^T u + p_d^T d$$
+where $p_u = (p_1, p_2)$ and $p_d = (p_3, p_4)$.
+From this we can deduce the explicit winning strategies
+\begin{align}
+	\label{eq:opt_ctf_u}
+  u^*(x,t) &= -V_{a,max} \frac{p_u(x,-t)}{||p_u(x,-t)||_2} \\
+	\label{eq:opt_ctf_d}
+  d^*(x,t) &= V_{d,max} \frac{p_d(x,-t)}{||p_d(x,-t)||_2}
+\end{align}
+Intuitively, this corresponds to moving at maximum allowable velocity along the directions indicated by the time-varying directional derivatives $-p_u(x(t),-t) \in \mathbb{R}^2$ or $p_d(x(t),-t) \in \mathbb{R}^2$.
+
+Over short time horizons, time varying strategies can be computed separately 
+for the first and second stage of the game as per equations 
+(\ref{eq:opt_ctf_u}) and (\ref{eq:opt_ctf_d}), using $W_a$ and $R_a$,
+respectively.  Under the attacker control policy constructed
+from $W_a$, the joint trajectory is guaranteed to enter 
+$\tilde{R}_a$ within $[0,T_1]$, achieving the capture flag objective.  
+At the time instant when $x(t) \in \tilde{R}_a$, the attacker can
+switch to the control policy constructed from $R_a$, which guarantees
+that the attacker can return to base within $[0,T_2]$ while avoiding
+capture, thus completing the game objectives.
+
+For this particular case, it turns out that the sets $R_a$ and $W_a$
+in fact converge for $T_1$ and $T_2$ large enough.
+Thus, if there are no time limits, or if one is more
+interested in long term strategies, then we can run the computations
+of $R_a$ and $W_a$ until they converge numerically within 
+some small tolerances.  From these converged sets, approximate long
+term strategies can be synthesized as per equations
+(\ref{eq:opt_ctrl_inf_u}) and (\ref{eq:opt_ctrl_inf_d}).
+
+
+
+
+
+
+
+
+
+
+
+
+
+

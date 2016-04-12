@@ -1,0 +1,72 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out
+                                                          % if you need a4paper
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
+                                                          % paper
+
+\IEEEoverridecommandlockouts                              % This command is only
+                                                          % needed if you want to
+                                                          % use the \thanks command
+\overrideIEEEmargins
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+\usepackage{graphicx}
+\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{amssymb}  % assumes amsmath package installed
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{algorithm, algorithmic}
+\usepackage{subcaption}
+\numberwithin{algorithm}{section}
+
+\newtheorem{defn}{Definition}
+\newtheorem{thm}{Proposition}[section]
+\newtheorem{cor}{Corollary}[section]
+\newtheorem{rem}{Remark}
+\newtheorem{lem}{Lemma}
+\newtheorem{IEEEproof}{Proof of Lemma}
+\usepackage{"../../my_macros"}
+
+\title{\LARGE \bf
+A Path Defense Approach to the Multiplayer Reach-Avoid Game
+}
+
+\author{Mo~Chen, Zhengyuan~Zhou, and Claire~J.~Tomlin% <-this % stops a space
+\thanks{This work has been supported in part by NSF under CPS:ActionWebs (CNS-931843), by ONR under the HUNT (N0014-08-0696) and SMARTS (N00014-09-1-1051) MURIs and by grant N00014-12-1-0609, by AFOSR under the CHASE MURI (FA9550-10-1-0567).}% <-this % stops a space
+\thanks{M.~Chen, and C.~J.~Tomlin are with the Department of Electrical Engineering and Computer Sciences,
+        University of California, Berkeley, CA 94720, USA
+        {\tt\small \{mochen72,tomlin\}@eecs.berkeley.edu}}
+\thanks{Z.~Zhou is with the Department of Electrical Engineering,
+        Stanford University, Stanford, CA 94305, USA
+        {\tt\small zyzhou@stanford.edu}}   
+}
+
+\begin{document}
+
+\maketitle
+
+\thispagestyle{empty}
+\pagestyle{empty}
+
+\begin{abstract}
+We consider a multiplayer reach-avoid game played between $\N$ attackers and $\N$ defenders moving with simple dynamics on a general two-dimensional domain. The attackers attempt to win the game by sending at least $\m$ of them ($1\le\m\le\N$) to a target location while the defenders try to prevent the attackers from doing so by capturing them. The analysis of this game plays an important role in collision avoidance, motion planning, and aircraft control, among other applications involving cooperative agents. The high dimensionality of the game makes computing an optimal solution for either side intractable when $\N>1$. The solution is difficult even when $\N=1$. To address this issue, we present an efficient, approximate solution to the 1 vs. 1 problem. We call the approximate solution the ``path defense solution", which is conservative towards the defenders. This serves as a building block for an approximate solution of the multiplayer game. Compared to the classical Hamilton-Jacobi-Isaacs approach for solving the 1 vs. 1 game, our new method is orders of magnitude faster, and scales much better with the number of players.
+\end{abstract}
+
+\input{introduction.tex}
+\input{formulation.tex}
+\input{"solution HJI.tex"}
+\input{"solution PD game.tex"}
+\input{"solution PD reach-avoid.tex"}
+\input{"solution matching.tex"}
+%\input{solution.tex}
+\input{results.tex}
+\input{conclusion.tex}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

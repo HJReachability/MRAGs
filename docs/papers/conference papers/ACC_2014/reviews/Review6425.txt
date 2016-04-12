@@ -1,0 +1,45 @@
+Reviewer 2 of 2014 ACC submission 1035
+
+Comments to the author
+======================
+
+The paper is a good application of matching techniques of
+bipartite
+graphs to reach-avoid games. A scalable solution is
+proposed and
+demonstrated on some examples.
+
+If I understand, a maximum matching size denotes how many
+defenders succeeded in preventing attackers from reaching
+the target. The symbol m is better used for this purpose.
+(m is the size of a matching in typical matching
+literature, I
+support this usage.)
+But here m is used in the converse sense.
+
+The authors could give some more explanation about special
+cases.
+When would there not be a perfect matching? for too small a
+defender radius?
+What happens when there are no obstacles?
+
+These extreme cases would be easier to understand.
+The only extreme case the authors write is when there is
+just
+one defender and one attacker. And then, the full
+generality problem!
+Some intermediate situations will be helpful too.
+
+I don't think I found to what extent the approximated
+solution
+is close to the actual solution. For the examples
+considered, an optimal
+solution can be calculated by brute force and used for
+comparison, I suggest.
+
+% I think the "curse of dimensionality" has been used a
+% little too often.
+% This phrase is now too trite. Management people use it
+% without knowing.
+% The authors could just use "numerically intractable", as
+% they do once. 

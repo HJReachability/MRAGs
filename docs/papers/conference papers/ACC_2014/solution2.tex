@@ -1,0 +1,128 @@
+\section{Solution} \label{sec:solution}
+We first describe the HJ reachability framework for solving differential games with arbitrary terrain, domain, obstacles, target set, and player velocities based on \cite{j:mitchell-TAC-2005, LSToolbox, Huang2011}. The results of HJ computation assume a closed-loop strategy for both players given previous information of the other players.
+
+Solving the 4$\N$D PDE corresponding to the full multiplayer game is numerically intractable, so we solve a 4D HJI PDE instead, and construct an approximation to the 4$\N$D solution using maximum matching. The approximation provides an upper bound on the number of attackers who are able to reach the target. 
+
+\subsection{Hamilton-Jacobi Reachability} \label{subsec:hj_background}
+The setup for using HJ reachability to solve differential games can be found in \cite{j:mitchell-TAC-2005, LSToolbox, Huang2011}. In summary, we are given the continuous dynamics of the system state:
+
+\bq
+\dxj = f(\xj,u,d), \xj(0)=\xjn,
+\eq
+
+\noindent where $\xj\in\R^n$ is the system state, $u\in\mathbb{U}$ is the joint control input of the attacking team, and $d\in\mathbb{D}$ is the joint control input of the defending team. The sets $\mathbb{U}$ and $\mathbb{D}$ represent the sets of the joint admissible control inputs of the attacking team and the defending team, respectively. 
+
+We specify the terminal set $R$ (described in detail in Section \ref{subsec:hj_two}) as the attackers' winning condition, and propagate backwards this set subject to the constraint imposing that the attackers be outside the capture regions and the obstacles. This constraint is described by the avoid set $A$. 
+
+More precisely, the HJ reachability calculation is as follows. First, given a set $G$, the level set representation of $G$ is a function $\valsR_\set:\R^n \rightarrow \R$ such that $\set = \left\{\xj\in\R^n \mid \valsR_\set\le0\right\}$.
+In particular, the terminal set $R$ and the avoid set $A$ will be represented by the functions $\valsR_R$ and $\valsR_A$ respectively.
+ 
+Let $\Phi:\R^n\times[-\T,0]\rightarrow\R$ be the viscosity solution \cite{j:Crandall-TAMS-1983} to the constrained terminal value HJI PDE:
+\begin{equation}
+	\label{eq:HJ_PDE_reachavoid}
+	\frac{\partial \Phi}{\partial t} + \min \left[0, H\left(\xj,\frac{\partial \Phi}{\partial \xj}\right)\right] = 0,\;\Phi(\xj,0) = \valsR_R(\xj)	 
+\end{equation}
+subject to 
+$$\Phi(\xj,t) \geq -\valsR_A(\xj),$$
+where the optimal Hamiltonian is given by
+$$H\left(\xj,p\right) = \min_{u \in \mathbb{U}} \max_{d \in \mathbb{D}} p^T f(\xj,u,d).$$
+
+By the argument presented in \cite{j:mitchell-TAC-2005} and \cite{mitchell-thesis}, the set of initial conditions from which the attackers are guaranteed to win within time $T$ is given by 
+\bq
+\mathcal{RA}_T(R,A) := \left\{\xj\in \R^n \mid \Phi (\xj,-\T) \leq 0\right\}.
+\eq
+
+Hence, $\Phi (\xj,-\T)$ is the level set representation of $\mathcal{RA}_T(R,A)$. The optimal control input for the attacking team is given by \cite{j:Lygeros-automatica-1999, j:Tomlin-ProcIEEE-2000, Huang2011}:
+\bq \label{eq:opt_ctrl_u}
+  u^*(\xj,t) = \arg \min_{u \in \mathbb{U}} \max_{d \in \mathbb{D}} p(\xj,-t)^T f(\xj,u,d), \!\ t \in [0,T] 
+\eq
+where $p = \frac{\partial \Phi}{\partial \xj}$. 
+
+Similarly, the optimal control input for the defending team is given by
+\bq \label{eq:opt_ctrl_d}
+  d^*(\xj,t) = \arg \max_{d \in \mathbb{D}} p(\xj,-t)^T f(\xj,u^*,d), \ t \in [0,T].
+\eq
+
+Taking $T\rightarrow\infty$, we obtain the set of initial conditions from which the attackers are guaranteed to win. We denote this set $\mathcal{RA}_\infty(R,A)$. The set of initial conditions from which the defenders are guaranteed to win is given by all points not in $\mathcal{RA}_\infty(R,A)$. For an $\N$ vs. $\N$ game on a two-dimensional domain $\amb\subset\R^2$, the reachable set $\mathcal{RA}_\infty(R,A)$ is $4\N$D.
+
+A highly accurate numerical solution to Equation (\ref{eq:HJ_PDE_reachavoid}) can be computed using the Level Set Toolbox for MATLAB \cite{LSToolbox}.
+
+\subsection{Hamilton-Jacobi Reachability for the Two Player Game}
+\label{subsec:hj_two}
+In general, an HJI PDE of dimensions higher than five cannot be solved practically, so we are limited to only being able to solve the HJI PDE corresponding to a two-player game in which each player's state space is 2D. We will solve the multiplayer game by combining the solution to the two-player game and maximum matching from graph theory. 
+
+In the two-player game, the goal of the attacker is to reach the target set $\target$ while avoiding capture by the defender. This terminal set $R$ is represented by the attacker being inside $\target$. En route to $\target$, the attacker must avoid capture by the defender. This is represented by the set $\avoid$. 
+
+Both players also need to avoid the obstacles $\obs$, which can be considered as the locations in $\amb$ where the players have zero velocity. In particular, the defender wins if the attacker is in $\obs$, and vice versa. Therefore, we define the terminal set and avoid set as 
+\bq
+\begin{aligned}
+R = & \left\{\xj\in\amb^2 \mid \xa\in\target \land \|\xa-\xb\|_2 > \Rc \right\} \\  
+&\cup \left\{\xj\in\amb^2\mid \xb\in\obs \right\}
+\end{aligned}
+\eq
+
+\bq \begin{aligned}
+A &= \left\{\xj\in\amb^2 \mid \|\xa-\xb\|_2\le \Rc \right\} \\ &\cup \left\{\xj\in\amb^2\mid \xa\in\obs \right\} 
+\end{aligned} \eq
+
+Given these sets, we can define the corresponding level set representations $\valsR_R,\valsR_A$, and solve (\ref{eq:HJ_PDE_reachavoid}). If $\amb\subset\R^2$, the result is $\mathcal{RA}_\infty(R,A)\in\R^4$, a 4D reach-avoid set with the level set representation $\Phi(\xj,-\infty)$. The attacker wins if and only if $(\xan,\xbn)=\xjn\in\mathcal{RA}_\infty(R,A)$.
+
+If $\xjn\in\mathcal{RA}_\infty(R,A)$, then the attacker is guaranteed to win the game. Applying Equation (\ref{eq:opt_ctrl_u}) to the two-player game, we obtain the explicit winning strategy is given in \cite{Huang2011}:
+
+\bq \label{eq:opt_ctrl2_a}
+\ca^*(\xa,\xb,t) = -\vela \frac{p_u(\xa,\xb,-t)}{\|p_u(\xa,\xb,-t)\|_2}.
+\eq
+
+\noindent where $p = (p_u,p_d) = \frac{\partial \Phi}{\partial (\xa,\xb)}$.  
+
+Similarly, if $\xjn\notin\mathcal{RA}_\infty(R,A)$, then the defender is guaranteed to win the game. Applying (\ref{eq:opt_ctrl_d}) to the two-player game, we obtain the explicit winning strategy given in \cite{Huang2011}:
+\bq \label{eq:opt_ctrl2_d}
+\cb^*(\xa,\xb,t) = \velb \frac{p_d(\xa,\xb,-t)}{\|p_d(\xa,\xb,-t)\|_2}.
+\eq
+
+\subsection{Maximum Matching}
+\label{subsec:max_match}
+We can determine whether the attacker can win the multiplayer reach-avoid game by combining the solution to the two-player game, characterized by $\mathcal{RA}_\infty(R,A)$, and maximum matching \cite{Schrjiver2004, Karpinski1998} from graph theory as follows:
+
+\begin{enumerate}
+\item Compute $\mathcal{RA}_\infty(R,A)$
+\item Construct a bipartite graph with two sets of nodes $\pas,\pbs$, where each node represents a player.
+\item For each $\pbm{i}$, determine whether $\pbm{i}$ can win against $\pam{j}$, for all $j$. Given $\mathcal{RA}_\infty(R,A)$, we can determine the winner of the two player game for any given pair $(\xam{i},\xbm{j}) \forall (i,j)$.
+\item Form a bipartite graph: Draw an edge between $\pbm{i}$ and $\pam{j}$ if $\pbm{i}$ wins against $\pam{j}$
+\item Run any matching algorithm to find a maximum matching in the graph. This can be done using, for example, a linear program \cite{Schrjiver2004}, or the Hopcroft-Karp algorithm \cite{Karpinski1998}.
+\end{enumerate}
+
+After constructing the bipartite graph, if the maximum matching is of size $\mm$, then the defending team would be able to prevent \textit{at least} $\mm$ attackers from reaching the target. Alternatively, $\N-\mm$ is an \textit{upper bound} on the number of attackers that can reach the target.
+
+For intuition, consider the following specific cases of $\mm$. If $\mm=\N$, then no attacker will be able to reach the target. If $\mm=0$, then there is no initial pairing that will prevent any attacker from reaching the target; however, the attackers are not guaranteed to all reach the target, as $\N-\mm=\N$ is only an upper bound on the number of attackers who can reach the target. Finally, $\mm=\N-\m+1$, then the attacking team would only be able to send at most $\N-\mm=\m-1$ attackers to the target. 
+
+The optimal strategy for the defenders can be obtained from (\ref{eq:opt_ctrl2_d}). If the \ith defender $\pbm{i}$ is assigned to defend against the \jth attacker $\pam{j}$ by the maximum matching, then the strategy that guarantees that $\pam{j}$ never reaches the target is given by 
+\bq \label{eq:opt_ctrl3_d}
+\cbm{i}^*(\xam{j},\xbm{i},t) = \velb \frac{p_d(\xam{j},\xbm{i},-t)}{\|p_d(\xam{j},\xbm{i},-t)\|_2}
+\eq
+
+The entire procedure of applying maximum matching to the 4D HJ reachability calculation is illustrated in Figure \ref{fig:general_procedure}.
+
+Our solution to the multiplayer reach-avoid game is an approximation to the optimal solution that would be obtained by directly solving the $4\N$D HJI PDE; it is conservative for the defending team because by creating defender-attacker pairs, each defender restricts its attention to only one opposing player. For example, if no suitable matching is found, the defending team is not guaranteed to allow all attackers to reach the target, as the defending team could potentially capture some attackers without using a strategy that creates defender-attacker pairs. Nevertheless, our solution is able to overcome the numerical intractibility to approximate a reachability calculation, and is useful in many game configurations.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{"fig/general procedure"}
+\caption{The 4D HJ reachability and maximum matching approximation to the multiplayer reach-avoid game. A maximum matching of size $\mm$ indicates that at most $\N-\mm$ attackers will be able to reach the target.}
+\label{fig:general_procedure}
+\end{figure}
+
+\subsection{Time-Varying Defender-Attacker Pairings}
+\label{subsec:tvarp}
+The procedure in Section \ref{subsec:max_match} assigns an attacker to each defender that is part of a maximum pairing in the beginning of the game, and the assignment does not change during the course of the game. However, the bipartite graph and its corresponding maximum matching can be updated as the players change positions during the game. Because $\mathcal{RA}_\infty(R,A)$ captures the winning conditions for every joint defender-attacker configuration given $\amb,\obs,\target$, this update can be performed in real time by the following procedure:
+
+\begin{enumerate}
+\item Given the position of each player, determine whether each defender can win against each attacker. 
+\item Construct the bipartite graph and find its maximum matching to assign an attacker to each defender that is part of the maximum matching.
+\item For a chosen duration $\Delta$, compute the optimal control input and trajectory for each defender that is part of the maximum matching via Equation (\ref{eq:opt_ctrl3_d}). For the rest of the defenders and for all attackers, compute the trajectories assuming any control function.
+\item Repeat the procedure with the new player positions.
+\end{enumerate}
+
+As $\Delta\rightarrow 0$, the above procedure computes a bipartite graph and its maximum matching as a function of time. Whenever the maximum matching is not unique, the defenders can choose a different maximum matching and still be guaranteed to prevent the same number of attackers from reaching the target. As long as each defender uses the optimal control input given in Equation (\ref{eq:opt_ctrl3_d}), the size of the maximum matching can never decrease as a function of time. 
+
+On the other hand, it is possible for the size of the maximum matching to increase as a function of time. This occurs if the joint configuration of the players becomes such that the resulting bipartite graph has a bigger maximum matching than before, which may happen since the size of the maximum matching only gives an upper bound on the number of attackers that are able to reach the target. Furthermore, there is no numerically tractable way to compute the joint optimal control input for the attacking team, so a suboptimal strategy from the attacking team can be expected, making an increase of maximum matching size likely. Determining defender control strategies that optimally promote an increase in the size of the maximum matching would be an important step towards the investigation of cooperation, and will be part of our future work.

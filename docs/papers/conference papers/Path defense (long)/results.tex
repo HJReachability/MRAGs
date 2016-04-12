@@ -1,0 +1,82 @@
+\section{Computation Results}
+\label{sec:results}
+
+We illustrate our path-defense and maximum matching approach in the two examples below. The HJ reachable sets are calculated using our path defense approach. We calculated $\mathcal{RA}_\infty(R,A)$ by incrementing $T$ until $\mathcal{RA}_T(R,A)$ converges. Each computation of $\mathcal{RA}_\infty(R,A)$, done on a $45\times45\times45\times45$ grid, took approximately 30 minutes on a Lenovo T420s laptop with a Core i7-2640M processor. 
+
+The two examples are shown in Figures \ref{fig:results1} and \ref{fig:results2}. In both examples, there are four attackers and four defenders playing on a square domain with obstacles; the defenders have a capture radius of $0.1$ units. In example 1, all players have equal speeds ($\velb=\vela$). In example 2, the defenders are twice as fast as the attackers, who have equal speeds ($\velb=2\vela$).
+
+$\mathcal{RA}_\infty(R,A)$ is a 4D set that represents the joint configurations in which the attacker wins the game. To visualize the 4D set in 2D, we view the reachable set at the slices representing the positions of particular players. Figure \ref{subfig:fixed_d_1} and \ref{subfig:fixed_d_2} show boundaries of $\mathcal{RA}_\infty(R,A)$ with fixed defender positions. In each subplot, attackers which are closer to the target set than the reachable set boundary is win against the particular defender. For example, in the right top subplot of Figure $\ref{subfig:fixed_d_1}$, the defender at $(0.3,-0.5)$ loses to the attacker at $(0,0)$, but wins against the other three attackers. 
+
+Similarly, Figures \ref{subfig:fixed_a_1} and \ref{subfig:fixed_a_2} show boundaries of $\mathcal{RA}_\infty(R,A)$ with fixed attacker positions. Defenders which are closer to the target set than the reachable set boundary win against the particular attacker. For example, in the top left subplot of Figure \ref{subfig:fixed_a_2}, the attacker at $(0.8, 0.6)$ wins against the defender at $(-0.7, 0.2)$ but loses against the other three defenders.
+
+Figures \ref{subfig:max_matching_1} and \ref{subfig:max_matching_2} show the resulting bipartite graphs (edges shown as thin solid blue lines) and the maximum matching (edges shown as thick dashed blue lines) after applying the algorithm described in Section \ref{subsec:max_match}. In example 1, the maximum matching is of size 3, which means that at most 1 attacker is able to reach the target. So if the game requires $m>1$ attackers to reach the target for the attacking team to win the game, then the defending team would win. In example 2, we have a perfect matching, so no attacker is able to reach the target.
+
+Figure \ref{fig:tvarg} shows the result of a 4 vs. 4 reach-avoid game simulation being played out in a course of 0.6 time units to illustrate the potential usefulness of time-dependent defender-attacker pairings. Every $\Delta=0.005$ time units, a bipartite graph and its maximum matching are computed according to the algorithm in Section \ref{subsec:tvarp}. The defender that is not part of the maximum matching plays optimally against the closest attacker. The attackers use the suboptimal strategy of taking the shortest path to the target while steering $0.125$ units clear of the obstacles and disregarding the control inputs of other players in the game.
+
+The initial size of the maximum matching is 3. At $t=0.4$, because the attackers have not been playing optimally, the attacker at $(-0.50,0.16)$ becomes in a losing position against the defender at $(-0.26, -0.34)$. Thus, the maximum matching now assigns the attacker at $(-0.50,0.16)$ to the defender at $(-0.26, -0.34)$. At the same time, the defender at $(-0.09, -0.22)$ switches from defending the attacker at $(-0.50,0.16)$ to defending the attacker at $(-0.27,0.14)$, creating a perfect matching and preventing any attacker from reaching the target.
+\begin{figure}[H]
+\centering
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{"fig/fixed defender 1"}
+	\caption{Slices of reachable set at the positions of the four defenders. The defender is guaranteed to win against any attacker who is farther away from the target than the reachable set boundary is.}
+	\label{subfig:fixed_d_1}
+	\end{subfigure}	
+	
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{"fig/fixed attacker 1"}
+	\caption{Slices of reachable set at the positions of the four attackers. The attacker is guaranteed to win against any defender who is farther away from the target than the reachable set boundary is.}
+	\label{subfig:fixed_a_1}
+	\end{subfigure}
+\end{figure}
+
+\begin{figure}
+	\ContinuedFloat
+	\centering
+	\begin{subfigure}{0.4\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{"fig/max matching 1"}
+	\caption{Bipartite graph and maximum matching. Each edge, shown as a thin solid blue line, connects a defender to an attacker against whom the defender is guaranteed to win, creating a bipartite graph. The dashed thick blue lines show a maximum matching of the bipartite graph. Here, a maximum matching of size 3 indicates that at most one attacker can reach the target.}
+	\label{subfig:max_matching_1}
+	\end{subfigure}
+	
+\caption{Example 1: A 4 vs. 4 reach-avoid game in which all players have equal maximum speeds and the defenders have a capture radius of $0.1$ units.}
+\label{fig:results1}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{"fig/fixed defender 2"}
+	\caption{Slices of reachable set at the positions of the four defenders. The defender is guaranteed to win against any attacker who is farther away from the target than the reachable set boundary is.}
+	\label{subfig:fixed_d_2}
+	\end{subfigure}
+	
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{"fig/fixed attacker 2"}
+	\caption{Slices of reachable set at the positions of the four attackers. The attacker is guaranteed to win against any defender who is farther away from the target than the reachable set boundary is.}
+	\label{subfig:fixed_a_2}
+	\end{subfigure}
+\end{figure}
+\begin{figure}
+	\ContinuedFloat
+	\centering
+	\begin{subfigure}{0.4\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{"fig/max matching 2"}
+	\caption{Bipartite graph and maximum matching. Each edge, shown as a thin solid blue line, connects a defender to an attacker against whom the defender is guaranteed to win, creating a bipartite graph. The dashed thick blue lines show a maximum matching of the bipartite graph. Here, a maximum matching of size 3 indicates that at most one attacker can reach the target.}
+	\label{subfig:max_matching_2}
+	\end{subfigure}
+\caption{Example 2: A 4 vs. 4 reach-avoid game in which players of the same team have the same maximum speed, and the maximum speed of the defenders is twice that of the attackers.  The defenders have a capture radius of $0.1$ units.}
+\label{fig:results2}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{"fig/time varying graph"}
+\caption{An illustration of how the size of maximum matching can increase over time. Throughout the game, the defenders are updating the bipartite graph and maximum matching via the procedure described in Section \ref{subsec:tvarp}. Because the attacking team is not playing optimally, the defending team is able to find a perfect matching after $t=0.4$ (bottom plots) and prevent all attackers from reaching the target.}
+\label{fig:tvarg}
+\end{figure}

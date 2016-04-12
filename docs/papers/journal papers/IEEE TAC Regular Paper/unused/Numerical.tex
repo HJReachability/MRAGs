@@ -1,0 +1,42 @@
+\section{Numerical Results}
+\label{sec:results}
+
+\begin{figure*}[t]
+	\centering
+	\begin{tabular}{ccc}
+%		\includegraphics[width=0.275\textwidth]{map} &
+%		\includegraphics[width=0.275\textwidth]{stage1}  &
+%		\includegraphics[width=0.275\textwidth]{stage2}  \\ 
+	         \includegraphics[width=0.3\textwidth]{figures/ol_example_init.pdf} &
+		\includegraphics[width=0.3\textwidth]{figures/ol_example_rstar.pdf}  &
+		\includegraphics[width=0.3\textwidth]{figures/ol_example_paths.pdf}  \\ 
+		(a) & (b) & (c)
+	\end{tabular} 
+	\caption{\textbf{Example scenario showing (a) the initial conditions of the players, the target set $\target$, and game domain, (b) the set $\Rs$ with contours plotted for $\ts$ within, and (c) the trajectories taken for each player, with equal time-to-reach contours for player 1 plotted. }}
+	\label{fig:results_ol}
+\end{figure*} 
+
+We now show numerical results for an example scenario to illustrate the concepts presented in this paper and to demonstrate the algorithm presented in Section~\ref{sec:algorithm}.
+Figure~\ref{fig:results_ol}(a) shows the initial condition for the scenario considered.
+The gray, rectangular regions in the middle are the obstacles, and the green, semi-circular region to the right is the target set.
+The initial positions of both players are plotted, along with the capture radius around $\pb$.
+In this scenario, $\pb$ has a maximum speed of $0.25$ and $\pa$ has a maximum speed of $1$.
+Figure~\ref{fig:results_ol}(b) shows $\Rs$ and contour plots for $\ts$ within $\Rs$. 
+Obviously $\ts$ increases as $\pb$ moves toward the opening in the obstacles, forcing $\pa$ to move up around the obstacles in order to reach the target.
+The final paths of the two players are shown in Figure~\ref{fig:results_ol}(c): as expected $\pb$ moves to block the opening, as that results in the maximum $\ts$.
+
+The same scenario computed using the upper value solution discussed in~\cite{OL_ICRA2012} is shown in Figure~\ref{fig:results_vu}.
+In this case, $\pa$ is playing conservatively.
+$\mathcal{S}_1$ denotes the set of points that $\pa$ can safely reach before $\pb$, given that $\pb$ has knowledge of $\pa$'s inputs.
+Again, $\pa$ is forced to move up over the obstacles as opposed to passing through the central opening.
+The control inputs in the two cases are the identical, implying that the solutions found are equivalent to the optimal, feedback strategy results.
+
+The computations are performed on a 100x100 grid using compiled C++ code in Matlab, on a Macbook Pro laptop with a 2.4 GHz Intel Core i7 processor and 8 GB RAM.
+Total elapsed time for computing $\Rs$ and associated $\ts$ was 1.25 seconds.
+
+\begin{figure}[t]
+	\centering
+		\includegraphics[width=0.3\textwidth]{figures/ol_example_vupath.pdf}  
+	\caption{\textbf{Solution to the upper value problem, showing the safe reachable set $\mathcal{S}_1$ for $\pa$ and the resultant path to the target set. }}
+	\label{fig:results_vu}
+\end{figure} 

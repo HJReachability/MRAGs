@@ -1,0 +1,11 @@
+Reviewer 10 of CDC14 submission 1635
+
+Comments to the author
+======================
+
+The paper studies the 1-to-1 reach-avoid game. The major
+contribution is the scalability of the proposed approach
+and its potential use in a multi-player game. The paper is
+well-written. It is very interesting to see how the
+game-theoretical approach is compared to other motion
+planning methods. Overall, it is a valid conference paper.

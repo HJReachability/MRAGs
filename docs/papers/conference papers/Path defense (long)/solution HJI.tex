@@ -1,0 +1,109 @@
+\section{Hamilton-Jacobi Reachability} \label{subsec:hj_background}
+\textbf{Taken from ACC 2014 paper, need to shorten}
+The multiplayer reach-avoid game is a differential game in which two teams have competing objectives \cite{b:basar-olsder-1999}. By specifying the winning conditions, we can determine the winning regions of the attacker and the defender by numerically computing the HJ reachable sets. The numerical HJ computations allow us to consider games with arbitrary terrain, domain, obstacles, target set, and player velocities. Furthermore, the results of HJ computation assume a closed-loop strategy for both players given previous information of the other players.
+
+The setup for using HJ reachability to solve differential games can be found in \cite{j:mitchell-TAC-2005, LSToolbox, Huang2011}. In summary, we are given the continuous dynamics of the system state:
+
+\bq
+\dxj = f(\xj,u,d), \xj(0)=\xjn,
+\eq
+
+\noindent where $\xj\in\R^n$ is the system state, $u\in\mathbb{U}$ is the joint control input of the attacking team, and $d\in\mathbb{D}$ is the joint control input of the defending team. The sets $\mathbb{U}$ and $\mathbb{D}$ represent the sets of the joint admissible control inputs of the attacking team and the defending team, respectively. The attacking team selects a control input based on the past and the current joint states of all the players. The defending team then selects a control input based on the past and the present control inputs of the attacking team, in addition to
+the past and the current joint states. \textit{A priori}, this information pattern is conservative towards the attackers, as defenders have more information available. However, in the case that the system (described by the function $f$) is decoupled, which is
+true in our reach-avoid game defined in Equation~\eqref{eq:dynamics}, the Isaacs condition \cite{b:isaacs-1967} holds and the two information patterns yield the same optimal solutions for both the attackers and the defenders.
+
+To use the HJ reachability framework, we specify the terminal set $R$ (described in detail in the next subsection) as the attackers' winning condition, and propagate backwards this set subject to the constraint imposing that the attackers be outside the capture regions and the obstacles. This constraint is described by the avoid set $A$ in more detail in the next subsection. The result is a reachable set that partitions the state space into two regions. All points inside the reachable set represent the joint initial conditions from which the attacking team is guaranteed to win, and all points outside represent the joint initial conditions from which the defending team is guaranteed to win.
+
+More precisely, the HJ reachability calculation is as follows. 
+First, given a set $G$, the level set representation of $G$ is a function $\valsR_\set:\R^n \rightarrow \R$ such that $\set = \left\{\xj\in\R^n \mid \valsR_\set\le0\right\}$.
+In particular, the terminal set $R$ and the avoid set $A$ will be represented by the functions $\valsR_R$ and $\valsR_A$ respectively.
+
+ 
+Let $\Phi:\R^n\times[-\T,0]\rightarrow\R$ be the viscosity solution \cite{j:Crandall-TAMS-1983} to the constrained terminal value HJI PDE:
+\begin{equation}
+	\label{eq:HJ_PDE_reachavoid}
+	\frac{\partial \Phi}{\partial t} + \min \left[0, H\left(\xj,\frac{\partial \Phi}{\partial \xj}\right)\right] = 0,\;\Phi(\xj,0) = \valsR_R(\xj)	 
+\end{equation}
+subject to 
+$$\Phi(\xj,t) \geq -\valsR_A(\xj),$$
+where the optimal Hamiltonian is given by
+$$H\left(\xj,p\right) = \min_{u \in \mathbb{U}} \max_{d \in \mathbb{D}} p^T f(\xj,u,d).$$
+By the argument presented in \cite{j:mitchell-TAC-2005} and \cite{mitchell-thesis}, the set of initial conditions from which the attackers are guaranteed to win within time $T$ is given by 
+\bq
+\mathcal{RA}_T(R,A) := \left\{\xj\in \R^n \mid \Phi (\xj,-\T) \leq 0\right\}.
+\eq
+Hence, $\Phi (\xj,-\T)$ is the level set representation of $\mathcal{RA}_T(R,A)$.
+
+The optimal control input for the attacking team is given by \cite{j:Lygeros-automatica-1999, j:Tomlin-ProcIEEE-2000, Huang2011}:
+\bq \label{eq:opt_ctrl_u}
+  u^*(\xj,t) = \arg \min_{u \in \mathbb{U}} \max_{d \in \mathbb{D}} p(\xj,-t)^T f(\xj,u,d), \!\ t \in [0,T] 
+\eq
+where $p = \frac{\partial \Phi}{\partial \xj}$. 
+
+Similarly, an initial player configuration outside $\mathcal{RA}_T(R,A)$ guarantees that the defenders will win by using the optimal control input
+\bq \label{eq:opt_ctrl_d}
+  d^*(\xj,t) = \arg \max_{d \in \mathbb{D}} p(\xj,-t)^T f(\xj,u^*,d), \ t \in [0,T].
+\eq
+
+Taking $T\rightarrow\infty$, we obtain the set of initial conditions from which the attackers are guaranteed to win. We denote this set $\mathcal{RA}_\infty(R,A)$. The set of initial conditions from which the defenders are guaranteed to win is given by all points not in $\mathcal{RA}_\infty(R,A)$. Note that for an $\N$ vs. $\N$ game on a two-dimensional domain $\amb\subset\R^2$, the reachable set $\mathcal{RA}_\infty(R,A)$ is $4\N$-dimensional.
+
+A highly accurate numerical solution to Equation (\ref{eq:HJ_PDE_reachavoid}) can be computed using the Level Set Toolbox for MATLAB \cite{LSToolbox}.
+
+In the next two subsections, we will describe the terminal set and the avoid set for the multiplayer and the two player reach-avoid games.
+
+\subsection{Hamilton-Jacobi Reachability for the Multiplayer Game}
+\label{subsec:hj_multi}
+%NEED TO INCLUDE OBSTACLES HERE TOO
+In the multiplayer reach-avoid game, the goal of the attacking team is to send at least $\m$ attackers to the target set $\target$. For a particular set of $\m$ attackers, the goal set is given by each of the attackers being inside the target but outside of the capture radius of all the defenders. To obtain the terminal set $R$ for the game (i.e.\ at least $\m$ attackers reaching the target), we take the union of all $\begin{pmatrix} \N \\ \m \end{pmatrix}$ goal sets.
+%$\begin{pmatrix} \N \\ \m \end{pmatrix}$ ($\N$ choose $\m$) sets. 
+%To obtain the terminal set for at least $\m$ attackers reaching the target, one would take the union of the terminal sets for exactly $\m,\m+1,\ldots,\N$ attackers reaching the target without being captured.
+
+The avoid set is defined by the losing condition of the attackers: the attackers lose the game when at least $\N-\m+1$ of them have been captured by the defender. For a particular attacker $\pam{i}$, the individual keep-out set is given by $\bigcup_{j=1}^\N \avoid_{ij}$, corresponding to $\pam{i}$ being captured by any of the defenders $\pbm{j},j=1,2,\ldots,\N$. For a particular set of $\N-\m+1$ attackers, the joint keep-out set is characterized by each of these players being within the capture radius of some defender. The avoid set $\set_A$ for at least $\N-\m+1$ attackers being captured is the union of all $\begin{pmatrix} \N \\ \N-\m+1 \end{pmatrix}$ such joint keep-out sets. %The entire avoid set for at least $\N-\m+1$ attackers being captured would be the union of the avoid sets for $\N-\m+1, \N-\m+2, \ldots, \N$ attackers being captured.
+
+The HJ reachability calculation for the multiplayer reach-avoid game is not only cumbersome to set up, but also intractable computationally due to the HJI PDE being solved on a discrete grid, which makes the computation complexity scale exponentially with the number of dimensions. In general, an HJI PDE of dimensions higher than five cannot be solved practically. Thus, we are limited to only being able to solve the HJI PDE corresponding to a two player game in which each player's state space is two-dimensional. Instead of directly solving the HJI PDE corresponding to the $2\N$-player game, which is a $4\N$-dimensional problem, we will solve the multiplayer game by combining the solution to the two player game and maximum matching from graph theory. This approach is outlined below.
+
+\subsection{Hamilton-Jacobi Reachability for the Two Player Game}
+\label{subsec:hj_two}
+In the two-player reach-avoid game, the goal of the attacker is to reach the target set $\target$ while avoiding capture by the defender. This goal is represented by the attacker being inside $\target$ but outside of the defender's capture radius.. En route to $\target$, the attacker must avoid capture by the defender. This is represented by the set $\avoid$. 
+
+In addition, both players need to avoid the obstacles $\obs$, which can be considered as the locations in $\amb$ where the players have zero velocity. In particular, the defender wins if the attacker is in $\obs$, and vice versa. Therefore, we define the terminal set as 
+\bq
+\begin{aligned}
+R = & \left\{\xj\in\amb^2 \mid \xa\in\target \land \|\xa-\xb\|_2 > \Rc \right\} \\  
+&\cup \left\{\xj\in\amb^2\mid \xb\in\obs \right\}
+\end{aligned}
+\eq
+
+Similarly, we define the avoid set as
+\bq \begin{aligned}
+A &= \left\{\xj\in\amb^2 \mid \|\xa-\xb\|_2\le \Rc \right\} \cup \left\{\xj\in\amb^2\mid \xa\in\obs \right\} \\
+&= \avoid \cup \left\{\xj\in\amb^2\mid \xa\in\obs \right\}
+\end{aligned} \eq
+
+Given these sets, we can define the corresponding level set representations $\valsR_R,\valsR_A$, and solve (\ref{eq:HJ_PDE_reachavoid}). Assuming $\amb\subset\R^2$, the result is $\mathcal{RA}_\infty(R,A)\in\R^4$, a four dimensional reachable set with the level set representation $\Phi(\xj,-\infty)$. The attacker wins if and only if the joint initial condition is such that $(\xan,\xbn)=\xjn\in\mathcal{RA}_\infty(R,A)$.
+
+If $\xjn\in\mathcal{RA}_\infty(R,A)$, then the attacker is guaranteed to win the game by using the optimal control input given in (\ref{eq:opt_ctrl_u}). Applying Equation (\ref{eq:opt_ctrl_u}) to the two player game, we have that the attacker winning strategy satisfies 
+
+\bq \label{eq:opt_ctrl2_u_gen}
+  \ca^*(\xa,\xb,t) = \arg \min_{\ca \in \mathbb{U}} \max_{\cb \in \mathbb{D}} p(\xa,\xb,-t)^T f(\xa,\xb,\ca,\cb) 
+\eq
+
+\noindent for $t \in [0,T]$. The explicit winning strategy satisfying (\ref{eq:opt_ctrl2_u_gen}) is given in \cite{Huang2011} as
+
+\bq \label{eq:opt_ctrl2_a}
+\ca^*(\xa,\xb,t) = -\vela \frac{p_u(\xa,\xb,-t)}{\|p_u(\xa,\xb,-t)\|_2}.
+\eq
+
+\noindent where $p = (p_u,p_d) = \frac{\partial \Phi}{\partial (\xa,\xb)}$.  
+
+Similarly, if $\xjn\notin\mathcal{RA}_\infty(R,A)$, then the defender is guaranteed to win the game by using the optimal control input given in (\ref{eq:opt_ctrl_d}). Applying Equation (\ref{eq:opt_ctrl_d}) to the two player game, we have that the defender winning strategy satisfies 
+
+\bq \label{eq:opt_ctrl2_d_gen}
+  \cb^*(\xa,\xb,t) = \arg \max_{\cb \in \mathbb{D}} p(\xa,\xb,-t)^T f(\xa,\xb,\ca^*,\cb)
+\eq
+
+\noindent for $t \in [0,T]$. The explicit winning strategy satisfying (\ref{eq:opt_ctrl2_d_gen}) is given in \cite{Huang2011} as
+\bq \label{eq:opt_ctrl2_d}
+\cb^*(\xa,\xb,t) = \velb \frac{p_d(\xa,\xb,-t)}{\|p_d(\xa,\xb,-t)\|_2}.
+\eq
+

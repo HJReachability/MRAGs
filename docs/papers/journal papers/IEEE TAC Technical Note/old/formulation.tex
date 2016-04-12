@@ -1,0 +1,56 @@
+\section{The Reach-Avoid Problem}
+\subsection{The Multiplayer Reach-Avoid Game}
+\label{sec:formulation}
+In our multiplayer reach-avoid game, $2\N$ players are partitioned into the set of $\N$ attackers, $\pas = \{\pam{1}, \pam{2}, \ldots, \pam{\N}\}$ and the set of $\N$ defenders, $\pbs = \{\pbm{1}, \ldots, \pbm{\N}\}$, whose states are confined in a bounded, open domain $\amb \subset \R^2$. The domain $\amb$ is partitioned into $\amb$ = $\free \cup \obs$, where $\free$ is a compact set representing the free space in which the $\N$ players can move, while $\obs = \amb \setminus \free$ corresponds to obstacles in the domain. 
+
+Let $\xam{i}, \xbm{j} \in \R^2$ denote the state of players $\pam{i}$ and $\pbm{j}$, respectively. Then given initial conditions $\xanm{i},\xbnm{i},i=1,2,\ldots,\N \in \amb$, we assume the dynamics of the players to be defined by the following decoupled system for $t \geq 0$:
+
+\bq\label{eq:dynamics}
+\begin{aligned}
+\dotxam{i}(t) &= \velai{i}\cam{i}(t), & \xam{i}(0) = \xanm{i},\\
+\dotxbm{i}(t) &= \velbi{i}\cbm{i}(t), & \xbm{i}(0) = \xbnm{i},\\
+& i=1,2,\ldots,N
+\end{aligned}
+\eq
+where $\velai{i}, \velbi{i}$ represent maximum speeds for $\pam{i}$ and $\pbm{i}$ respectively, and $\cam{i},\cbm{i}$ represent the controls of $\pam{i}$ and $\pbm{i}$ respectively. Different players may have different maximum speeds, and we assume that $\cam{i},\cbm{i}$ are drawn from the set $\A = \{\sigma \colon [0,\infty)\rightarrow \unitball \mid \sigma \text{ is measurable}\}$, where $\unitball$ denotes the closed unit ball in $\R^2$. Furthermore, we constrain the controls of both players to be those which allow the player states to remain within the free space for all time. Denote the joint state of all players by $\xj = (\xja, \xjb)$ where $\xja =(\xam{1},\ldots\xam{\N})$ is the joint state of the attackers $\pas$, and $\xjb = (\xbm{1},\ldots,\xbm{\N})$ is the joint state of the defenders $\pbs$. 
+
+The winning conditions of our reach-avoid game are as follows. The attacking team wins whenever $\m$ of the $\N$ attackers reach some target set without being captured by the defenders; $\m$ is pre-specified. The target set is denoted $\target\subset\free$ and is compact. The defending team wins if it can prevent the attacking team from winning by capturing or indefinitely delaying $\N-\m+1$ attackers from reaching $\target$. An illustration of the game setup is shown in Figure \ref{fig:mp_form}.
+
+The notion of capture is defined by the capture sets $\avoid_{ij}\subset\amb^{2\N},i,j=1,\ldots,\N$, which specifies the conditions under which $\pbm{i}$ is captured by $\pam{j}$. In general, $\avoid_{ij}$ can be any set that models capture, collision, or any situation in which a defender takes an attacker out of the game. In this paper, we will define $\avoid_{ij}$ to be $\avoid_{ij} = \left\{\xj\in\amb^{2\N} \mid \dist(\xam{i},\xbm{j})\le\Rc \right\}$, the interpretation of which is that $\pam{i}$ is captured by $\pbm{j}$ if $\pam{i}$'s position is within $\Rc$ of $\pbm{j}$'s position. 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{"fig/mp game formulation"}
+\caption{An illustration of the components of a multiplayer reach-avoid game.}
+\label{fig:mp_form}
+\end{figure}
+
+In this paper, we address the following the problems:
+\begin{enumerate}
+\item Given the joint initial states of all players $\xjn$, the target $\target$, and some fixed integer $\m, 0\le\m\le\N$, can the attacking team win?
+\item More generally, given the joint initial states of all players $\xjn$ and the target $\target$, how many attackers can the defending team prevent from reaching the target?
+\end{enumerate}
+% \begin{enumerate}
+% \item Given joint initial states of all players $\xjn$ and the target $\target$, can the defenders be guaranteed to win? \label{p:mp1}
+% \item More generally, given joint initial states of all attackers $\xjna$ and the target $\target$, what are all the defender configurations $\xjnb$ such that the defenders are guaranteed to win? \label{p:mp2}
+% \end{enumerate}
+
+\subsection{The Two-Player Reach-Avoid Game}
+\label{sec:2p_ra}
+We will answer the above questions about the general 2$\N$-player reach-avoid game by using solution to the two-player game as a building block. Thus, it will convenient to specialize the above formulation to the two-player game. In the two-player game, we denote the attacker as $\pa$, the defender as $\pb$, their states as $\xa,\xb$, and their initial conditions as $\xan,\xbn$. Their dynamics are
+\bq
+\begin{aligned}
+\dotxa(t) &= \vela\ca(t), & \xa(0) = \xan,\\
+\dotxb(t) &= \velb\cb(t), & \xb(0) = \xbn
+\end{aligned}
+\eq
+
+The players' joint state becomes $\xj=(\xa,\xb)$, and their joint initial condition becomes $\xjn=(\xan,\xbn)$. The capture set becomes simply $\avoid = \left\{(\xa,\xb)\in\amb^2 \mid \dist(\xa,\xb)\leq \Rc\right\}$. 
+
+The attacker $\pa$ wins if she reaches the target $\target$ without being captured by the defender $\pb$. The defender $\pb$ wins if she can prevent the attacker from winning by capturing the attacker or indefinitely delaying the attacker from reaching $\target$. 
+
+For the two-player reach-avoid game, we seek to answer the following:
+\begin{enumerate}
+\item Given the joint initial state of the attacker and defender $\xjn$ and the target $\target$, can the defender be guaranteed to win? \label{p:tp1}
+\item More generally, given the joint initial state of the attacker $\xa$ and the target $\target$, what is the set of initial defender positions in $\amb$ such that the defender is guaranteed to win? \label{p:tp2}
+\end{enumerate}

@@ -1,0 +1,44 @@
+\section{From Two-Player to Multiplayer} \label{sec:two_to_multi}
+In principle, the reach-avoid game can be analyzed by solving the corresponding HJI PDE. However, in our multiplayer reach-avoid game involving $\N$ players on each team, the joint state space of all 2$\N$ players is 4$\N$-dimensional (4$\N$D). Numerical solutions to the HJI PDE are only feasible up to approximately five dimensions \cite{HThesis}; thus, solving the HJI PDE corresponding to a $\N$ vs. $\N$ game is computationally intractable, and complexity-optimality trade-offs must be considered. 
+
+In this section, we assume that it is known whether or not each defender is guaranteed to win against each attacker in a 1 vs. 1 setting. This information can be obtained from, for example, the HJI solution described in Section \ref{sec:solution_hji} or the path defense solution described in Section \ref{sec:path_defense}. Given this knowledge of the outcome of each attacker-defender pair, we construct an approximation to the 4$\N$D HJI PDE solution using the graph-theoretic maximum matching. The approximation \textit{guarantees} an upper bound on the number of attackers that are able to reach the target. 
+
+\subsection{Maximum Matching}
+\label{subsec:max_match}
+We piece together our assumed knowledge of the outcome of each attacker-defender pair using maximum matching to approximate the 4$\N$D HJI PDE solution as follows:
+
+\begin{enumerate}
+\item Construct a bipartite graph with two sets of nodes $\pas,\pbs$, where each node represents a player.
+\item Form a bipartite graph: Draw an edge between $\pbm{i}$ and $\pam{j}$ if $\pbm{i}$ wins against $\pam{j}$ in a two-player reach-avoid game.
+\item Run any matching algorithm to find a maximum matching in the graph. This can be done using, for example, a linear program \cite{Schrjiver2004}, or the Hopcroft-Karp algorithm \cite{Karpinski1998}.
+\end{enumerate}
+
+After finding a maximum matching, we can guarantee an upper bound on the number of attackers who will be able to reach the target. If the maximum matching is of size $\mm$, then the defending team would be able to prevent \textit{at least} $\mm$ attackers from reaching the target. In other words, $\N-\mm$ is an upper bound on the number of attackers that can reach the target.
+
+For intuition, consider the following specific cases of $\mm$. If the size of the maximum matching is $\mm=\N$, then the defenders can prevent \textit{all} $\N$ attackers from reaching the target and thus no attacker will be able to reach the target. If $\mm=0$, then there is no initial pairing that will prevent any attacker from reaching the target; however, the attackers are \textit{not} guaranteed to all reach the target, as $\N-\mm=\N$ is only an upper bound on the number of attackers who can reach the target. Finally, if $\mm=\N-\m+1$, then the attacking team would only be able to send at most $\N-\mm=\m-1$ attackers to the target. Since $\m$ attackers need to reach the target for the attacking team to win, in this case the defending team would be guaranteed to win. 
+
+The entire procedure of applying maximum matching to the pairwise outcomes is illustrated in Figure \ref{fig:general_procedure}.
+
+Our solution to the multiplayer reach-avoid game is an approximation to the optimal solution that would be obtained by directly solving the $4\N$D HJI PDE; it is conservative for the defending team because by creating defender-attacker pairs, each defender restricts her attention to only one opposing player. Even if the size of maximum matching is zero, not all attackers are guaranteed to to reach the target, as the defending team could potentially capture some attackers without using a strategy that creates defender-attacker pairs. Nevertheless, our solution is able to overcome the numerical intractibility to approximate a $4\N$D calculation, and is useful in many game configurations.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{"fig/general procedure"}
+\caption{An illustration of using maximum matching to conservatively approximate the multiplayer reach-avoid game. A bipartite graph is created based on pairwise outcomes. Then, a maximum matching of the bipartite graph is found to optimally assign defender-attacker pairs. A maximum matching of size $\mm$ indicates that at most $\N-\mm$ attackers will be able to reach the target.}
+\label{fig:general_procedure}
+\end{figure}
+
+\subsection{Time-Varying Defender-Attacker Pairings}
+\label{subsec:tvarp}
+The procedure outlined in Section \ref{subsec:max_match} assigns an attacker to each defender that is part of a maximum pairing in an open-loop manner: the assignment is done at the beginning of the game, and does not change during the course of the game. However, the bipartite graph and its corresponding maximum matching can actually be updated as the players change positions during the game. This update can potentially be performed in real time by the following procedure:
+
+\begin{enumerate}
+\item Given the position of each defender $\xbm{i}$ and each attacker $\xam{j}$, determine whether $\xam{j}$ can win for all $j$. \label{step:pairwise}
+\item Construct the bipartite graph and find its maximum matching to assign an attacker to each defender that is part of the maximum matching.
+\item For a short, chosen duration $\Delta$, apply a winning control input and compute the resulting trajectory for each defender that is part of the maximum matching. For the rest of the defenders and for all attackers, compute the trajectories assuming some (any) control function. \label{step:traj}
+\item Update the player positions after the duration $\Delta$ and repeat steps \ref{step:pairwise} to \ref{step:traj}  with the new player positions.
+\end{enumerate}
+
+As $\Delta\rightarrow 0$, the above procedure computes a bipartite graph and its maximum matching as a function of time. Whenever the maximum matching is not unique, the defenders can choose a different maximum matching and still be guaranteed to prevent the same number of attackers from reaching the target. As long as each defender uses a winning control input against the paired-up attacker, the size of the maximum matching can never decrease as a function of time. 
+
+On the other hand, it is possible for the size of the maximum matching to increase as a function of time. This occurs if the joint configuration of the players becomes such that the resulting bipartite graph has a bigger maximum matching than before, which may happen since the size of the maximum matching only gives an upper bound on the number of attackers that are able to reach the target. Furthermore, there is currently no numerically tractable way to compute the joint optimal control input for the attacking team, so a suboptimal strategy from the attacking team can be expected, making an increase of maximum matching size likely. Determining defender control strategies that optimally promote an increase in the size of the maximum matching would be an important step towards the investigation of cooperation, and will be part of our future work.

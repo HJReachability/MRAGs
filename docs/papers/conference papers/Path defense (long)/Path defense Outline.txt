@@ -1,0 +1,26 @@
+Path defense outline
+** Write the following material and judge whether there is space to write about applying path defense to general target sets
+
+Abstract
+
+I. Introduction
+- Refer to intro from previous papers
+- Complexity-optimality trade-off
+
+II. Problem formulation
+- copy from journal paper and modify
+
+III. Solution 
+A. Path defense
+- 4D HJI solution description
+B. Strong path defense
+- Given point p on the path, what is the defender and attacker winning regions
+- The best point p* for defender to defend
+C. Properties of strongly defendable paths
+- A path "behind" a strongly defendable path is strongly defendable
+
+IV. Computational results
+- Comparison to 4D HJI solution (winning regions and computation time)
+- Non-convex 
+
+V. Conclusion and future work

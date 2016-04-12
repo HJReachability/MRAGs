@@ -1,0 +1,12 @@
+*.mexw64
+code/OLGameModified_fig1/
+code/OLGameModified_timeVarying1/
+code/nonconvexExample_fig1/
+code/nonconvexExample_fig2/
+*.aux
+*.blg
+*.gz
+*.svn-base
+*.tmp
+fig/OLgame2MP/
+fig/

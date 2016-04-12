@@ -1,0 +1,57 @@
+% !TEX root = multiplayer_reach_avoid_games.tex
+\section{From Two-Player to Multiplayer} \label{sec:two_to_multi}
+%Given the outcome of each attacker-defender pair obtained from either the HJI approach or the path defense approach, we construct an approximation to the $N$ vs. $N$ game using the graph-theoretic maximum matching. The approximation \textit{guarantees} an upper bound on the number of attackers that are able to reach the target. 
+
+\subsection{Maximum Matching}
+\label{subsec:max_match}
+We piece together the outcomes of all attacker-defender pairs using maximum matching as follows:
+
+\begin{alg}~
+\begin{enumerate}
+\item Construct a bipartite graph with two sets of nodes $\pas,\pbs$. Each node represents a player.
+\item For all $i,j$, draw an edge between $\pbm{i}$ and $\pam{j}$ if $\pbm{i}$ wins against $\pam{j}$ in a two-player reach-avoid game.
+\item Run any matching algorithm (eg. \cite{Schrjiver2004, Karpinski1998}) to find a maximum matching in the graph. %This can be done using, for example, a linear program \cite{Schrjiver2004}.
+\end{enumerate}
+\end{alg}
+
+After finding a maximum matching, we can guarantee an upper bound on the number of attackers that will be able to reach the target. If the maximum matching is of size $\mm$, then the defending team would be able to prevent \textit{at least} $\mm$ attackers from reaching the target.% In other words, $\N-\mm$ is an upper bound on the number of attackers that can reach the target.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.35\textwidth]{"fig/general procedure"}
+\caption{An illustration of using maximum matching to conservatively approximate the multiplayer reach-avoid game.}
+\label{fig:general_procedure}
+\end{figure}
+
+\subsection{Time-Varying Defender-Attacker Pairings}
+\label{subsec:tvarp}
+With the next algorithm, the bipartite graph and its corresponding maximum matching can be updated, potentially in real time, as the players change positions during the game:
+
+\begin{alg}~
+\begin{enumerate}
+\item Given each $\xbm{i}$ and each $\xam{j}$, determine whether $\pam{j}$ can win against $\pbm{i}$ for all $i,j$. \label{step:pairwise}
+\item Assign a defender to each attacker that is part of a maximum matching.
+\item For a short duration $\Delta$, apply a winning control input and compute the resulting trajectory for each defender that is part of the maximum matching. For the rest of the defenders and for all attackers, compute the trajectories assuming some (any) control function. \label{step:traj}
+\item Update the player positions after the duration $\Delta$ and repeat steps \ref{step:pairwise} to \ref{step:traj}  with the new player positions.
+\end{enumerate}
+\end{alg}
+
+As $\Delta\rightarrow 0$, the above procedure continuously computes a bipartite graph and its maximum matching. As long as each defender uses a winning control input against the paired-up attacker, the size of maximum matching can never decrease. 
+
+%Since the size of the maximum matching only gives an upper bound on the number of attackers that are able to reach the target, it is possible for the size of the maximum matching to increase as a function of time. Also, because there is currently no numerically tractable way to compute the joint optimal control input for the attacking team, a suboptimal strategy from the attacking team can be expected, making an increase of maximum matching size likely. %Determining defender control strategies that optimally promote an increase in the size of the maximum matching would be an important step towards the investigation of cooperation. Since the maximum matching of a bipartate is in general not unique, such strategies may involve intelligently choosing among several maximum matchings or adding weights to edges and performing weighted maximum matching. These considerations will be part of our future work.
+
+\subsection{Application to the Two-Player HJI Solution}
+\label{subusec:MMHJI}
+In general, solving $\N^2$ 4D HJI PDEs gives us the pairwise outcomes between every attacker-defender pair. The computation time required is thus $C \N^2$, where $C$ is the time required to solve a single 4D HJI PDE. The pairwise outcomes can then be merged together to approximate the $\N$ vs. $\N$ game. In the case where each team has a single maximum speed, solving \textit{one} 4D HJI PDE would characterize all pairwise outcomes.
+
+Since the solution to the 4D HJI PDE characterizes pairwise outcomes based on any attacker-defender joint-state, it allows for real-time updates of the maximum matching. As players move to new positions, the pairwise outcome can be updated by simply checking whether $(\xam{i}, \xbm{j})$ is in $\mathcal{RA}_\infty(R,A)$.
+
+\subsection{Application to the Two-Player Path Defense Solution}
+\label{subsec:MMPD}
+To use the pairwise outcomes determined by the path defense approach for approximating the solution to the multiplayer game, we add the following step to Algorithm \ref{alg:PD_RA}: 
+\begin{enumerate}
+\setcounter{enumi}{5}
+\item Repeat steps \ref{step:dWinRegion} to \ref{step:union} for every attacker position.
+\end{enumerate}
+
+For a given domain, set of obstacles, and target set, steps \ref{step:createPath} and \ref{step:repeatCreatePath} in Algorithm \ref{alg:PD_RA} only need to be performed once, regardless of the number of players. In step \ref{step:dWinRegion}, the speeds of defenders come in only through a single distance calculation from $\pstar$, which only needs to be done once per attacker position. Therefore, the total computation time required is on the order of $C_1 + C_2 \N$, where $C_1$ is the time required for steps \ref{step:createPath} and \ref{step:repeatCreatePath}, $C_2$ is the time required for steps \ref{step:dWinRegion} to \ref{step:union}. 

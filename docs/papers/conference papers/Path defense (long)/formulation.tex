@@ -1,0 +1,50 @@
+\section{Problem Formulation}
+\label{sec:formulation}
+We consider a multiplayer reach-avoid game between a team of $\N$ attackers, $\pas = \{\pam{1}, \pam{2}, \ldots, \pam{\N}\}$ and a team of $\N$ defenders, $\pbs = \{\pbm{1}, \ldots, \pbm{N}\}$. Each player is confined in a bounded, open domain $\amb \subset \R^2$, which can be partitioned as follows: $\amb$ = $\free \cup \obs$. $\free$ is a compact set representing the free space in which the players can move, while $\obs = \amb \setminus \free$ represents the obstacles that obstruct movement in the domain. Let $\xam{i}, \xbm{j} \in \R^2$ denote the states of the players $\pam{i}$ and $\pbm{j}$ respectively. Initial conditions of the players are denoted by $\xanm{i},\xbnm{i} \in \free,i=1,2,\dots,\N$. We assume that the dynamics of the players are defined by the following decoupled system for $t \geq 0$:
+
+\bq\label{eq:dynamics}
+\begin{aligned}
+\dotxam{i}(t) &= \velai{i}\cam{i}(t), & \xam{i}(0) = \xanm{i},\\
+\dotxbm{i}(t) &= \velbi{i}\cbm{i}(t), & \xbm{i}(0) = \xbnm{i},\\
+& i=1,2,\ldots,\N
+\end{aligned}
+\eq
+where $\cam{i}(\cdot),\cbm{i}(\cdot)$ represent the control functions of $\pam{i}$ and $\pbm{i},i=1,2,\ldots,\N$ respectively. $\velai{i},\velbi{i}$ represent the maximum speeds of the \ith attacker and \ith defender, respectively; each player can have a different maximum speed. We assume that every defender is no slower than all attackers: $\forall i, \velbi{i} \ge \velai{j} \forall j$. We further assume that the control functions $\cam{i}(\cdot),\cbm{i}(\cdot)$ are drawn from the set $\A = \{\sigma \colon [0,\infty)\rightarrow \unitball \mid \sigma \text{ is measurable}\}$, where $\unitball$ denotes the closed unit ball in $\R^2$.
+ 
+As a clarification on the notation and terminology, the control functions (with a dot notation, e.g.\ $\cam{i}(\cdot), \cbm{i}(\cdot), u(\cdot)$ etc.\ ) which are the entire control trajectories, are distinguished from the control inputs (such as $\cam{i}, \cam{i}(t), \cbm{i}, \cbm{i}(t)$ etc.\ ) which are the instantaneous control inputs. Furthermore, given $\xanm{i}\in \free$, we define the admissible control function set for $\pam{i}$ to be the the set of all control functions such that $\xam{i}(t) \in \free, \forall i$, $\forall t \ge 0$. The admissible control function set for defenders $\pbm{i},i=1,2,\ldots,\N$ is defined similarly, given that $\xbnm{i}\in \free$. The joint state of all the players is denoted by $\xj = (\xam{1},\ldots\xam{\N}, \xbm{1},\ldots,\xbm{\N})$. The joint initial condition is denoted by $\xjn = (\xanm{1},\ldots,\xanm{N},\xbnm{1},\ldots,\xbnm{N})$.  
+
+In this reach-avoid game, the attacking team aims to reach the target $\target\subset\free$, a compact subset of the domain, without getting captured by the defenders. 
+The capture conditions are formally described by the capture sets $\avoid_{ij}\subset\amb^{2\N}$ for the pairs of the players $\left(\pam{i},\pbm{j}\right),i,j=1,\ldots,\N$. In general, $\avoid_{ij}$ can be an arbitrary compact subset of $\amb^{2\N}$, which represents the set of the joint player states $\xj$ at which $\pam{i}$ is captured by $\pbm{j}$. Hence, in the general case, the interpretation of capture is given by the set $\avoid_{ij}$, which in turn depends on the specific situation one wishes to model. In this paper, we define the capture sets to be $\avoid_{ij} = \left\{\xj\in\amb^{2\N} \mid \xam{i}=\xbm{j} \right\}$, the interpretation of which is that $\pam{i}$ is captured by $\pbm{j}$ if $\pam{i}$'s position coincides with $\pbm{j}$'s position. The lack of capture radius allows for clearer presentation of our analysis, easily extends to the case in which there is a positive capture radius.
+
+In our multiplayer reach-avoid game, the team of the attackers $\pas$ wins when at least $\m$ attackers reach the target $\target$ without being captured. The team of the defenders $\pbs$ wins the game if they can delay at least $N-m+1$ attackers from reaching the target indefinitely. An illustration of the game setup is shown in Figure \ref{fig:mp_form}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.4\textwidth]{"fig/formulation"}
+\caption{An illustration of the components of a multiplayer reach-avoid game.}
+\label{fig:mp_form}
+\end{figure}
+
+With the above definitions, we now state the main question that this paper answers. Given the minimum number $m$ of the attackers that need to reach the target, the joint initial state $\xjn$ of all the players in domain $\amb$ with obstacles $\obs$, the target set $\target$, and the capture sets $\avoid_{ij}$, can the defenders be guaranteed to win?
+
+As an example of the multiplayer reach-avoid game, consider the special case in which each team only has one player. The solution to this special case will be a building block for the the solution to the full multiplayer game. In the two-player game, we denote the attacker as $\pa$, the defender as $\pb$, their states as $\xa,\xb$, and their initial conditions as $\xan,\xbn$. Their dynamics are
+\bq
+\begin{aligned}
+\dotxa(t) &= \vela\ca(t), & \xa(0) = \xan,\\
+\dotxb(t) &= \velb\cb(t), & \xb(0) = \xbn.
+\end{aligned}
+\eq
+
+We assume $\velb \ge \vela$. The players' joint state and joint initial condition become $\xj=(\xa,\xb),\xjn=(\xan,\xbn)$ respectively. The capture set for $\pa$ is then simply 
+
+\bq
+\label{eq:2p_avoid}
+\avoid = \left\{(\xa,\xb)\in\amb^2 \mid \xa=\xb\right\}. 
+\eq
+
+The attacker $\pa$ wins when she reaches the target $\target$ without being captured by the defender $\pb$. If the defender $\pb$ can delay $\pa$ from reaching $\target$ indefinitely, the defender wins.
+
+This two-player reach-avoid game and its variant were first studied in \cite{Huang2011} and \cite{Zhou2012}. In this paper, we provide a computationally efficient approximation to the HJI framework, and utilize the results in \cite{Chen2014} to deal with the multiplayer reach-avoid games.
+
+
+%For the two-player reach-avoid game, we seek to the following: Given joint initial state of the attacker and defender $\xjn$ and the target $\target$, can the defender be guaranteed to win? 

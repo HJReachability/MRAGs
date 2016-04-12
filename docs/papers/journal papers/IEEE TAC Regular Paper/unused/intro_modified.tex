@@ -1,0 +1,33 @@
+\section{Introduction}
+
+In a reach-avoid game, one set of players attempt to arrive at a target set in the state-space, while avoiding a set of unsafe states, as well as interceptions by an opposing set of players.  Throughout this paper, we refer to the two opposing sides as attackers and defenders, respectively. 
+%The defenders attempt to prevent the attackers from arriving at the target by intercepting them or blocking their motion.
+Such games encompass a large number of robotics and control applications.
+For example, many safe motion-planning problems may be formulated as reach-avoid games, in which the objective is to control one or more agents into a desired target region, while avoiding a set of obstacles or possibly adversarial agents.
+%The game can be defined by a scalar value function representing the arrival time of one or more of the attackers at the target, with the attacking side attempting to minimize this value and the defenders maximizing.
+Finding solution strategies for such games can be computationally expensive, even for games involving a single attacker and a single defender, and the computational burden can grow exponentially with the number of players. 
+%For convenience, we refer to the two opposing sides of a reach-avoid game as attackers and defenders. 
+
+This paper presents a method to mitigate the computational requirements for finding a solution to reach-avoid games, by addressing them in an open-loop sense, such that the two sides select their plans of action prior to the beginning of the game and do not change them over the course of play. 
+In particular, we consider an \emph{upper-value} game, in which the attacking side first selects its control inputs, which are then made known to the defenders, and a \emph{lower-value} game, in which the defending side chooses first.
+The upper-value game is conservative from the point of the attackers, and gives an upper bound on the time to accomplish their objectives.  The lower-value game, which is conservative from the point of the defenders, provides a lower bound on this time.
+The scenario we consider involves kinematically controlled players moving with spatially varying speed limits in a bounded domain containing obstacles.
+
+The primary contribution of this work is an open-loop framework for efficiently computing solutions to reach-avoid games in the two-player case and also certain multi-agent cases.  More specifically, we discuss formulations of the reach-avoid games in terms of the open-loop upper value and the open-loop lower value, and develop a set of modified fast-marching methods (FMM) that allow us to quickly compute solutions to these open-loop games, in the form of a set of player trajectories with provable properties.  We emphasize here that the two open-loop values, in addition to being interesting for study in their own right, also provide bounds on the closed-loop value of the reach-avoid game.  This closed-loop value is in general the solution to a Hamilton-Jacobi-Isaacs (HJI) equation, which can be very difficult to compute, in particular for games with a large number of players.  Thus, our open-loop framework can be interpreted as a computationally efficient approximation framework for reach-avoid games, through the trade-off of a certain degree of optimality for a reduction in computational complexity.
+
+Some of the theoretical results were presented in two previous publications~\cite{OL_ICRA2012, OL_CDC2012}.
+This work unifies the presentation of the open-loop games and their relationship to each other, while providing more detailed proofs of the technical results and extending the solutions to classes of multi-agent games. Additional simulation results are also included for the multi-agent cases. 
+
+We begin by reviewing related work in this domain in Section~\ref{sec:related}.  We then proceed to describe formulations of the problem for a single attacker and a single defender in Section~\ref{sec:formulation}. The classical closed-loop, Hamilton-Jacobi-Isaacs (HJI) formulation is first introduced in this section. The computational complexity of this approach then provides the motivation for open-loop formulations of the game.
+The theory of the upper and lower value games are presented in Section~\ref{sec:theory}.
+For the upper-value game, we present an algorithm to compute a time-optimal path for the attacker to reach the target while avoiding obstacles and the defender in the low-dimensional state-space of a single player rather than in the joint state-space of both players. 
+%This allows us to compute the solution to the motion planning problem from the solution to a Hamilton-Jacobi-Bellman (HJB) equation in the low-dimensional state-space of single attackers rather than in the joint state-space of all players.  
+%From the HJB solution, we derive a ``safe-reachable set,'' namely the set of states reachable by the player from a given initial condition, under trajectories which conservatively avoid collisions with the point obstacle.  
+For the lower-value game, we present an algorithm which computes a lower bound to the time-to-reach function and derive control inputs for a defending player that achieves this bound.
+The properties of the two open-loop values as bounds on the closed-loop value is also discussed.
+The algorithms for computing these solutions are discussed in detail in Section~\ref{sec:numerics}, based upon modifications of the FMM.
+%The open-loop game formulations and solutions can also be directly applied to scenarios with multiple players on each side.
+% as well as sequences of multiple target sets that must be reached in order.
+Section~\ref{sec:multiPlayer} extends the discussion of open-loop games to scenarios with multiple players on each side.
+%and illustrates the use of the algorithms through simulation results. 
+Section~\ref{sec:simulation} presents simulation results demonstrating the application of the computational algorithms.  We conclude with a discussion of the open-loop framework and future work in Section~\ref{sec:conclusion}.

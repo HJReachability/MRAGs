@@ -1,0 +1,65 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out
+                                                          % if you need a4paper
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
+                                                          % paper
+
+\IEEEoverridecommandlockouts                              % This command is only
+                                                          % needed if you want to
+                                                          % use the \thanks command
+\overrideIEEEmargins
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+\usepackage{graphicx}
+\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{amssymb}  % assumes amsmath package installed
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{algorithm, algorithmic}
+\usepackage{subcaption}
+\numberwithin{algorithm}{section}
+
+\newtheorem{defn}{Definition}
+\newtheorem{thm}{Proposition}[section]
+\newtheorem{cor}{Corollary}[section]
+
+\usepackage{"../../my_macros"}
+
+%\title{\LARGE \bf
+%Pursuit-Evasion and Reachability in Playing Capture-the-Flag
+%}
+
+\title{\LARGE \bf
+Multiplayer Reach-Avoid Games, Single Defender versus Two Attackers
+}
+
+
+\author{% <-this % stops a space
+\thanks{This work has been supported in part by NSF under CPS:ActionWebs (CNS-931843), by ONR under the HUNT (N0014-08-0696) and SMARTS (N00014-09-1-1051) MURIs and by grant N00014-12-1-0609, by AFOSR under the CHASE MURI (FA9550-10-1-0567).}% <-this % stops a space
+}
+
+\begin{document}
+
+\maketitle
+
+\thispagestyle{empty}
+\pagestyle{empty}
+
+\begin{abstract}
+We consider a multiplayer reach-avoid game with an equal number of attackers and defenders moving with simple dynamics on a two-dimensional domain possibly with obstacles. The attacking team attempts to win the game by sending at least $\m$ attackers to a certain target location quickly while the defenders aim to capture the attackers to prevent the attacking team from reaching its goal.  The analysis of problems like this plays an important role in collision avoidance, motion planning, and aircraft control, among other applications. Computing optimal solutions for such multiplayer games is intractable due to the curse of dimensionality. This paper provides a first attempt to address such computational intractability by combining maximum matching in graph theory with the classical Hamilton-Jacobi-Isaacs approach. In addition, our solution provides an initial step to take cooperation into account by computing maximum matching in real time.
+\end{abstract}
+
+\input{introduction.tex}
+\input{formulation.tex}
+\input{solution.tex}
+\input{results.tex}
+\input{conclusion.tex}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

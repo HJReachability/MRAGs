@@ -1,0 +1,12 @@
+Reviewer 4 of CDC14 submission 1635
+
+Comments to the author
+======================
+
+In this paper, the authors consider multi-player
+reach-avoid games. They present the solution to a
+two-player "path defense" game and use this to construct a
+(conservative) solution to the more general multi-player
+game. This is a very good idea, which shows substantial
+computational gains over standard methods. In addition, the
+paper is admirably clear and well written. 

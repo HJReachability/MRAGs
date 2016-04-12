@@ -1,0 +1,140 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{#1}
+\csname url@rmstyle\endcsname
+\providecommand{\newblock}{\relax}
+\providecommand{\bibinfo}[2]{#2}
+\providecommand\BIBentrySTDinterwordspacing{\spaceskip=0pt\relax}
+\providecommand\BIBentryALTinterwordstretchfactor{4}
+\providecommand\BIBentryALTinterwordspacing{\spaceskip=\fontdimen2\font plus
+\BIBentryALTinterwordstretchfactor\fontdimen3\font minus
+  \fontdimen4\font\relax}
+\providecommand\BIBforeignlanguage[2]{{%
+\expandafter\ifx\csname l@#1\endcsname\relax
+\typeout{** WARNING: IEEEtran.bst: No hyphenation pattern has been}%
+\typeout{** loaded for the language `#1'. Using the pattern for}%
+\typeout{** the default language instead.}%
+\else
+\language=\csname l@#1\endcsname
+\fi
+#2}}
+
+\bibitem{OFTHEAIRFORCEWASHINGTON:2009p37}
+D.~of~the Air~Force, ``United states air force unmanned aircraft systems flight
+  plan 2009-2047,'' \emph{oai.dtic.mil}, Jan 2009.
+
+\bibitem{Erzberger:2006p44}
+H.~Erzberger, ``Automated conflict resolution for air traffic control,''
+  \emph{25 th International Congress of the Aeronautical Sciences}, Jan 2006.
+
+\bibitem{kiva2009}
+A.~Madrigal, ``Autonomous robots invade retail warehouses,''
+  \url{http://www.wired.com/wiredscience/2009/01/retailrobots/}.
+
+\bibitem{Axe:2007p9}
+D.~Axe, ``Building trust: Human fears limit autonomy and capability of
+  robots,'' \emph{Defense Technology International}, Nov 2007.
+
+\bibitem{Metzger:2001p60}
+U.~Metzger and R.~Parasuraman, ``The role of the air traffic controller in
+  future air traffic management: An empirical study of active control versus
+  passive monitoring,'' \emph{Human Factors}, Jan 2001.
+
+\bibitem{DAndrea:2003p95}
+R.~D'Andrea and M.~Babish, ``The roboflag testbed,'' \emph{Proceedings of the
+  American Control Conference}, vol.~1, pp. 656--660, 2003.
+
+\bibitem{Earl:2007p101}
+M.~Earl and R.~D'Andrea, ``A decomposition approach to multi-vehicle
+  cooperative control,'' \emph{Robotics and Autonomous Systems}, vol.~55,
+  no.~4, pp. 276--291, 2007.
+
+\bibitem{Campbell:2003p5}
+M.~Campbell, R.~D'Andrea, D.~Schneider, A.~Chaudhry, S.~Waydo, J.~Sullivan,
+  J.~Veverka, and A.~Klochko, ``Roboflag games using systems based,
+  hierarchical control,'' \emph{Proceedings of the American Control
+  Conference}, vol.~1, pp. 661--666, 2003.
+
+\bibitem{Waydo:2003p97}
+S.~Waydo and R.~Murray, ``Vehicle motion planning using stream functions,''
+  \emph{IEEE International Conference on Robotics and Automation, 2003.
+  Proceedings. ICRA'03}, pp. 2484--2491, 2003.
+
+\bibitem{Parasuraman:2005p99}
+R.~Parasuraman, S.~Galster, P.~Squire, H.~Furukawa, and C.~Miller, ``A flexible
+  delegation-type interface enhances system performance in human supervision of
+  multiple robots: Empirical studies with roboflag,'' \emph{IEEE Transactions
+  on Systems, Man, and Cybernetics---Part A: Systems and Humans}, vol.~35,
+  no.~4, p. 481, 2005.
+
+\bibitem{Chasparis:2005p102}
+G.~Chasparis and J.~Shamma, ``Linear-programming-based multi-vehicle path
+  planning with adversaries,'' \emph{American Control Conference, 2005.
+  Proceedings of the 2005}, pp. 1072--1077, 2005.
+
+\bibitem{Sprinkle:2004p100}
+J.~Sprinkle, J.~Eklund, H.~Kim, and S.~Sastry, ``Encoding aerial
+  pursuit/evasion games with fixed wing aircraft into a nonlinear model
+  predictive tracking controller,'' \emph{Decision and Control, 43rd IEEE
+  Conference on}, 2004.
+
+\bibitem{McGrew:2008p103}
+J.~McGrew, J.~How, L.~Bush, B.~Williams, and N.~Roy, ``Air combat strategy
+  using approximate dynamic programming,'' \emph{AIAA Guidance, Navigation, and
+  Control Conference}, Aug 2008.
+
+\bibitem{j:mitchell-TAC-2005}
+I.~Mitchell, A.~Bayen, and C.~Tomlin, ``A time-dependent {Hamilton-Jacobi}
+  formulation of reachable sets for continuous dynamic games,'' \emph{IEEE
+  Transactions on Automatic Control}, vol.~50, no.~7, pp. 947--957, July 2005.
+
+\bibitem{DSST08}
+J.~Ding, J.~Sprinkle, S.~S. Sastry, and C.~J. Tomlin, ``Reachability
+  calculations for automated aerial refueling,'' in \emph{Proceedings of the
+  47th IEEE Conference on Decision and Control}, Cancun, Mexico, 2008.
+
+\bibitem{GHVT09b}
+J.~H. Gillula, H.~Huang, M.~P. Vitus, and C.~J. Tomlin, ``Design of guaranteed
+  safe maneuvers using reachable sets: Autonomous quadrotor aerobatics in
+  theory and practice,'' in \emph{Proc. 2010 IEEE Int. Conf. on Robotics and
+  Automation}, Anchorage, AK, May 2010.
+
+\bibitem{Oishi:2008p98}
+M.~Oishi, I.~Mitchell, A.~Bayen, and C.~Tomlin, ``Invariance-preserving
+  abstractions of hybrid systems: Application to user interface design,''
+  \emph{IEEE Transactions on Control Systems Technology}, vol.~16, no.~2, pp.
+  229--244, 2008.
+
+\bibitem{b:basar-olsder-1999}
+T.~Bas¸ar and G.~Olsder, \emph{Dynamic Noncooperative Game Theory},
+  2nd~ed.\hskip 1em plus 0.5em minus 0.4em\relax Philadelphia, PA: SIAM, 1999.
+
+\bibitem{mitchell-thesis}
+I.~Mitchell, ``Application of level set methods to control and reachability
+  problems in continuous and hybrid systems,'' Ph.D. dissertation, Stanford
+  University, 2002.
+
+\bibitem{b:bardi-1997}
+M.~Bardi and I.~Capuzzo~Dolcetta, \emph{Optimal Control and Viscosity Solutions
+  of Hamilton-Jacobi-Bellman Equations}.\hskip 1em plus 0.5em minus 0.4em\relax
+  Birkhauser, 1997.
+
+\bibitem{j:Crandall-TAMS-1983}
+M.~G. Crandall and P.-L. Lions, ``Viscosity solutions of {Hamilton-Jacobi}
+  equations,'' \emph{Transactions of the American Mathematical Society}, vol.
+  277, no.~1, pp. 1--42, 1983.
+
+\bibitem{LSToolbox}
+I.~Mitchell, \emph{{A Toolbox of Level Set Methods}}, 2009,
+  \url{http://people.cs.ubc.ca/~mitchell/ToolboxLS/index.html}.
+
+\bibitem{j:Lygeros-automatica-1999}
+J.~Lygeros, C.~Tomlin, and S.~Sastry, ``Controllers for reachability
+  specifications for hybrid systems,'' \emph{Automatica}, vol.~35, no.~3, pp.
+  349 -- 370, 1999.
+
+\bibitem{j:Tomlin-ProcIEEE-2000}
+C.~Tomlin, J.~Lygeros, and S.~Shankar~Sastry, ``A game theoretic approach to
+  controller design for hybrid systems,'' \emph{Proceedings of the IEEE},
+  vol.~88, no.~7, pp. 949 --970, Jul 2000.
+
+\end{thebibliography}

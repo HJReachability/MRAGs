@@ -1,0 +1,152 @@
+\documentclass[journal]{IEEEtran}
+%\documentclass[12pt,draftcls,onecolumn]{IEEEtran}
+%\documentclass[manuscript]{IEEEtran}
+%\usepackage{hyperref}
+% show labels
+%\usepackage[notref,notcite]{showkeys}
+%\usepackage[T1]{fontenc}
+%\usepackage[latin9]{inputenc}
+%\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphics}
+\usepackage{graphicx}
+%\usepackage{enumitem}
+\usepackage{color}
+%\usepackage{algorithm2e}
+%\usepackage{appendix}
+%\usepackage{algorithmic}
+%\usepackage{program}
+\usepackage{subcaption}
+
+
+
+
+%\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+%\theoremstyle{plain}
+%\newtheorem{thm}{Theorem}
+%\theoremstyle{plain}
+%\newtheorem{prop}[thm]{Proposition}
+% \ifx\proof\undefined\
+%   \newenvironment{proof}[1][\proofname]{\par
+%     \normalfont\topsep6\p@\@plus6\p@\relax
+%     \trivlist
+%     \itemindent\parindent
+%     \item[\hskip\labelsep
+%           \scshape
+%       #1]\ignorespaces
+%   }{%
+%     \endtrivlist\@endpefalse
+%   }
+%   \providecommand{\proofname}{Proof}
+% \fi
+%\theoremstyle{remark}
+\newtheorem{rem}{Remark}
+%\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\newtheorem{prop}{Proposition}
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}{Lemma}
+\newtheorem{alg}{Algorithm}
+
+%\theoremstyle{plain}
+%\newtheorem{lem}[thm]{Lemma}
+%\theoremstyle{plain}
+%\newtheorem{cor}[thm]{Corollary}
+%
+%\newtheorem{example}{Example}
+
+%\makeatother
+
+%\usepackage{babel}
+
+\usepackage{"../my_macros"}
+
+\title{Multiplayer Reach-Avoid Games via Pairwise Outcomes}
+
+\author{Mo Chen, Zhengyuan Zhou and Claire J. Tomlin%
+\thanks{This work has been supported in part by NSF under CPS:ActionWebs (CNS-931843), by ONR under the HUNT (N0014-08-0696) and SMARTS (N00014-09-1-1051) MURIs and by grant N00014-12-1-0609, by AFOSR under the CHASE MURI (FA9550-10-1-0567).}% <-this % stops a space
+\thanks{M.~Chen, and C.~J.~Tomlin are with the Department of Electrical Engineering and Computer Sciences,
+        University of California, Berkeley, CA 94720, USA
+        {\tt\small \{mochen72,tomlin\}@eecs.berkeley.edu}}
+\thanks{Z.~Zhou is with the Department of Electrical Engineering,
+        Stanford University, Stanford, CA 94305, USA
+        {\tt\small zyzhou@stanford.edu}}   
+\thanks{We thank Haomiao Huang for sharing MatLab code for 4D HJI calculations.}
+}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+
+\begin{abstract}
+A multiplayer reach-avoid game is a differential game between two adversarial teams, each of $\N$ cooperative players playing on a compact domain with obstacles. The attacking team aims to send $\m$ of the $\N$ attackers to some target location, while the defending team aims to prevent that by capturing attackers or indefinitely delaying attackers from reaching the target. The analysis of this game plays an important role in collision avoidance, motion planning, aircraft control, among other applications involving cooperative agents. The optimal solution to this game is not only difficult to intuit, but also computationally intractable when $\N>1$ due to the high dimensionality of the joint state space of all players. In this paper, we present two different approaches for solving the reach-avoid game in the $N=1$ case to determine pairwise outcomes, and a graph theoretic maximum matching approach that merges together these pairwise outcomes for an $N>1$ solution that provides guarantees on the performance of the defending team. We will show that the four-dimensional Hamilton-Jacobi-Isaacs approach allows for real-time updates to the maximum matching in special cases, and that the two-dimensional ``path defense" approach is in general considerably more scalable with the number of players and trades off optimality for complexity while maintaining defender performance guarantees.
+\end{abstract}
+
+\input{intro.tex} 
+% Motivation and significance of result
+
+%\input{related.tex} 
+% CTF paper, Ryo OL paper, OL paper, etc.
+
+\input{formulation.tex}
+% General domain, # of players, goal of attackers
+% Specialization to 2 player case
+
+% HJI solution of 2 player game (CTF paper)
+\input{solution_hji.tex}
+
+%% THEORY
+\input{"solution PD game.tex"}
+% Path defense game as special case of general 2-player reach-avoid
+% Alternate way of solving path defense game through strong defense
+	% lemma 1: winning regions for defender once defender is on the path
+	% lemma 2: optimal point on the path for defender to go to
+% Conservatism of strong path defense (insight beyond HJI)
+
+\input{"solution PD reach-avoid.tex"} 
+% Properties of strong path defense
+	% Rotating paths backwards
+% 2 player reach-avoid using path defense
+	% Convex (solved)
+	% Simply connected (strong path defense method)
+		% only need to check paths touching target
+	% Obstacles (strong path defense method)
+		% only checking paths touching target may be even more conservative
+% Conservatism of reach-avoid via strong path defense (defender winning regions)
+	% Compare to 4D HJI solution
+
+%%%%% MULTIPLAYER GAME
+% Assume we have the solution to the two-player game
+% Maximum matching ties together two-player game solutions
+\input{two_to_multi.tex}
+
+%% IMPLEMENTATION (Put algorithms in the previous sections)
+% Finding the shortest path touching the target
+% Choosing a path to defend
+% Computing attacker winning regions given point
+% Determining optimal point on a path to defend
+% Conservatism (binary search on paths)
+
+\input{"comparison.tex"}
+
+\input{simulation.tex}
+% Convex (illustration of conservatism of strong path defense)
+% Non-convex
+	% Comparison with 4D HJI
+
+% Conservatism of strong path defense
+% Conservatism of reach-avoid via strong path defense (defender winning regions)
+
+\input{conclusion.tex}
+
+
+% bibliography
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

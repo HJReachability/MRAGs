@@ -1,0 +1,111 @@
+%\documentclass[journal]{IEEEtran}
+\documentclass[12pt,draftcls,onecolumn]{IEEEtran}
+%\usepackage{hyperref}
+% show labels
+%\usepackage[notref,notcite]{showkeys}
+%\usepackage[T1]{fontenc}
+%\usepackage[latin9]{inputenc}
+%\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphics}
+\usepackage{graphicx}
+%\usepackage{enumitem}
+\usepackage{color}
+%\usepackage{algorithm2e}
+%\usepackage{appendix}
+%\usepackage{algorithmic}
+%\usepackage{program}
+
+
+
+
+%\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+%\theoremstyle{plain}
+%\newtheorem{thm}{Theorem}
+%\theoremstyle{plain}
+%\newtheorem{prop}[thm]{Proposition}
+% \ifx\proof\undefined\
+%   \newenvironment{proof}[1][\proofname]{\par
+%     \normalfont\topsep6\p@\@plus6\p@\relax
+%     \trivlist
+%     \itemindent\parindent
+%     \item[\hskip\labelsep
+%           \scshape
+%       #1]\ignorespaces
+%   }{%
+%     \endtrivlist\@endpefalse
+%   }
+%   \providecommand{\proofname}{Proof}
+% \fi
+%\theoremstyle{remark}
+\newtheorem{rem}{Remark}
+%\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\newtheorem{prop}{Proposition}
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}{Lemma}
+
+%\theoremstyle{plain}
+%\newtheorem{lem}[thm]{Lemma}
+%\theoremstyle{plain}
+%\newtheorem{cor}[thm]{Corollary}
+%
+%\newtheorem{example}{Example}
+
+%\makeatother
+
+%\usepackage{babel}
+
+
+\usepackage{my_macros}
+
+\title{An Open-Loop Framework for Reach-Avoid Games}
+
+\author{Zhengyuan Zhou, Haomiao Huang, Jerry Ding, Ryo Takei, and Claire~J.~Tomlin
+
+\thanks{This work has been supported in part by NSF under CPS:ActionWebs
+(CNS-931843), by ONR under the HUNT (N0014-08-0696) and
+SMARTS (N00014-09-1-1051) MURIs and by grant N00014-12-1-0609, by AFOSR
+under the CHASE MURI (FA9550-10-1-0567).}\vspace{-1cm}% <-this % stops a space
+\thanks{Z.~Zhou, H.~Huang, J.~Ding, and C.~J.~Tomlin are with the Department of Electrical Engineering and Computer Sciences,
+        University of California, Berkeley, CA, USA
+        {\tt\small \{zhengyuan, haomiao, jding, tomlin\}@eecs.berkeley.edu}}        
+%\thanks{R.~Takei is with ???,
+%        ???
+%        {\tt\small ??@??}}
+}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+
+\begin{abstract}
+We consider a game in which one or more attacking players attempt to reach a target while avoiding both obstacles and capture by opposing, defending players. 
+Unlike pursuit-evasion games, in this reach-avoid game the players must consider both opposing players and the target.
+This complexity makes finding solutions to such games difficult and computationally challenging, especially as the number of players grows.
+We propose an approach to solving such games in an open-loop sense, where the players commit to their control actions prior to the beginning of the game.
+This reduces the dimensionality of the required computations, and allows us to quickly compute feasible solutions in real time for domains with arbitrary obstacle topologies. 
+We describe two such formulations, each of which is conservative towards one side, and derive algorithms based upon modified fast-marching methods (FMM) for efficiently computing their solutions.
+The formulations and algorithms are discussed in detail, along with simulation results demonstrating their use in scenarios with complex obstacle geometries and player speed profiles.
+\end{abstract}
+
+\input{intro_modified.tex}
+\input{related.tex}
+\input{formulation.tex}
+\input{theory_modified.tex}
+\input{numerics.tex}
+%\input{connection.tex}
+\input{multiPlayer.tex}
+\input{simulation.tex}
+\input{conclusion.tex}
+
+% bibliography
+\bibliographystyle{IEEEtran}
+\bibliography{refopenloop}
+
+\end{document}

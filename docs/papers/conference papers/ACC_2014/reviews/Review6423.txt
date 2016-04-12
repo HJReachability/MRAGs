@@ -1,0 +1,31 @@
+Reviewer 1 of 2014 ACC submission 1035
+
+Comments to the author
+======================
+
+This is a potentially interesting paper on dynamic
+2N-player reach-avoid games, but the research seems to be 
+still in the initial stages and  the paper  written  in
+haste.
+
+Due to the intractability of solving the associated HJI PDE
+inequalities for 2N-player games the authors propose to
+approximate the solution by an approach that combines the
+solution of N^2 two-player games with a pairwise matching
+algorithm, followed by standard maximum matching in a
+graph.
+
+It is not clear how valid is this pairwise matching in
+general. The key to the whole procedure is to create
+defender-attacker pairs.  But what if no suitable matching
+is found?  Can we a priori know whether this pairwise
+matching approach can be applied or not?  Moreover, the
+authors  do not characterize the class of configurations or
+scenarios that can be treated by their approach. Even
+though two examples are given, they are not discussed from
+this perspective. 
+
+Also,  in the Computation Results section there are a lot
+of typos, with many  figures being improperly numbered. In
+fact in the whole paper there are 3 figures (1 on page 5
+and 2 on page 7)  that are all labelled  as Fig 2!

@@ -1,0 +1,137 @@
+\section{Algorithms}
+\label{sec:algorithms}
+\textcolor{red}{OLD SECTION FROM OPEN LOOP PAPER
+Computing solutions to the open-loop upper and lower value games as described in the previous section requires finding $\vals$ and $\safereach$ for the upper value game and $\wRs$ and $\Rs$ for the lower value game.
+In each case, the desired value is a minimum time-to-reach function constrained within some set.
+If the set is known \emph{a priori}, the computation of the function values can be straightforwardly performed by obtaining the solution to a constrained optimal control problem. 
+However, in both cases the set is also unknown and actually depends upon the time-to-reach function, so both must be computed together.
+To do this in an efficient manner, we utilize modified versions of the fast marching method (FMM) to compute both the desired function values and the corresponding sets simultaneously on a grid.
+This section briefly summarizes the FMM algorithm, and then presents the computations of $\vUpper$ and $\vLLower$ via modified FMM.}
+
+\subsection{The Fast Marching Method Algorithm}
+\textcolor{red}{
+FMM \cite{SethSIAM, SethianBook, falconeLecture}, is a single-pass method used to numerically approximate the \emph{Eikonal equation}}
+\vspace{-0.1cm}
+\bq\label{eikonal}
+\vel(y)\|\nabla \valsR (y) \| = 1,\quad y\in\domain\setminus \inits,
+\eq
+with Dirichlet boundary conditions $\valsR=\infty$ on $\partial\domain$ and $\valsR(y)=b(y),\forall y\in\inits$, for some closed set $\inits \subset\domain$, some boundary condition $b(y)$ and some known function $\vel(\cdot)$. 
+%Here $\valsR(\cdot)$ represents a generic minimum time-to-reach function. 
+For the system dynamics here, the Eikonal equation can be used to compute the minimum time-to-reach function from an initial condition or to a target set.
+%if the boundary condition in $\inits$ is $b(y) = 0, \forall y \in \inits$. 
+That is, if $\vel(\cdot)$ is a positive scalar function representing the maximum speed, then the solution $\valsR$ to equation~\eqref{eikonal} gives the minimum time-to-reach function starting from point $y$ and ending in the region $\inits$, or starting from $\inits$ and ending at $y$. 
+
+The value $\valsR$ in equation~\eqref{eikonal} is approximated by a grid function $\valsR_{i,j}$ on a uniform 2-D Cartesian grid $\grid$, where $\valsR_{i,j} \approx \valsR(y_{i,j})$, $y_{i,j}=(ih,jh)\in\grid$ and $h$ is the grid spacing.
+To simplify the treatment of the boundary conditions, assume that $\partial\domain$ is well-discretized by the grid points $\partial\grid\subset\grid$.
+The solution to equation~\eqref{eikonal} is found via the finite difference approximation,
+\bq\label{upwind}
+\frac{\vel(y_{i,j})}{h} \left[\!
+\begin{array}{c}
+(\valsR_{i,j} - \min\{\valsR_{i\pm1,j},\valsR_{i,j}\})^2 + \\
+\quad(\valsR_{i,j} - \min\{\valsR_{i,j\pm 1},\valsR_{i,j}\})^2 
+\end{array}\!
+\right]^{1/2}\!\!\!=1
+\eq
+
+%\vel(y_{i,j})\sqrt{
+%(\valsR_{i,j} - \min\{\valsR_{i\pm1,j},\valsR_{i,j}\})^2 + \quad(\valsR_{i,j} - \min\{\valsR_{i,j\pm 1},\valsR_{i,j}\})^2} \\
+% =1
+
+
+The solution to equation~\eqref{upwind} for $\valsR_{i,j}$ can be found through the quadratic formula, and is referred to as the Eikonal update
+\begin{equation}\label{EikonalUpdate}
+ \valsR_{i,j} = \valsR_{i,j}^*(\valsR_{i\pm1,j},\valsR_{i,j\pm1},\vel(y_{i,j})). 
+\end{equation}
+The scheme in equation~\eqref{upwind} is consistent and stable, and converges to the viscosity solution of equation~\eqref{eikonal} as $h\rightarrow 0$ \cite{RouyTourin}.
+The FMM algorithm computes the solution to equation~\eqref{upwind} for the entire grid by sequentially computing the value for each grid node in a particular order. 
+The value for each node is computed only a small number of times, resulting in efficient computation of the value function even on large grids. 
+%referenced in Chapter~\ref{chapter:hji}.
+%In the upper value section, the above generic minimum time-to-reach function $\phi$ will be replaced by $\vals$ and in the lower value section, it will be replaced by $\wRs$.
+
+We will use the basic structure of FMM with some modifications to compute the appropriate values: $\vals$ for the upper value and $\wRs$ for the lower value.
+We now briefly outline the FMM algorithm.
+% At each iteration, we partition the grid $\grid$ into Accepted, the set of nodes where the approximation values of the minimum time-to-reach function((i.e. $\vals$ or $\wRs$) are known, NarrowBand the set of candidate nodes to be added to Accepted.
+We keep track of two sets of nodes: Accepted and NarrowBand. 
+Accepted is the set of nodes where the approximation values of the minimum time-to-reach function((i.e. $\vals$ or $\wRs$) are known. 
+NarrowBand is the set of candidate nodes to be added to Accepted.
+% and FarAway (neither Accepted nor Narrow-Band).
+ In each iteration, one or more nodes from NarrowBand will have their values computed using the known node values in Accepted and then be removed from NarrowBand and added to Accepted.
+ At the same time, additional nodes on the boundary of NarrowBand will be added to NarrowBand.
+The intuition for fast marching is a thin boundary that expands outward from a known initial point or set.
+The algorithm begins with the known boundary condition as the Accepted set, then expands the set outward, computing the value for points near the boundary (points in the NarrowBand) until the values for all points on $\grid$ have been found.
+
+\textcolor{red}{The key principle exploited by the FMM is that of ``causality'' \cite{SethSIAM}, which states that the solution at a node only depends on adjacent nodes that have smaller values.
+This defines an ordering of the nodes, in increasing values of the minimum time-to-reach function (i.e. $\vals$ or $\wRs$). 
+This ordering is realized by adding the smallest valued candidate from NarrowBand into Accepted at each step, until either all nodes are in Accepted or the Accepted set is enclosed by nodes from NarrowBand, each of which contains $\infty$ as the minimum time-to-reach value.
+This ordering allows the value for each node to be computed only a small number of times, while the node is within NarrowBand, thus speeding up computation.}
+
+\subsection{Path Defense}
+Algorithm 1: Computing $\rpa$ and $\rpb$ given $\pathd$ and $\ppath\in\pathd$
+\begin{enumerate}
+\item Compute the time to reach $\apa$ and to $\apb$ from all points in $\amb$ for the attacker and the defender using FMM. This gives the time-to-reach functions $\valsRa(\x;\apa), \valsRa(\x;\apb), \valsRb(\x;\apa), \valsRb(\x;\apb)$ for $\x\in\amb$.
+\item Evaluate $\tb(\ppath,\apa) = \valsRb(\ppath;\apa)$ and $\tb(\ppath,\apb) = \valsRb(\ppath;\apb)$.
+\item $\rpa$ is given by $\rpa = \{\x: \valsRa(\x;\apa) \le \tb(\ppath,\apa)\}$, and $\rpb$ by $\rpb = \{\x: \valsRa(\x;\apb) \le \tb(\ppath,\apb)\}$.
+\end{enumerate}
+
+
+Algorithm 2: Computing $\pstar$ given $\pathd$
+The time-to-reach functions here are already computed in the previous algorithm, so virtually no additional computation time is needed.
+ 
+\begin{enumerate}
+\item Evaluate $\ta(\xa,\apa) = \valsRa(\xa;\apa)$, $\ta(\xa,\apb) = \valsRb(\xa;\apb)$, and $\ta(\apa,\apb) = \valsRb(\apa;\apb) = \valsRb(\apb;\apa)$.
+\item Calculate the position of $\pstar$ on $\pathd$ analytically by $\ta(\pstar,\xa) = \ta(\partial\rpa,\xa) = \frac{1}{2} \left( \ta(\apa,\xa)  + \ta(\apb,\xa) - \ta(\apa,\apb) \right)$. This calculation is shown below.
+\end{enumerate}
+
+The distance from $\apa$ to the boundary of $\rpa$ is the same as the distance from $\apa$ to $\pstar$. Similarly, the distance from $\apb$ to the boundary of $\rpb$ is the same as the distance from $\apb$ to $\pstar$. These two distances add up to the length of $\pathd$. Expressed in terms of the attacker time to reach, we have
+
+\bq
+\ta(\apa,\partial\rpa) + \ta(\apb,\partial\rpb) = \ta(\apa,\apb)
+\eq
+
+Note that $\ta(\apa,\partial\rpa) =  \ta(\apa,\xa) - \ta(\partial\rpa,\xa)$, and $\ta(\apb,\partial\rpb) =  \ta(\apb,\xa) - \ta(\partial\rpb,\xa)$, and we have
+
+\bq
+\ta(\apa,\xa) - \ta(\partial\rpa,\xa) + \ta(\apb,\xa) - \ta(\partial\rpb,\xa) = \ta(\apa,\apb)
+\eq
+
+$\pstar$ is characterized by the property $\ta(\partial\rpa,\xa) = \ta(\partial\rpb,\xa)$, so we have
+
+\bq
+\ta(\apa,\xa) - 2\ta(\partial\rpa,\xa) + \ta(\apb,\xa) = \ta(\apa,\apb)
+\eq
+
+Rearranging, we get
+
+\bq
+\ta(\pstar,\xa) = \ta(\partial\rpa,\xa) = \frac{1}{2} \left( \ta(\apa,\xa)  + \ta(\apb,\xa) - \ta(\apa,\apb) \right)
+\eq
+
+This uniquely defines $\pstar$.
+
+Algorithm 3: Determining whether a path $\pathd$ is strongly defendable
+\begin{enumerate}
+\item Compute $\pstar\in\pathd$ and the induced regions $\rpa$ and $\rpb$.
+\item Compute $\ta(\partial\rpa,\xa)$ (or $\ta(\partial\rpb,\xa)$, which is equal).
+\item Compute $\valsRb(\x;\pstar)$ and evaluate $\tb(\pstar,\xb) = \valsRb(\xb;\pstar)$.
+\item The path $\pathd$ is strongly defendable if and only if $\tb(\pstar,\xb) \le \ta(\partial\rpa,\xa)$.
+Alternatively, a region from which the defender can strongly defend $\pathd$ is given by $\rpd = \left\{\x: \tb(\x,\pstar) \le \ta(\xa,\rpa)\right\}$. $\pathd$ is strongly defendable if and only if $\xb\in\rpd$.
+\end{enumerate}
+
+\subsection{Two Player Reach-Avoid Game}
+Algorithm 4: Solving the two player reach-avoid game in a convex domain
+\begin{enumerate}
+\item Compute the Voronoi line between $\xan$ and $\xbn$.
+\item The defender wins if and only if the target set $\target$ is contained entirely in the defender's Voronoi cell.
+\textcolor{red}{May want to add something about value of the game}
+\end{enumerate}
+
+Algorithm 5: Finding a path of defense $\pathd$ that touches the target set $\target$.
+Given one anchor point $\apa$, this algorithm finds $\apb$ such that $\pathd$ touches (is close to) $\target$.
+\begin{enumerate}
+\item Fix $\apa$, and compute $
+\valsR(\x;\apa)$ (using either the defender or attacker's speed).
+\item Fix $\apa$, and compute $\valsR(\x;\apa)$ with $\target$ as an obstacle.
+\item Evaluate $\valsR(\x;\apa) \forall \x\in\boundary$. 
+\end{enumerate}
+
+Algorithm 6: Solving the two player reach-avoid game in a simply connected domain

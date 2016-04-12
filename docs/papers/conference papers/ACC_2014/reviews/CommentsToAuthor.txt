@@ -1,0 +1,6 @@
+This is a good paper but the current version can be
+improved and, as suggested by a reviewer, the paper gives
+the impression to have been written in haste.  
+I suggest to address carefully the comments of the
+reviewers and to devote some time in organizing and
+polishing the paper when preparing the final version.  

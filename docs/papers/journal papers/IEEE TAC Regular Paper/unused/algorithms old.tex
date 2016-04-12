@@ -1,0 +1,326 @@
+\section{Algorithms}
+\label{sec:algorithms}
+OLD SECTION FROM OPEN LOOP PAPER
+Computing solutions to the open-loop upper and lower value games as described in the previous section requires finding $\vals$ and $\safereach$ for the upper value game and $\wRs$ and $\Rs$ for the lower value game.
+In each case, the desired value is a minimum time-to-reach function constrained within some set.
+If the set is known \emph{a priori}, the computation of the function values can be straightforwardly performed by obtaining the solution to a constrained optimal control problem. 
+However, in both cases the set is also unknown and actually depends upon the time-to-reach function, so both must be computed together.
+To do this in an efficient manner, we utilize modified versions of the fast marching method (FMM) to compute both the desired function values and the corresponding sets simultaneously on a grid.
+This section briefly summarizes the FMM algorithm, and then presents the computations of $\vUpper$ and $\vLLower$ via modified FMM.
+
+\subsection{The Fast Marching Method Algorithm}
+FMM \cite{SethSIAM, SethianBook, falconeLecture}, is a single-pass method used to numerically approximate the \emph{Eikonal equation}
+\vspace{-0.1cm}
+\bq\label{eikonal}
+\vel(y)\|\nabla \valsR (y) \| = 1,\quad y\in\domain\setminus \inits,
+\eq
+with Dirichlet boundary conditions $\valsR=\infty$ on $\partial\domain$ and $\valsR(y)=b(y),\forall y\in\inits$, for some closed set $\inits \subset\domain$, some boundary condition $b(y)$ and some known function $\vel(\cdot)$. 
+%Here $\valsR(\cdot)$ represents a generic minimum time-to-reach function. 
+For the system dynamics here, the Eikonal equation can be used to compute the minimum time-to-reach function from an initial condition or to a target set.
+%if the boundary condition in $\inits$ is $b(y) = 0, \forall y \in \inits$. 
+That is, if $\vel(\cdot)$ is a positive scalar function representing the maximum speed, then the solution $\valsR$ to equation~\eqref{eikonal} gives the minimum time-to-reach function starting from point $y$ and ending in the region $\inits$, or starting from $\inits$ and ending at $y$. 
+
+The value $\valsR$ in equation~\eqref{eikonal} is approximated by a grid function $\valsR_{i,j}$ on a uniform 2-D Cartesian grid $\grid$, where $\valsR_{i,j} \approx \valsR(y_{i,j})$, $y_{i,j}=(ih,jh)\in\grid$ and $h$ is the grid spacing.
+To simplify the treatment of the boundary conditions, assume that $\partial\domain$ is well-discretized by the grid points $\partial\grid\subset\grid$.
+The solution to equation~\eqref{eikonal} is found via the finite difference approximation,
+\bq\label{upwind}
+\frac{\vel(y_{i,j})}{h} \left[\!
+\begin{array}{c}
+(\valsR_{i,j} - \min\{\valsR_{i\pm1,j},\valsR_{i,j}\})^2 + \\
+\quad(\valsR_{i,j} - \min\{\valsR_{i,j\pm 1},\valsR_{i,j}\})^2 
+\end{array}\!
+\right]^{1/2}\!\!\!=1
+\eq
+
+%\vel(y_{i,j})\sqrt{
+%(\valsR_{i,j} - \min\{\valsR_{i\pm1,j},\valsR_{i,j}\})^2 + \quad(\valsR_{i,j} - \min\{\valsR_{i,j\pm 1},\valsR_{i,j}\})^2} \\
+% =1
+
+
+The solution to equation~\eqref{upwind} for $\valsR_{i,j}$ can be found through the quadratic formula, and is referred to as the Eikonal update
+\begin{equation}\label{EikonalUpdate}
+ \valsR_{i,j} = \valsR_{i,j}^*(\valsR_{i\pm1,j},\valsR_{i,j\pm1},\vel(y_{i,j})). 
+\end{equation}
+The scheme in equation~\eqref{upwind} is consistent and stable, and converges to the viscosity solution of equation~\eqref{eikonal} as $h\rightarrow 0$ \cite{RouyTourin}.
+The FMM algorithm computes the solution to equation~\eqref{upwind} for the entire grid by sequentially computing the value for each grid node in a particular order. 
+The value for each node is computed only a small number of times, resulting in efficient computation of the value function even on large grids. 
+%referenced in Chapter~\ref{chapter:hji}.
+%In the upper value section, the above generic minimum time-to-reach function $\phi$ will be replaced by $\vals$ and in the lower value section, it will be replaced by $\wRs$.
+
+We will use the basic structure of FMM with some modifications to compute the appropriate values: $\vals$ for the upper value and $\wRs$ for the lower value.
+We now briefly outline the FMM algorithm.
+% At each iteration, we partition the grid $\grid$ into Accepted, the set of nodes where the approximation values of the minimum time-to-reach function((i.e. $\vals$ or $\wRs$) are known, NarrowBand the set of candidate nodes to be added to Accepted.
+We keep track of two sets of nodes: Accepted and NarrowBand. 
+Accepted is the set of nodes where the approximation values of the minimum time-to-reach function((i.e. $\vals$ or $\wRs$) are known. 
+NarrowBand is the set of candidate nodes to be added to Accepted.
+% and FarAway (neither Accepted nor Narrow-Band).
+ In each iteration, one or more nodes from NarrowBand will have their values computed using the known node values in Accepted and then be removed from NarrowBand and added to Accepted.
+ At the same time, additional nodes on the boundary of NarrowBand will be added to NarrowBand.
+The intuition for fast marching is a thin boundary that expands outward from a known initial point or set.
+The algorithm begins with the known boundary condition as the Accepted set, then expands the set outward, computing the value for points near the boundary (points in the NarrowBand) until the values for all points on $\grid$ have been found.
+
+The key principle exploited by the FMM is that of ``causality'' \cite{SethSIAM}, which states that the solution at a node only depends on adjacent nodes that have smaller values.
+This defines an ordering of the nodes, in increasing values of the minimum time-to-reach function (i.e. $\vals$ or $\wRs$). 
+This ordering is realized by adding the smallest valued candidate from NarrowBand into Accepted at each step, until either all nodes are in Accepted or the Accepted set is enclosed by nodes from NarrowBand, each of which contains $\infty$ as the minimum time-to-reach value.
+This ordering allows the value for each node to be computed only a small number of times, while the node is within NarrowBand, thus speeding up computation.
+
+\subsection{Upper Value}
+We can now present the modified FMM in detail to compute the safe-reachable set $\safereach$ and the corresponding minimum time-to-reach function $\vals$. 
+Our algorithm computes the solution to the following Hamilton-Jacobi-Bellman(HJB) equation in $\safereach$:
+\bq\label{HJI}
+%-\inf_{\ca \in \A} \{\nabla \vals(y,\xjn) \cdot \fa(\xa,\ca)\ca\} = 1 
+-\inf_{\ca \in \unitball} \{\nabla \vals(y; \xan) \cdot \fa(\xa)\ca\} = 1
+\eq
+along with the set $\safereach$ itself, using the boundary conditions 
+\begin{align}
+\vals(\xan; \xan) = 0; \ \vals(y; \xan) = \infty, \ y \in \amb \setminus \safereach. 
+\end{align}
+We note that if the speed function $\fa$ is identified with $\vel(\cdot)$ in the Eikonal equation~\eqref{eikonal}, then the previous HJB equation is equivalent to the Eikonal equation, provided $\fa$ is isotropic, which is true for the assumptions in this paper.
+
+%The safe-reachable set and minimum time-to-reach functions are computed on a grid using a modified version of FMM. 
+%The structure of the algorithm is as follows. 
+%First, the minimum time-to-reach function value at every point in $\domain$ is computed for $\pb$. 
+%Simultaneously, the minimum time-to-capture function values at all points are also computed.
+%The set of safe-reachable points for $\pa$ is found in the following way.
+%Beginning with the initial $\pa$ position, the set is expanded outward, computing the time-to-reach for neighboring points and incorporating only points that can be reached by $\pa$ before they can be captured by $\pb$.
+%The procedure terminates when all remaining points along the boundary are either outside of $\domain$ or cannot be reached by $\pa$ before being captured by $\pb$, and the results give both the safe-reachable set $\safereach$ and the minimum time-to-reach for both agents for all points in the set.  
+
+%Both computing the minimum time-to-reach functions for the agents and expanding the set make use of FMM. 
+
+%A modified version of FMM can be used to compute the solution to the following Hamilton-Jacobi-Bellman(HJB) equation  along with the set $\safereach$.
+%\bq\label{HJI}
+%-\inf_{\ca \in \A} \{\nabla \vals(y,\xan) \cdot \fa(\xa,\ca)\ca\} = 1 
+%\eq
+%withe boundary conditions 
+%\begin{align}
+%\vals(\xan,\xan) = 0;\\
+%\vals(y,\xan) = \infty, y \in \amb \setminus \safereach. 
+%\end{align}
+%We note that if the speed function $\fa$ is identified with $\vel(\cdot)$ in the Eikonal equation~\eqref{eikonal}, then the previous HJB equation is equivalent to the Eikonal equation, provided $\fa$ is isotropic, which is the assumption we take on in this paper.
+
+
+%Assume that equation~\eqref{vald} is approximated by $\vald_{i,j}\!\approx\! \vald(y_{i,j})$ at each $y_{i,j}\in\grid$, calculated using  FMM. 
+%For any capture set $\Cset$, a capture mask $\Cmask(y) = \{x \mid y \in \Cset(x)\}$ can be defined. 
+%Then the time-to-capture for any node $y_{i,j}$, denoted $\vald_{i,j}$, can be found as 
+%$\min_{x \in \Cmask(y_{i,j})} \vald_{i,j}(x)$. 
+%The key observation is that \emph{any node $y_{i,j}$ captureable by $\pa$ in time $t\!=\!\vals_{i,j} \ge \vald_{i,j}$ cannot belong in $\safereach$}.
+
+%$\vald_{(i,j)}$ denotes the function value $\vald(\y;\xbn)$, with $y$ approximated by the grid node $(i,j)$. 
+%To compute $\vald_{(i,j)}$, we define the capture mask $\Cmask(y)$ as follows.
+%For a stationary $\pa$ at $y$, $\Cmask(y) =  \{x \mid (x,y) \in \avoid\}$. Namely, it is the collection of all possible $\pb$ positions that $\pb$ captures $\pa$. 
+%Notice the mask comes as a dual concept to the partial avoid set.
+%Then $\vald_{(i,j)}$ for any node $y_{i,j}$ can be found as $\inf_{x \in \Cmask{(i,j)}} \phi(x)$, where $\phi(\cdot)$ is the unconstrained
+%minimum time-to-reach function representing the shortest time to reach $x$ starting from node $(i,j)$. 
+%$\vals^{(i,j)}$  denotes the function value $\vals(\y;\xan)$, also with $\y$ approximated by the node $(i,j)$. 
+To compute $\vald_{(i,j)}$, we define $\avoid^{x} := \{y \in \amb \mid (x,y) \in \avoid \}$ as a slice of the avoid set at a fixed $\pa$ location $x \in \amb$.  Intuitively, this corresponds to the set of points which allows $\pb$ to capture $\pa$ at $x$.  Then $\vald_{(i,j)}$ for any node $y_{i,j}$ can be found as $\inf_{y \in \avoid^x} \td(y)$, where $\td(y)$ is the unconstrained minimum time-to-reach function representing the shortest time to reach $y$ starting from $\xbn$. 
+
+
+
+
+In the following, we provide a schematic description of the modified FMM, with the numerical approximation of $\vals(\y;\xan)$ at a grid node $(i,j)$ denoted as $\vals^{(i,j)}$. 
+%The set Accepted now represents the the collection of all computed grid nodes $(i,j)$ whose $\ts$ are computed, with the sets NarrowBand and FarAway defined as previously.
+\begin{enumerate}
+\item
+%Set $\vals_{i,j}=\infty, \forall y_{i,j}\in\grid$ and label them as FarAway.
+Initialize $\vals^{(i,j)}=\infty$, $\forall$ node $(i,j)$ $ \in\grid$.  
+\item
+Compute $\vald_{(i,j)}$ for every $(i,j) \in \grid$ from $\inf_{y_{i,j} \in \avoid^x} \td(y_{i,j})$ by using standard FMM to compute the defender time-to-reach $\td$ for every node $({i,j})$.  
+\item 
+%Set $\vals_{i,j}\! =\! b(y_{i,j}), \forall y_{i,j} \in \inits$, and label them as $\text{Accepted}$.
+\label{step:initFMMUpper}
+Set $\vals^{(i,j)}\! =\! 0$, if node $(i,j)$ is the initial position of $\pa$, set it to be in $\text{Accepted}$. 
+\item 
+%For all nodes $(i,j)$ adjacent to a node in Accepted, set $\vals^{(i,j)} =\vals{(i,j)}$ and label them as NarrowBand.
+\label{step:startFMMUpper}
+For all nodes $(i,j)$ adjacent to a node in Accepted, set $\vals^{(i,j)} =$ ${\vals^*}^{(i,j)}$ via the Eikonal update as per Equation~\eqref{EikonalUpdate} and label them to be in NarrowBand. 
+\item
+%Choose a node $y^{\min}$ in Narrow-Band with the smallest $\vals_{i,j}$ and label it as Accepted.
+\label{step:updateFMMUpper}
+Choose a node $(i,j)$ in Narrow-Band with the smallest $\vals^{(i,j)}$ value. 
+If there is no node remaining or $\vals^{(i,j)} = \infty$, continue to Step~6.
+Otherwise, if $\vals^{(i,j)} \ge \vald_{(i,j)}$, then set $\vals^{(i,j)}=\infty$. Place node $(i,j)$ in Accepted, return to Step~4. 
+
+\item
+\label{step:endFMMUpper}
+Return the two arrays containing the values of $\vals^{(i,j)}$ and $\vald_{(i,j)}$.
+Compute $\safereach$ by taking all nodes $(i,j)$ with finite $\vals^{(i,j)}$ values.
+Compute $\vUpper$ by first intersecting $\safereach$ with $\target$ and pick the smallest 
+$\vals^{(i,j)}$ in the intersection and designate the corresponding node $(i,j)$ to be the final point in 
+$\target$.
+
+%\item
+%%At node $y_{i,j}^{\min}$, if $\vals_{i,j} \ge \vald_{i,j}$, then set $\vals_{i,j}=\infty$.
+%At node $y_{i,j}^{\min}$, if $\vals_{i,j} \ge \vald_{i,j}$, then set $\vals_{i,j}=\infty$.
+
+
+%\item
+%Set $\vals_{i,j} =\vals_{i,j}$ for all non-Accepted nodes adjacent to $y^{\min}$ from the previous step, and (re-)label them as Narrow-Band.
+
+%\item
+%Repeat from step 4, until all nodes are labeled Accepted.
+
+\end{enumerate}
+%}
+%By choosing $\inits$ to represent some small neighborhood of a point $y$, such that at least one $y_{i,k}$ falls within $\inits$, the time-to-reach of all points to or from $y$ can be computed.
+The algorithm terminates in a finite number of iterations, since the total number of nodes is finite.
+On a grid with $M$ nodes, the complexity is $O(M\log M)$ and the algorithm naturally extends to three or higher dimensions~\cite{SethianBook}.
+
+The algorithm presented above differs from the standard FMM in the addition of Step~\ref{step:updateFMMUpper}, which rejects points that are reachable by $\pb$ in less time than $\pa$. 
+To see why this modification is sufficient, suppose that, at the start of Step~\ref{step:startFMMUpper} of the current iteration, all Accepted nodes have the correct $\vals^{(i,j)}$ values.
+Suppose also that node $(i,j)$ is the smallest element in NarrowBand ordered by $\vals$ value and $\vals^{(i,j)}\ge \vald_{(i,j)}$.
+Since $\vals^{(i,j)}$ is computed using neighboring Accepted nodes (which are assumed to have the correct values), this implies that an optimal path in $\safereach$ would take longer than $\vald_{(i,j)}$ to reach $(i,j)$. 
+This in turn implies that $\pb$ will capture $\pa$ should $\pa$ attempt to reach $(i,j)$.
+Therefore, $\vals^{(i,j)} = \infty$, since $(i,j)$ cannot be safe-reachable.
+On the other hand, if $\vals^{(i,j)}< \vald_{(i,j)}$, there is a safe-reachable path in $\safereach$ that takes less than $\vald_{(i,j)}$ time to reach $(i,j)$.
+Thus, right before Step~\ref{step:endFMMUpper}, $\vals^{(i,j)}<\infty$ if and only if $(i,j)\in\safereach$.
+Since all Accepted nodes are initially correct (Step~\ref{step:initFMMUpper}), the above argument holds inductively until all Accepted nodes are computed correctly.
+The result of the computation above is a grid $\grid$ with nodes where $\vals^{(i,j)}$ approximates the value of $\vals$ for each node $(i,j)$.
+The safe-reachable set $\safereach$ can then be approximated as $\safereach \approx \{(i,j) \mid \vals^{(i,j)} < \infty \}$.
+
+
+\begin{rem}
+Note that with more general dynamics that are not isotropic, the FMM is not directly applicable.
+However a similar causality-ordering procedure is possible via the Ordered Upwind Method (OUM) \cite{SethianOUM}, allowing the method to be eventually extended to anisotropic \cite{SethianOUM} and non-holonomic \cite{TakeiACC} dynamics.
+\end{rem}
+
+%\subsection{Value and Set Computation}
+%
+%\subsubsection{Upper Value}
+%
+%A modified version of FMM can be used to compute the solution to equations~\eqref{hjb}-\eqref{bc2} along with the set $\safereach$.
+%Assume that equation~\eqref{vald} is approximated by $\vald_{i,j}\!\approx\! \vald(y_{i,j})$ at each $y_{i,j}\in\grid$, calculated using the unmodified FMM. 
+%For any capture set $\Cset$, a capture mask $\Cmask(y) = \{x \mid y \in \Cset(x)\}$ can be defined. 
+%Then the time-to-capture for any node $y_{i,j}$, denoted $\vald_{i,j}$, can be found as 
+%$\min_{x \in \Cmask(y_{i,j})} \vald_{i,j}(x)$. 
+%The key observation is that \emph{any node $y_{i,j}$ captureable by $\pa$ in time $t\!=\!\vals_{i,j} \ge \vald_{i,j}$ cannot belong in $\safereach$}.
+%
+%This calls for a simple modification to the FMM; namely, implement the method with the boundary condition in equation~\eqref{bc1} 
+%and insert immediately after step~4:
+%\[
+%\text{4.5) At node $y_{i,j}^{\min}$, if $\vals_{i,j} \ge \vald_{i,j}$, then set $\vals_{i,j}=\infty$.}
+%\]
+%To see why this modification is sufficient, suppose that, at the start of step 3 of the current iteration, all Accepted nodes have the correct $\vals_{i,j}$ value.
+%Suppose also that $y_{i,j}$ is the smallest element in Narrow Band and $\vals_{i,j}\ge \vald_{i,j}$.
+%Since $\vals_{i,j}$ is computed using neighboring Accepted nodes (which are assumed to have the correct values), this implies that an optimal path in $\safereach$ would take longer than $\vald_{i,j}$ to reach $y_{i,j}$. 
+%Then, $\vals_{i,j} = \infty$, since $y_{i,j}$ cannot be safe-reachable.
+%On the other hand, if $\vals_{i,j}< \vald_{i,j}$, there is a safe-reachable path in $\safereach$ that takes less than $\vald_{i,j}$ time to reach $y_{i,j}$.
+%Thus, after step 4.5, $\vals_{i,j}<\infty$ if and only if $y_{i,j}\in\safereach$.
+%Since all Accepted nodes are initially correct (step 2), the above argument holds inductively until all Accepted nodes are computed correctly.
+%
+%The result of the computation above is a grid $\grid$ with nodes where $\vals_{i,j}$ approximates the value of $\vals$ for each node $y_{i,j}$.
+%The safe-reachable set $\safereach$ can then be approximated as
+%\bqs
+%\safereach \approx \{y_{i,j} \mid \vals_{i,j} < \infty \}.
+%\eqs
+%
+%Note that with more general dynamics that are not isotropic, the FMM is not directly applicable.
+%However a similar causality-ordering procedure is possible via the Ordered Upwind Method (OUM) \cite{SethianOUM}, allowing the method to be eventually extended to anisotropic \cite{SethianOUM} and non-holonomic \cite{TakeiACC} dynamics.
+
+\subsection{Lower Value}
+
+We use a different modified FMM algorithm to compute $\vLLower$, the bound on the open-loop lower value.
+Computing $\vLLower$ has some conceptual similarity to the computation of $\vUpper$, but requires some extra steps.
+%The main distinction here is that $\pb$ does not attempt to reach a fixed target set.
+%Instead, it has its goal to delay $\pa$ from entering $\target$, which can be viewed as $\pb$ having a dynamically changing target set as $\pa$ changes.
+Here, instead of computing $\vals, \vald$, and $\safereach$, we are interested in computing $\ts(\x;\xan)$, $\wRs(\x;\xbn)$, $\Rs$ and $\Rss$.
+The computation of $\ts$ requires more computation than that of $\vals$ and $\vald$, as for each point in $\Rss$ a separate FMM computation must be performed to find $\pa$'s arrival time at the target.
+However, by using a modified FMM method, we are able to compute the $\ts$, $\wRs$, and $\Rs$ simultaneously and avoid computing $\ts$ unnecessarily, reducing computation time.
+ 
+In the following, we denote the numerical approximation of the functions $\ts(y;\xan)$ and $\wRs(y;\xbn)$ as $\tij$ and $\wij$, respectively.  The notation $\Aij$ is used to denote the slice $\avoida_{\y_{i,j}} = \{x \in \amb \mid (x,\y_{i,j}) \in \avoid \}$ of the avoid set at a fixed $\pb$ location $\y_{i,j}$.  The sets Accepted and NarrowBand have the same meaning as before: Accepted represents the set of nodes whose corresponding $\wij$ values have been computed.
+NarrowBand represents the set of nodes that are about to be added to Accepted.
+$\Wij$ and $\Tij$ are two arrays which are used to store values for $\wij$ and $\tij$, respectively. 
+The algorithm then proceeds as follows:
+\begin{enumerate}
+\item
+Initialize $\Wij = \infty$, $\forall$ node $(i,j)\in\grid$.
+
+\item
+$\Wij = 0$, if $(i,j)$ is the initial position of $\pb$, and set $(i,j)$ to be in Accepted.
+
+\item\label{return}
+For each node $(i,j)$ adjacent to a node in Accepted, run the Eikonal update as described in~\eqref{EikonalUpdate} to obtain the $
+\wij$ value for $(i,j)$.  Set $\Wij = \wij$ for all $(i,j)$ adjacent to a node in Accepted and place these nodes in NarrowBand. 
+
+\item\label{note}
+Choose a node $(i,j)$ in NarrowBand with the smallest $\Wij$ value. If there is no node remaining or if it is equal to $\infty$ return $W$ and $T$ and continue to Step~\ref{return1}.  Otherwise compute $\tij$ by doing the following:
+treat $\Aij$ as an obstacle, compute $\tij$ using standard FMM. 
+Set $\Tij$ to be $\tij$ and put $(i,j)$ into Accepted. If $\Wij < \tij$, set $\Wij$ to $\tij$; otherwise set $\Wij$ to be $\infty$. Now return to Step~\ref{return}. 
+
+\item\label{return1}
+Find a node $(i,j)$ with the largest $\Tij$ value, record this value in a variable $M$ and set $\Tij$ to be $-$$\infty$.
+% Use the fast marching method presented in~\cite{OL_ICRA2012}
+Compute the reachable set $\ra(M)$ using FMM and test if it has nonempty intersection with $\Aij$. If so, return to Step~\ref{return1}. Otherwise, set $\vLLower$ = $M$ and return $\vLLower$.
+\end{enumerate}
+
+%\begin{rem}
+%Note that instead of computing $\ts$ for every point, we compute it "on the fly" in the sense that we stop immediately when it is the case that nodes in NarrowBand that has the smallest $\Wij$ value to be $\infty$. This in fact saves a lot of computational time.  We also note that   the justification for step \ref{note} is Lemma \ref{later}, since if $\Wij \ge \tij$,then (i,j) is not in $\Rs$, which by the lemma, tells us that we should set $\Wij$ to be $\infty$. Later, if we want to extract $\R*$, we need only look at the nodes that have finite values, which is also due to Lemma \ref{later}.
+%\end{rem}
+%
+
+Note that instead of computing $\ts$ at all points, we compute it ``on the fly" in the sense that we stop immediately when the smallest $\Wij$ in Narrowband is equal to $\infty$. 
+This results in a significant amount of computational savings, and is justified by the fact that if $\Wij \ge \tij$, then $(i,j)$ is not in $\Rs$, which means $\Wij$ should be $\infty$ by definition of the function $\wRs$.
+Later, if we want to extract $\Rs$, we need only look at the nodes that have finite values. 
+
+ 
+\subsection{Extracting Control Inputs}
+
+%In the previous two sections, we have given modified FMM algorithms for obtaining the open-loop values.
+%In most cases, we may also be interested in obtaining the optimal controls and/or optimal path trajectories that when followed, yield the corresponding open-loop values.
+
+Given the value function approximations described above, we can also extract the optimal controls and paths corresponding to these value functions. 
+
+For the upper value game, if $\vUpper < \infty$, the next step is to identify $\pa$'s optimal control $\bar\ca \in \arg\min_{\ca\in\Ua}\sup_{\cb\in\Ub}  \pay(\xjn,\ca,\cb).$
+Note that $\bar\ca$ is not necessarily unique, but all such inputs yield the same value $\vUpper$.  
+%The function $\vals$, which was used in the evaluation of $\vUpper$ is particularly convenient for this purpose.
+%
+Given the result of Theorem \ref{mainThm}, one can interpret $\bar\ca$ as a control input for $\pa$ realizing a time-optimal safe-reachable path from $\xan$ to a final point $\xaf \in \arg \inf_{y\in\target \cap \safereach} \vals(y;\xan).$
+%that is, a point in $\target$ that can be safely reached in the shortest time. 
+In fact, this final point is returned in Step 5 of our algorithm.
+Thus, $\vals$ can be used to extract the optimal 
+%input sequence $\ustrat^ = \ustrat^(y)$ where it is smooth.
+control where it is smooth.
+In particular, given the dynamics in (\ref{path_eq}) and the assumption on the control set $\Ua$, one can verify that the optimal control for $\pa$ at a location $y \in \free$ where the value function $\vals $ is differentiable is given by $\ustrat(y) = -\frac{\nabla \vals(y;\xan)}{\|\nabla \vals(y;\xan)\|}.$
+%where $\ustrat(\cdot) \colon \amb \rightarrow \unitball$ is a function that gives the optimal control input for each point in the game domain.
+In general, the value function $\vals$ may not be differentiable at every point $y\in\free$.  Non-differentiable points typically correspond to locations at which the optimal input is not unique.
+
+The optimal path $\xa^*(\cdot)$ of $\pa$ can be then computed using $\ustrat(y)$ by solving the ordinary differential equation
+\vspace{-0.2cm}
+\bq\label{backwardODE}
+%\xa^*(t) = -\ustrat(\xa^*(t))
+\dotxa^*(t) = \fa(\xa^*(t))\ustrat(\xa^*(t))
+\eq
+from $t=\vals(\xaf;\xan)$ to $t=0$ backward in time, with the terminal condition $\xa^*(\vals(\xaf;\xan))=\xaf$. 
+Due to the construction of $\vals$, this results in $\xa^*(0)=\xan$.  
+The realization of the optimal control is then given by $\bar\ca(t) = \ustrat(\xa^*(t))$.
+%\eqref{dynamics} (for $\pa$\!\) with $, and $\fa(\xa(t),\ustrat(t))$ replaced by $-\fa(\xa(t),\ustrat(t))$.
+We note that the solution to (\ref{backwardODE}) can be numerically approximated by standard ODE solvers.
+
+%Note that the optimal trajectory and the optimal control for $\pb$ are not explicitly computed in this solution.
+%As $\pa$ is able to reach the target using this optimal open-loop control no matter what $\pb$ does, the actions of $\pb$ can be safely ignored.
+%Thus, any action by $\pb$ will have the same result. 
+%In other words, the algorithm cannot produce a control for the advantageously non-conservative $\pb$ precisely because $\pb$ has been given so much advantage due to $\pa$'s conservatism that it is immaterial from $\pa$'s perspective as to which control $\pb$ adopts.
+%This does mean, however, that the open-loop upper value formulation presented here cannot be used to control $\pb$. 
+
+For the open-loop lower value case, we can find the final point $\xdf$ for $\pb$ by selecting the point within $\Rss$ with the lowest $\ts$ value.
+Then the optimal input map $\ustrat(\cdot)$ for $\pb$ can be found using $\wRs(y;\xbn)$ in a similar fashion $\vals(y;\xan)$, resulting in an optimal control $\underline{\cb}$ and an optimal path $\xb^*(\cdot)$. 
+%Given $\pb$'s trajectory, an optimal path for $\pa$ can be computed using standard optimal control methods.
+
+%Note that unlike in the upper value case, an optimal open-loop control can be generated for the the non-conservative player $\pa$ by simply treating $\pb$'s final position as an obstacle and using the standard FMM algorithm. 
+%
+%Since from $\pa$'s perspective,an equivalent view is that $\pb$ stays stationary at $\xdf$ during the entire game and the corresponding capture set acts as an obstacle.
+%Therefore computing the optimal path and the optimal control for $\pa$ becomes a standard optimal control problem, readily achieved by using FMM. 
+  
+
+%The previous section presented an algorithm for computing the minimum time-to-reach to a single target set, subject to a collision avoidance constraint with respect to one or more defenders. 
+%Like the reachable sets in Chapter~\ref{chapter:hji}, extending this solution to a multi-stage game with multiple target sets is not simply a direct concatenation of solutions to individual stages (see Figure~\ref{fig:onetwo}).
+%
+%Conceptually, the extension of the open-loop formulation and solutions to multi-stage games is similar to the method in Section~\ref{sec:hj_multistage}.
+%Working backward from the final target set, the solution for each preceding stage is constructed to ensure that the next target in the sequence is reachable. 
+%Unlike the reach-avoid sets in Section~\ref{sec:hj_multistage}, which are computed in the joint state space of all agents, $\safereach$ is computed in $\pa$'s state space only, and the movements of $\pb$s are not explicitly computed. 
+%Instead, the set $\domain \setminus \safereach$ reflects all the states that \emph{could} be captured by a defender.
+%To construct the solution to a multi-stage open-loop game, $\pa$ must avoid all states that $\pb$s may reach during \emph{all} stages of the game.
+%Thus, the open-loop solution to a multi-stage game will depend on computing $\vals$ to correctly account for $\pb$s during each stage of the game. 
+%
+%For clarity and simplicity, the solution to open-loop multi-stage games will be explored in detail with a two-stage game. 
+%Generalizing to an arbitrary number of stages is a straightforward extension, and is briefly described in section \ref{general_multi}.
+

@@ -1,0 +1,107 @@
+\section{Numerical Results}
+\label{sec:simulation}
+In the following subsections, we use a 4 vs. 4 example to illustrate our methods. The game is played on a square domain with obstacles. Defenders have a capture radius of $0.1$ units, and all players have the same maximum speed. We first show simulation results for the HJI and path defense approaches for determining pairwise outcomes, and then compare the two approaches. Computations are done on a Lenovo T420s laptop with a Core i7-2640M processor with 4 gigabytes of memory.
+
+\subsection{HJI Formulation}
+Figures \ref{fig:OL_pw_HJIA} to \ref{fig:OL_mm_HJI} show the results of solving the 4D HJI PDE in Equation (\ref{eq:HJ_PDE_reachavoid}) using the terminal set and avoid set in Equations (\ref{eq:4DHJI_terminal_set}) and (\ref{eq:4DHJI_avoid_set}), respectively. Computing the 4D reach-avoid set on a grid with 45 grid points in each dimension took approximately 30 minutes. In general, this makes the computation time required for computing $\N^2$ pair-wise outcomes $C \N^2 = 30 \N^2$ minutes. In our example, however, all players have the same maximum speed, so only a single 4D HJI PDE needed to be solved.
+
+The solution of the 4D HJI PDE characterizes the 4D reach-avoid set $\mathcal{RA}_\infty(R,A)$. To visualize this set in 2D, we take 2D slices of the 4D reach-avoid set sliced at each player's position. Figure \ref{fig:OL_pw_HJIA} shows the 4D reach-avoid set sliced at various \textit{attacker positions}, which gives the all pairwise outcomes. For example, in the left top subplot, the attacker at $(-0.2, 0)$ is guaranteed to win a 1 vs. 1 reach-avoid game against each of the defenders at $(-0.3, 0.5)$ and at $(-0.3, -0.5)$, and guaranteed to lose against each of the defenders at $(0.3, 0.5)$ and at $(0.3, -0.5)$.
+
+Figure \ref{fig:OL_pw_HJID} shows the 4D reach-avoid set sliced at various \textit{defender positions}, and characterizes the same pairwise outcomes. For example,  in the right top subplot, the defender at $(-0.3, 0.5)$ is guaranteed to win a 1 vs. 1 reach-avoid game against each of the attackers at $(-0.5, 0)$ and at $(-0.2, 0.9)$, and guaranteed to lose against each of the attackers at $(0.7, -0.9)$ and at $(-0.2, 0)$.
+
+Figure \ref{fig:OL_mm_HJI} shows the bipartite graph and maximum matching resulting from the pairwise outcomes. In this case, the maximum matching is of size 4, a perfect matching. This guarantees that if each defender plays against the attacker matched by the maximum matching using the strategy in Equation (\ref{eq:opt_ctrl2_d}), then \textit{no} attacker will be able to reach the target.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{"fig/OLGame_pw_results_HJI_fixA"}
+	\caption{The 4D reach-avoid set sliced at various attacker positions. In each subplot, defenders ``inside" the reach-avoid slice boundary win against the plotted attacker in a 1 vs. 1 setting using the control in Equation (\ref{eq:opt_ctrl2_d}); defenders ``outside" lose.}
+	\label{fig:OL_pw_HJIA}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{"fig/OLGame_pw_results_HJI_fixD"}
+	\caption{The 4D reach-avoid set sliced at various defender positions. In each subplot, attackers ``inside" the reach-avoid slice boundary win against the plotted defender in a 1 vs. 1 setting using the control in Equation (\ref{eq:opt_ctrl2_a}); attackers ``outside" lose.}
+	\label{fig:OL_pw_HJID}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{"fig/OLGame_mm_results_HJI"}
+	\caption{Tying together pair-wise interactions through maximum matching. Here, a maximum matching of size 4 (a perfect matching) guarantees that \textit{no} attacker will be able to reach the target without being captured if the defenders play optimally according to Equation (\ref{eq:opt_ctrl2_d}) against their matched attackers.}
+	\label{fig:OL_mm_HJI}
+\end{figure}
+
+\subsection{Path Defense Formulation}
+Figures \ref{fig:pd_ex} to \ref{fig:pd_mm} show the results of using the path defense approach to compute conservative approximations of the 4D reach-avoid set sliced at various attacker positions.
+
+Figure \ref{fig:pd_ex} shows the defender winning region for a given attacker position (red cross) and path of defense (blue line). If the defender can get to $\pstar$ (small light green square) before the attacker can get to $\rpa \cup \rpb$, then the defender will be able to strongly defend the path, and prevent the attacker from reaching any target set that is enclosed by the path (large dark green square). The region within which the defender is able to do this is the region $\dr(\apa,\apb)$ (shown in light green). 
+
+As an example, refer to the bottom left subplot in Figure \ref{fig:pd_ex}. Using the semi-open-loop strategy described in Section \ref{subsec:reach_avoid}, the defenders at $(-0.3, 0.5)$ and at $(0.3, 0.5)$ are able to prevent the attacker at $(-0.2, 0.9)$ from reaching the target.
+
+Figure \ref{fig:pd_pw} shows the bipartite graph and maximum matching resulting from the pairwise outcomes. In this case, the maximum matching is of size 3. This guarantees that if each defender plays against the attacker matched by the maximum matching using the semi-open-loop strategy, then \textit{at most} 1 attacker will be able to reach the target.
+
+Computations were done on a $200\times200$ grid, and 937 paths were used to compute the results in Figure \ref{fig:pd_pw}. Computation time varies with the number of paths we chose in steps \ref{step:createPath} and \ref{step:repeatCreatePath} in the algorithm in Section \ref{subsec:reach_avoid}. Taking the union of the defender winning regions from more paths will give a less conservative result, but require more computation time. A summary of the performance of our algorithm is shown in Figure \ref{fig:pd_perf}. 
+
+With 937 paths, the computation of paths takes approximately 60 seconds, and the computation of the 2D slice given the set of paths takes approximately 30 seconds. However, very few paths are needed to approximate a 2D slice: Even with as few as 30 paths, the computed 2D slice covers more than 95\% of the area of the 2D slice computed using 937 paths. This reduces the computation time of the paths to 2.5 seconds, and the computation time of the 2D slices given the paths to 2.1 seconds. In terms of the complexity constants in Section \ref{subsec:reach_avoid}, we have that the computation time required for computing all pairwise interactions is $C_1 + C_2 \N = 2.5 + 2.1 \N$ seconds.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{"fig/PD Example"}
+	\caption{Defense of a single path that encloses the target set.}
+	\label{fig:pd_ex}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{"fig/OLGame_pw_results_PD"}
+	\caption{The reach-avoid set sliced at various attacker positions. In each subplot, defenders ``inside" the reach-avoid slice boundary are guaranteed to win against the plotted attacker in a 1 vs. 1 setting using the semi-open-loop control strategy described in Section \ref{subsec:reach_avoid}.}
+	\label{fig:pd_pw}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{"fig/OLGame_mm_results_PD"}
+	\caption{Tying together pairwise interactions through maximum matching. Here, a maximum matching of size 3 guarantees that \textit{at most} 1 attacker will be able to reach the target without being captured if the defenders use the semi-open-loop control strategy described in Section \ref{subsec:reach_avoid} against their matched attackers.}
+	\label{fig:pd_mm}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{"fig/alg_perf_Rc"}
+	\caption{Performance of the Path Defense Solution.}
+	\label{fig:pd_perf}
+\end{figure}
+
+\subsection{Comparison Between HJI and Path Defense Formulations}
+Each pairwise outcome computed with the HJI approach gives the optimal behavior assuming the players utilize a closed-loop strategy. In contrast, each pairwise outcome computed with the path defense approach assumes that the defender is using a semi-open-loop strategy as discussed in Section \ref{sec:comparison}. Figures \ref{fig:comp_ol} and \ref{fig:comp_ml} compare the 2D slices computed from the two different approaches.
+
+Figure \ref{fig:comp_ol} shows the results for the 4 vs. 4 example in the preceding sections, where all players have the same maximum speed. Because the semi-open-loop strategy in the path defense approach is conservative towards the defender, the computed defender winning region is smaller in the path defense approach. The degree of conservatism depends on the domain, obstacles, target set, and attacker position. In this example, the defender winning regions computed using path defense approach on average covers approximately 75\% of the area of the defender winning regions computed using the HJI approach.
+
+The path defense approach becomes more conservative when the attacker is slower than the defender because in this case, the attacker being outside the region $\rpa \cup \rpb$ is not a necessary but only a sufficient condition for the defender to win using the semi-open-loop strategy, as discussed in the Lemmas in Section \ref{sec:path_defense}. The path defense approach also becomes more conservative when there are large obstacles in the domain because we only considered paths that touch the target, which introduces additional conservatism in non-simply-connected free space, as discussed in \ref{subsec:reach_avoid}. Figure \ref{fig:comp_ml} compares the 2D slices computed by the path defense approach and by the HJI approach in another 4 vs. 4 game where the attackers' maximum speed is 80\% of the defenders' maximum speed (players on each team have the same maximum speed), and where there is a larger obstacle in the domain. In this case,  the defender winning regions computed using path defense approach covers approximately 34\% of the area of the defender winning regions computed using the HJI approach.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{"fig/OLGame_compare"}
+	\caption{Reach-avoid slices computed using the HJI approach and the path defense approach. Defenders and attackers have the same maximum speed.}
+	\label{fig:comp_ol}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{"fig/midLGame_compare"}
+	\caption{Reach-avoid slices computed using the HJI approach and the path defense approach. Attackers' maximum speed is 80\% of that of the defenders.}
+	\label{fig:comp_ml}
+\end{figure}
+
+\subsection{Real-Time Maximum Matching Updates}
+After determining all pairwise outcomes either by $\N^2$ HJI PDEs in general or by solving a single 4D HJI PDE when all players on each team have the same maximum speed, pairwise outcomes of \textit{any} joint state of the attacker-defender pair are characterized. Thus, the bipartite graph corresponding to the pairwise outcomes can be updated simply by checking whether the joint state of the attacker-defender pair is inside the appropriate 4D reach-avoid set. This allows for updates of the bipartite graph and its maximum matching as the players play out the game in real time.
+
+Figure \ref{fig:real_time_update} shows the maximum matching at several time snapshots of a 4 vs. 4 game. Each defender that is part of a maximum matching plays optimally against the paired-up attacker according to Equation (\ref{eq:opt_ctrl2_d}), and the remaining defender plays optimally against the closest attacker also according to Equation (\ref{eq:opt_ctrl2_d}). The attackers' strategy is to move towards the target along the shortest path while steering clear of the obstacles by $0.125$ units. The maximum matching is updated every $\Delta=0.005$ seconds. At $t=0$ and $t=0.2$, the maximum matching is of size 3, which guarantees that at most one attacker will be able to reach the target. After $t=0.4$, a perfect matching is found, which guarantees that no attacker will be able to reach the target.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{"fig/time varying graph"}
+	\caption{An illustration of how the size of maximum matching can increase over time. Throughout the game, the defenders are updating the bipartite graph and maximum matching via the procedure described in Section \ref{subsec:tvarp}. Because the attacking team is not playing optimally, the defending team is able to find a perfect matching after $t=0.4$ (bottom plots) and prevent \textit{all} attackers from reaching the target.}
+	\label{fig:real_time_update}
+\end{figure}

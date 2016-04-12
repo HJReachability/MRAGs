@@ -1,0 +1,36 @@
+ACC 14 outline
+Abstract
+
+I. Introduction
+- difficulty of solving due to adversarial nature, asymmetric goals, cooperation between teammates
+- usefulness
+- previous work in 2 player game: HJI solution and open-loop
+- preview of this paper
+
+II. Problem formulation
+- copy from journal paper
+
+III. Solution (section name?) [A section for convex domain?]
+- summary of what needs the inputs are and what solution looks like (winning regions)
+- focused on HJI solution because it can handle arbitrary terrain and outputs winning strategies (cite Ian)
+A: two player game 
+- briefly repeat 4D HJI solution for two players, including control synthesis (cite ACC 11)
+B: brute force method via HJI
+- emphasize difficulty of HJI formulation and impossibility of solution
+C: multiple two player games solved in one shot
+- the same 4D HJI solution also contains information for any number of players, so by running 4D HJI once, we have solved the game for all pairs of players to construct a bipartite graph
+D: finding  maximum matching
+- find maximum matching via eg. a linear program
+- defenders can prevent m attackers from reaching the target if the maximum matching is of size at least n-m+1
+
+IV. Computational results
+- convex domain
+- non-convex domain
+- show defender winning set and indicate which attackers are in the defender winning set
+- show corresponding graph and maximum matching
+
+V. Conclusion and future work
+- extended two player solution to multiplayer solution at negligible computation cost
+- faster numerical solutions for two player solution
+- incorporating player dynamics
+

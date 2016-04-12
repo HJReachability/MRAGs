@@ -1,0 +1,234 @@
+\section{Path defense}
+\label{sec:path_defense}
+The HJI solution to the two-player reach-avoid game involves gridding up a 4-dimensional space, and is thus time- and memory-intensive to compute. In this section, we introduce the path defense game, a specific type of reach-avoid games, describe how the path defense game can be approximately solved efficiently, and quantify the conservatism of the approximation. 
+
+\subsection{The path defense game}
+The path defense game is a two player reach-avoid game in which the target set is $\target=\sac$ for some given points on the boundary $\apa,\apb$. $\sa,\pathd,\apa,\apb$ are defined below.
+
+% Definitions
+\begin{defn} % Shortest path between two points
+\textbf{Path of defense}. Denote the shortest path between two points $\x,\y$ to be $\path(\x,\y)$. A path of defense, $\pathd$, is the shortest path between points $\apa$ and $\apb$ located on $\boundary$, the boundary of the domain. $\apa$ and $\apb$ are referred to as the anchor points of path $\pathd$. 
+\end{defn}
+
+\begin{defn} % Attacker's side of the path (needed?)
+\textbf{Attacker's side of the path}. A path of defense $\pathd$ partitions the domain $\amb$ into two regions, one of which contains the attacker. Define $\sa$ to be the region that contains the attacker, not including points on the path. The attacker seeks to reach the target set $\target=\sac$.
+\end{defn}
+
+The basic setup of the path defense game is illustrated in figure \ref{fig:pd_form} below.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{"fig/pd game formulation"}
+\caption{An illustration of the components of a path defense game between two players.}
+\label{fig:pd_form}
+\end{figure}
+
+\subsection{Solving the path defense game}
+A path defense game can be solved by solving a 4-dimensional HJI corresponding to the problem as described in section \ref{sec:HJI_twop} with $\target=\sac$. However, the following definitions will allow us to solve the game conservatively for the defender without solving an HJI.
+
+% Definitions
+\begin{defn} % Defendable path
+\textbf{Defendable path}. Given initial conditions $\xjn=(\xan,\xbn)$, a path $\pathd$ is defendable if regardless of the attacker's actions, the defender has a control strategy $\cb$ to prevent the attacker from reaching $\pathd$ without being captured.
+\end{defn}
+
+\begin{defn} % Strongly defendable path
+\textbf{Strongly defendable path}. Given initial conditions $\xjn=(\xan,\xbn)$, a path $\pathd$ is strongly defendable if regardless of the attacker's actions, the defender has a control strategy $\cb$ to reach $\pathd$ after finite time and prevent the attacker from reaching $\pathd$ without being captured. Note that the defender is not explicitly required to stay on $\pathd$ after reaching it.
+\end{defn}
+
+\begin{rem}
+A path $\pathd$ is defendable if it is strongly defendable.
+\end{rem}
+
+Observe that checking whether a path $\pathd$ is defendable is exactly the path defense problem. Since solving the path defense problem involves a 4-dimensional HJI calculation, we instead consider the problem of checking whether a path $\pathd$ is strongly defendable.
+
+\begin{defn} % Level set image of attacker
+\textbf{Level set image of attacker}. Given attacker position $\xa(t)$, define the level set image of the attacker with respect to anchor point $\apa$ to be $\xai(t;\apa) = \{\x\in\pathd: \ta(\x,\apa) = \ta(\xa(t),\apa)\}$. $\xai$ is unique. Define $\xai(t;\apb)$ similarly.
+\end{defn}
+
+\begin{rem}
+\label{rem:image_of_a}
+$\xai(\apa)$ is closer to $\apb$ than $\xai(\apb)$.
+\end{rem}
+
+\begin{rem}
+Given some path of defense $\pathd$, if the defender's position coincides with the level set image of the attacker, i.e. $\xb(s) = \xai(s;\apa)$ (or $\xai(s;\apb)$) at some time $s$, then there exists a control for the defender to always remain on the level set image of the attacker thereafter, i.e. $\xb(t) = \xai(t;\apa)$ (or $\xai(t;\apb)$) $\forall t\ge s$.
+\end{rem}
+
+\begin{defn} % Winning regions for defender given path and point
+\label{def:d_win_region}
+\textbf{Regions induced by point $\ppath$ on path}. Given a point $\ppath$ on a path of defense $\pathd$, define a region $\rpa\left(\ppath\right)$ associated the point $\ppath$ and anchor point $\apa$ as follows:
+\bq
+\rpa\left(\ppath\right) = \left\{\x: \ta(\x,\apa) \leq \tb(\ppath,\apa) \right\}
+\eq
+
+Define $\rpb(\ppath)$ similarly.
+\end{defn}
+
+% Lemma involving winning regions for defender
+\begin{lem}
+\label{lem:d_winning_region}
+Suppose that the defender is on some point $\ppath$ on the path $\pathd$, i.e. $\xbn = \ppath$. Then, $\pathd$ is strongly defendable if and only if the attacker's initial position $\xan$ is outside the region induced by $\ppath$: $\xan\in\amb\backslash\left(\rpa \cup \rpb\right)$.
+\end{lem}
+
+\begin{IEEEproof} % This assumes speed of attacker is same as (or less than) speed of defender 
+% First, note that by definition, $\xa\in\sa$. Next, note that $\path(\xa,\pprime)$ where $\pprime$ is any point on the path of defense is contained in $\sa$ except for the point $\pprime$, and $\path(\ppath,\pprime)$ is contained in $\sac$. The paths $\path(\ppath,\pprime)$ and $\path(\xa,\pprime)$ do not cross.
+
+First, we show that if $\xan\in \rpa \cup \rpb$, then the attacker can reach $\apa$ or $\apb$ and hence $\sac$ without being captured. 
+
+Without loss of generality, suppose $\xan\in\rpa$. To capture the attacker, the defender must necessarily be on $\xai(\apa)$ or $\xai(\apb)$ at some time $t$. By definition \ref{def:d_win_region}, we have $\ta(\xan,\apa) < \tb(\ppath,\apa)$, so $\ta(\xai(\apa),\apa) < \tb(\ppath,\apa)$. By remark \ref{rem:image_of_a}, we also have $\tb(\ppath, \xai(\apa)) \leq \tb(\ppath, \xai(\apb))$, so it suffices to show that the defender never reaches $\xai(\apa)$ before the attacker reaches $\apa$. 
+
+If the attacker moves towards $\apa$ along $\path(\xan,\apa)$, then $\xai(\apa)$ will move towards $\apa$ along $\path(\xai(\apa),\apa)$. Since $\ta(\xa,\apa)=\ta(\xai(\apa),\apa)<\tb(\ppath,\apa)$, $\xai(\apa)$ will reach $\apa$ before $\xb$ does. Thus, the defender never captures the attacker's level set image. Therefore, no matter what the defender does, the attacker can reach $\sac$ by moving towards $\apa$ along $\path(\xa,\apa)$.
+
+Next, we show that if $\xa\in\sa\backslash\left(\rpa \cup \rpb\right)$, then the defender cannot reach $\sac$ without being captured.
+
+Suppose $\xa$ will reach some point $\pprime$ before $\xb$ does. Without loss of generality, assume $\pprime\in\path(\ppath,\apa)$, and note that $\tb(\xb,\apa)<\ta(\xa,\apa)$ since the attacker is not in $\rpa$. Since $\ta(\xa,\apa)$ is the minimum time for the attacker to reach $\apa$, we have
+\bq
+\begin{aligned}
+\ta(\xa,\apa) &\leq \ta(\xa,\pprime) + \ta(\pprime,\apa) \\
+&< \tb(\ppath,\pprime) + \ta(\pprime,\apa) \text{ (by assumption, $\ta(\xa,\pprime)<\tb(\ppath,\pprime)$)}\\ 
+&< \tb(\ppath,\pprime) + \tb(\pprime,\apa) \text{ (since defender is no slower than attacker)}\\ 
+& = \tb(\ppath,\apa) \\
+& < \ta(\xa,\apa)
+\end{aligned}
+\eq
+which is a contradiction. Therefore, the attacker cannot cross any point $\pprime$ on $\pathd$ without being captured.
+
+This proves lemma \ref{lem:d_winning_region}.
+
+\end{IEEEproof}
+
+The proof is illustrated in figure \ref{fig:lemma1}
+
+\begin{figure}[h]
+\centering
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{"fig/pd proof 1"}
+	\caption{Suppose the attacker is in $\rpa\cup\rpb$. If the attacker moves towards $e_a$, the defender can never capture the attacker's level set image.}
+	\end{subfigure} \quad
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{"fig/pd proof 2"}
+	\caption{Suppose the attacker is not $\rpa\cup\rpb$, there is no point $\pprime$ on $\pathd$ that the attacker can reach without being captured.}
+	\end{subfigure}
+\caption{An illustration of the proof of lemma \ref{lem:d_winning_region}.}
+\label{fig:lemma1}
+\end{figure}
+
+Given that the defender starts at $\ppath$ on $\pathd$, lemma \ref{lem:d_winning_region} partitions $\amb$ into two regions: if the attacker is initially in $\rpa \cup \rpb$, then $\pathd$ is not strongly defendable; otherwise, the path is strongly defendable.
+
+In general, the initial position of the defender, $\xbn$, may not be on $\pathd$. In this case, to strongly defend $\pathd$, the defender needs to first arrive at some point $\ppath\in\pathd$. When the defender arrives at $\ppath$, if the attacker is outside of $\rpa\cup\rpb$, then the path $\ppath$ is strongly defendable. 
+
+Thus, given initial conditions $\xjn = (\xan,\xbn)$, we can check whether a path $\pathd$ is strongly defendable by the following procedure:
+
+For all points on the path $\ppath\in\pathd$,
+\begin{enumerate}
+\item Compute the time it takes the defender to move from $\xbn$ to $\ppath$.
+\item Compute the time it takes the attacker to move from $\xan$ to $\rpa\cup\rpb$.
+\end{enumerate}
+If there exists a point $\ppath$ on $\pathd$ such that the defender can get to $\ppath$ before the attacker can get to the corresponding $\rpa\cup\rpb$, then the path is strongly defendable. Otherwise, the path is not strongly defendable.
+
+The above procedure requires two computations for every point on the path $\pathd$. The following lemma shows that it is necessary and sufficient to perform the computations for only one point.
+
+\begin{rem} \label{rem:time_to_region_a}
+It will be convenient to note that given $\ppath\in\pathd$, the time it takes the attacker to get to $\rpa(\ppath)$ is $\ta(\xan,\rpa(\ppath,\apa) = \ta(\xan,\apa) - \tb(\ppath,\apa)$. Similarly, $\ta(\xan,\rpb(\ppath) = \ta(\xan,\apb) - \tb(\ppath,\apb)$
+\end{rem}
+
+\begin{lem} \label{lem:pstar}
+Let a point $\pstar$ on the path $\pathd$ be such that the time it takes the attacker to get to $\rpa$ and the time it takes the attacker to get to $\rpb$ are equal. Then, $\pathd$ is strongly defendable if and only if the defender can defend $\pathd$ by first going to $\pstar$.
+\end{lem}
+
+\begin{IEEEproof}
+One direction is clear: if the defender can defend $\pathd$ by first going to $\pstar$, then $\pathd$ is strongly defendable by definition.
+
+We will show the other direction by showing its contrapositive: if the defender cannot defend $\pathd$ choosing  $\pstar$ as the first point of entry, then $\pathd$ is not strongly defendable. Equivalently, we will show that if choosing $\pstar$ as the first point of entry does not allow the defender to defend $\pathd$, then no other choice of $\ppath$ as the first point of entry does.
+
+Suppose that the defender cannot defend $\pathd$ by choosing $\pstar$ as the first point of entry, but can defend $\pathd$ by choosing another point $\pprime$ as the first point of entry. Without loss of generality, assume $\tb(\pstar,\apa)-\tb(\pprime,\apa)=\deltap>0$. Then, the time it takes the attacker to get to the regions induced by $\pstar$ and by $\pprime$ are related in the following way:
+
+\bq
+\begin{aligned}
+\ta(\xan,\rpa(\pstar)) & = \ta(\xan,\apa) - \tb(\pstar,\apa) \text{ (by remark \ref{rem:time_to_region_a})}\\
+\ta(\xan,\rpa(\pprime)) & = \ta(\xan,\apa) - \tb(\pprime,\apa) \text{ (by remark \ref{rem:time_to_region_a})}\\
+\ta(\xan,\rpa(\pprime)) - \ta(\xan,\rpa(\pstar) & = \tb(\pprime,\apa) - \tb(\pstar,\apa) \text{ (subtract above two equations)} \\
+& = \deltap \\
+\ta(\xan,\rpb(\pprime)) - \ta(\xan,\rpb(\pstar)) & = -\deltap \text{ (derived similarly)}
+\end{aligned}
+\eq
+
+\bq
+\begin{aligned}
+\tb(\xbn,\pstar) & \leq \tb(\xbn,\pprime) + \tb(\pprime,\pstar) \\
+\tb(\xbn,\pstar) - \tb(\xbn,\pprime) & \leq  \tb(\pstar,\pprime) 
+\end{aligned}
+\eq
+\end{IEEEproof}
+
+Lemmas \ref{lem:d_winning_region} and \ref{lem:pstar} give a simple algorithm to check whether a path of defense $\pathd$ is strongly defendable:
+\begin{enumerate}
+\item Given anchor points $\apa, \apb$ and attacker position $\xan$, compute the point $\pstar$ and the induced regions $\rpa,\rpb$.
+\item $\pathd$ is strongly defendable if and only if the defender can get to $\pstar$ before the attacker gets to the induced regions $\rpa,\rpb$, i.e. $\tb(\xbn,\pstar) \le \ta(\xan,\rpa \cup \rpb)$.
+
+Alternatively, one could compute the region around $\pstar$ such that the defender can get to $\pstar$ before the attacker gets to $\rpa\cup\rpb$, i.e. the set $\rpd := \left\{\x: \tb(\x,\pstar) \le \ta(\xan,\rpa \cup \rpb)\right\}$. $\pathd$ is strongly defendable if and only if $\xbn \in \rpd$. $\rpd$ will be referred to as the \textbf{defender's winning region} for the path $\pathd$.
+\end{enumerate}
+
+The computations in this algorithm can be efficiently computed by applying the fast marching method \cite{} on a two-dimensional grid. Thus, we have conservatively solved the path defense problem, orginally a four-dimensional HJI problem, using a series of two-dimensional fast marching calculations. 
+
+Figure \ref{fig:lemma2} illustrates the proof of lemma \ref{lem:pstar} and $\rpd$.
+\begin{figure}[h]
+\centering
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+	\includegraphics[width=\textwidth]{"fig/pd proof 3"}
+	\caption{If the defender cannot defend $\pathd$ by first going to $\pstar$, then the defender cannot defend $\pathd$ by going to any other point $\ppath$.}
+	\end{subfigure} \quad
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{"fig/pd proof 4"}
+	\caption{Lemma \ref{lem:pstar} allows an easy computation of $\rpd$.}
+	\end{subfigure}
+	\caption{An illustration of the proof of lemma \ref{lem:pstar} and $\rpd$.}
+	\label{fig:lemma2}
+\end{figure}
+
+\subsection{Conservatism of strong path defense}
+To quantify how conservative strong path defense is, we consider the following question: what paths of defense are defendable, but not strongly defendable? One example of such a path is the Voronoi line between an attacker and a defender with equal speeds in a convex domain. This is shown in figure \ref{fig:voronoi_pod}.
+
+\begin{figure}[h]
+\centering
+
+\begin{subfigure}{\textwidth}
+\includegraphics[width=\textwidth]{"../../../fig/voronoi path of defense"}
+\caption{}
+\label{subfig:vor_pod1}
+\end{subfigure}
+
+\begin{subfigure}{\textwidth}
+\includegraphics[width=\textwidth]{"../../../fig/voronoi path of defense proof"}
+\caption{}
+\label{subfig:vor_pod2}
+\end{subfigure}
+
+\caption{\textbf{BE MORE CLEAR HERE.} The Voronoi line is a path of defense that is defendable but not strongly defendable. Figure \ref{subfig:vor_pod1}: by mirroring the attacker's movement direction, the defender can prevent the attacker from ever crossing the Voronoi line. \newline\newline The proof is shown in figure \ref{subfig:vor_pod2}: Suppose the defender can move to some point $p$ on the Voronoi line, and then defend the Voronoi line. By definition of the Voronoi line, the attacker and defender are equidistant to the anchor points. Thus, it would take the defender longer to first move to some point $p$ on the Voronoi line, and then to an anchor point. This implies that by the time the defender arrives at $p$, the attacker would already be inside the induced region. Therefore the Voronoi line is not strongly defendable.}
+\label{fig:voronoi_pod}
+\end{figure}
+
+To quantify the conservatism of strong path defense compared to path defense, we compute the defendable region and the strongly defendable region, defined below.
+
+First, observe that if a path is strongly defendable, any path ``behind" it on the defender's side is also strongly defendable. This is illustrated in figure \ref{fig:path_behind}. Suppose $\pathdi$ is strongly defendable, then it is defendable. This necessarily implies that $\pathdj$ is defendable, because if the defender defends $\pathdi$, then the attacker can never cross $\pathdi$ and thus never cross $\pathdj$. Since $\pathdi$ is strongly defendable, the defender can move to some point on $\pathdi$, and then defend $\pathdi$. However, on the way to $\pathdi$, the defender would have crossed $\pathdj$. Now, we have that the defender arrives at some point on $\pathdj$ and can defend it afterwards; therefore $\pathdj$ is strongly defendable.
+
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{"../../../fig/path_behind"}
+\caption{}
+\label{fig:path_behind}
+\end{figure}
+
+\begin{defn}
+Given joint initial condition $\xn$ and a (strongly) defendable path $\pathd$, call the region $\sac$ the \textbf{(strongly) defendable region given $\pathd$}. Define the union of all (strongly) defendable regions given paths to be the \textbf{(strongly) defendable region}, denoted ($\sdr$) $\dr$:
+\bq
+\begin{aligned}
+\dr &= \bigcup_{\pathd \text{ defendable}} \sac\\
+\sdr &= \bigcup_{\pathd \text{ strongly defendable}} \sac
+\end{aligned}
+\eq
+\end{defn}
+
+For a given joint initial condition $\xn$, we express the conservatism of strong path defense as the ratio $\text{area}(\dr) / \text{area}(\sdr)$. 

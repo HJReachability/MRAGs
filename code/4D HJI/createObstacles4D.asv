@@ -1,0 +1,34 @@
+function [obs_a, obs_d] = createObstacles4D(g, obs, obs_type)
+% function [obs_a, obs_d] = createObstacles4D(g, obs, obs_type)
+%
+% Inputs:
+%   g           - grid structure
+%   obs         - obstacle structure
+%   obs_type    - obstacle shape
+%
+% Outputs:
+%   obs_a       - 
+%
+%
+% Creates a rectangular obstacle by corners based on fields in obs
+
+if nargin<3, obs_type = 'rect'; end
+
+switch obs_type
+    case 'rect'
+        % Obstacle in attacker space
+        obs_a = shapeRectangleByCorners(g, ...
+            [obs.xmin obs.ymin g.min(3) g.min(4)], ...
+            [obs.xmax obs.ymax g.max(3) g.max(4)]);
+        
+        % Obstacle in defender space
+        obs_d = shapeRectangleByCorners(g, ...
+            [g.min(1) g.min(2) obs.xmin obs.ymin], ...
+            [g.max(1) g.max(2) obs.xmax obs.ymax]);
+        
+        
+%     case 'circ'
+    otherwise
+        error('Unknown obstacle type!')
+end
+end

@@ -1,0 +1,133 @@
+\section{Generalization to Open-Loop Multi-Player Games}
+\label{sec:multiPlayer}
+
+In this section, we generalize the two-player open-loop game to multi-player games. 
+As mentioned before, solving HJI equations in high dimensions is in general an intractable problem, and
+the state space typically scales exponentially with the number of players. 
+However, for certain game formulations with multiple players, the open-loop framework and the modified FMM methods provide a fast way to 
+compute the open-loop values and controls that scales linearly with the number of players. 
+Due to the inherent difference between the open-loop upper value computation and the open-loop lower value computation, we will provide two open-loop multi-player game formulations corresponding
+to the upper and lower value, each leveraging techniques developed previously. 
+
+%We first state the generalised open-loop games.
+\subsection{The Open-Loop Upper Value for Multi-Player Games}
+Suppose that there are $N$ attackers $P_A^1$,...,$P_A^N$ with 
+initial conditions $x_{A1}^0$,...,$x_{AN}^0$, and $M$
+defenders $P_D^1$,...,$P_D^M$, with 
+initial conditions $x_{D1}^0$,...,$x_{DM}^0$, each having its own 
+decoupled dynamics.
+We assume that each defender has its own capture set, and use $\avoid \subset  \mathbb{R}^{N+M}$ to encode capture conditions in which at least one defender captures at least one attacker. 
+For convenience, we also define the partial avoid set $\avoida^{ij}(x) (1 \le i\le N, 1 \le j \le M)$ to be the set of
+all states that $P_A^i$ needs to avoid if $P_D^j$ stays at state $x$.
+We use $x_{Ai}$ and $\ca^{i}$ to denote the state and the control of $P_A^i$, respectively.
+$x_{Dj}$ and $\cb^{j}$ are similarly defined for defenders.
+ $\xjn = (x_{A1}^0,...,x_{AN}^0;x_{D1}^0,...,x_{DM}^0)$ is the joint initial state and 
+$\xj$ is the joint state of all agents.
+
+In the problem that we consider, the goal for the attackers is to minimize the time needed for every (and hence the last) attacker to reach the target set $\target$, while the defenders are trying to maximize this time. We note that as soon as an attacker reaches the target, it is removed from the game and hence safe thereafter.
+Observe that under this formulation, if the defenders can prevent at least one attacker from reaching the target, then the total arrival time for the attackers is infinity.
+In this subsection, we adopt the information pattern that is conservative towards attackers. 
+Namely, the controls of every attacker will be revealed to every defender. 
+Then all defenders will jointly optimize their controls with this knowledge.
+
+Under this formulation, the payoff of the game is given by
+\begin{align}
+\pay_{multi}(\xjn; \ca^1 ,..., \ca^N ; \cb^1 ,..., \cb^M) =& \inf\left\{ t\ge 0 \mid \forall 1\le i \le N, \exists t_i \leq t, \x_{Ai}(t_i)\in\target, \right. \nonumber\\
+&\left. \xj(s)\not\in\avoid, \forall s\in [0,t] \right\}.
+\end{align}
+The multi-player open-loop upper value is then
+\bq
+\begin{aligned}
+\vUpper_{multi}(\xjn) = 
+%\inf_{\ca^{i}\in\A, 1\le i \le N}  \sup_{\cb^{j}\in\A,1\le j \le M}  \pay_{multi}(\xjn;\{{\ca^{i}}\}_{1\le i \le N};\{{\cb^{j}}\}_{1\le j \le M})
+\inf_{\ca^{i}\in\Ua}  \sup_{\cb^{j}\in\Ub}  \pay_{multi}(\xjn;\{{\ca^{i}}\}_{1\le i \le N};\{{\cb^{j}}\}_{1\le j \le M}).
+\end{aligned}
+\eq
+
+In general, what makes a multi-agent problem difficult is that  simply adopting the optimal control for each agent does not necessarily yield a global optimal solution for the whole system. 
+%That is, the global optimality is usually achieved at the expense of some agents' sacrifice. 
+However, we shall see here that in this case the global optimal solution in fact decentralizes into each attacker's local optimal control, thus eliminating the need for centralized coordination. 
+%We can then leverage this property to solve for each attacker's control individually against all the defenders.
+
+First, observe that we can define for each attacker a function $\valsRi(x;x_{Ai}^0)$ similarly as in Definition~\ref{WRupper} and for each defender a function $\vald_{j}(y;x_{Dj}^0)$ similarly as in Definition~\ref{t*upper}.
+Second, given that all defenders cooperate to delay the attackers from reaching the target, we can assign a function $\vald(y;\{x_{Dj}^0\}_{1 \le j \le M}) := \min_{1 \le j \le M}\vald_{j}(y;x_{Dj}^0)$ to the whole defending side.
+For each attacker $P^i_A$, we define the corresponding safe reachable set $\safereach_{i}$ to be the maximal set such that
+the following is satisfied:
+%\bq\label{safereachableSet_multi}
+$\valsSi(y;\x_{Ai}^0) < \vald(y;\{x_{Dj}^0\}_{1 \le j \le M}), \ \forall y \in \safereach_i.$
+%\eq
+
+The following result generalizes Theorem~\ref{mainThm} to the multi-player case.
+\begin{thm}\label{multiUpper}
+\mbox{}
+\begin{enumerate}
+\item\label{first}
+$\vUpper_{multi}(\xjn)$ $<$ $\infty$ if and only if
+ $\safereach_{i} \cap \target \neq \emptyset$, $\forall i = 1,2,...,N$;
+\item
+$\vUpper_{multi}(\xjn) = \max_{1 \le i \le N}  \inf \{\valsSi(y;\x_{Ai}^0) \mid {y\in\target}\}$.
+\end{enumerate}
+
+\end{thm}
+
+\begin{proof}
+The first part can be inferred in a straightforward manner from the formulation of the game.
+For the second part, first observe that if $\vUpper_{multi}(\xjn) = \infty$, then by part~\ref{first}) of the theorem, there exists $i \in \{1,2,...,N\}$ such that $\inf \{\valsSi(y;\x_{Ai}^0) \mid {y\in\target}\} = \infty$.
+Thus, $\vUpper_{multi}(\xjn) = \max_{1 \le i \le N}  \inf \{\vals_{i}(y;\x_{Ai}^0) \mid {y\in\target}\} =\infty$.
+
+Now consider the case in which $\vUpper_{multi}(\xjn)$ is finite.
+Also by part~\ref{first}), we know that $\safereach_{i} \cap \target \neq \emptyset$, $\forall i = 1,2,...,N$.
+This implies that for every $P^i_A$, $t_i^* := \inf \{\vals_{i}(y;\x_{Ai}^0) \mid {y\in\target}\} < \infty$.  Let $t^* := \max_{i} t_i^*$.  Then clearly, $\vUpper_{multi}(\xjn) \le t^*$.  Moreover, there exists a collection of controls $\{{\ca^{i}}\}_{1\le i \le N}$ such that $\sup_{\cb^{j}\in\Ub}  \pay_{multi}(\xjn;\{{\ca^{i}}\}_{1\le i \le N};\{{\cb^{j}}\}_{1\le j \le M}) < \infty$.  For any such controls, there exists $t \ge 0$ such that for every $i=1,2,...,N$, there exists $\tau_i \le t$ such that $\x_{Ai}(\tau_i)\in\target$ and 
+$\xj(s)\not\in\avoid, \forall s\in [0,t]$.  Let $\tau_i^* := \inf \{t \ge 0 \mid \x_{Ai}(t) \in \target\}$, then it can be checked that $t_i^* \leq \tau_i^*$, $\forall i = 1,2,..,N$ and $\pay_{multi}(\xjn;\{{\ca^{i}}\}_{1\le i \le N};\{{\cb^{j}}\}_{1\le j \le M}) = \max_{i} \tau_i^*$, $\forall \cb^{j}\in\Ub$.  Given that this holds for every $\{{\ca^{i}}\}_{1\le i \le N}$ such that the payoff is finite, we have $t^* \leq \vUpper_{multi}(\xjn)$.  The second part of the theorem then follows.
+%Without loss of generality, assume that $\inf \{\vals_{1}(y;\x_{A1}^0) \mid {y\in\target}\}$ achieves the maximum over $i \in \{1,2,...,N\}$.  If the other players on the same team, i.e. $P^i_A$, $i \neq 1$ selects their optimal open-loop controls, then these players will reach the target in no more than $\inf \{\valsSi(y;\x_{Ai}^0) \mid {y\in\target}\}$ time units, with $i \neq 1$.
+%Then the opposing side, consisting of players $P^j_D$, $j = 1,2,...,M$ can optimize their controls with respect to the chosen control of $P^1_A$.  The game then becomes equivalent to a one attacker versus multiple defenders game. 
+%Thus, we have $\vUpper_{multi}(\xjn) =  \inf \{\vals_{1}(y;\x_{A1}^0) \mid {y\in\target}\}
+%= \max_{1 \le i \le N}  \inf \{\vals_{i}(y;\x_{Ai}^0) \mid {y\in\target}\}$.
+%No other attacker can choose a control that is suboptimal in an attempt to reduce the time it takes for $P^1_A$ to reach the target under the worst case, as the defenders can be oblivious to all other attackers and still achieve the same final arrival time. 
+%Therefore, equality still holds.
+\end{proof}
+
+\begin{rem}
+We note that under this formulation, it is not necessary for every attacker to use an optimal control to ensure that the upper value is achieved.  In particular, suppose that it takes attacker $P_1^A$ the longest to reach the target set, namely $t_1^* \in \arg \max_{i} t_i$ in the proof above.  Then attackers other than $P_1^A$ can use suboptimal controls while still achieving the same overall payoff, as long as the suboptimal controls do not yield a time-to-reach longer than $t_1^*$.
+We note that under this formulation, attackers other than $P_1^A$ can still take suboptimal controls while still
+achieving the same overall payoff as long as the suboptimal controls do not yield time longer than 
+$\inf \{\vals_{i}(y;\x_{Ai}^0) \mid {y\in\target}\}$.
+%A slightly stronger formulation can have the attackers minimizing the sum of all time of the attackers, where the payoff function now
+%becomes:
+%\bq
+%\begin{aligned}
+%\pay_{multi}(\xjn; \{\ca^i\}_{1\le i \le N} ;\{\cb^j\}_{1\le j \le M}) =  \sum_{i=1}^{N} \inf\{ t\ge 0 \mid \x_{Ai}(t)\in\target,  &\x_{Ai}(s)\not\in\avoida^{ij}(x_{Dj}(s)), \\
+%& \forall 1 \le j \le M, \forall s\in [0,t] \}.
+%\end{aligned}
+%\eq
+%From the proof of the above theorem, we see that the result still holds. Yet under this formulation,
+%each attacker must strictly follow the open-loop optimal control since any
+%deviation will unnecessarily incur suboptimality.
+\end{rem}
+
+\subsection{The Open-Loop Lower Value for Multi-Player Games}
+Under the open-loop lower value information pattern, an unfortunate difference from the open-loop upper value is that the 
+optimal controls for the defending agents do not decentralize, and the defenders must coordinate their control inputs jointly. 
+%This is caused by the fact that as soon as one defending agent chooses a control and commit to it, the other defenders need to take this information into account before choosing their controls. 
+This distinction is again created because unlike the attacking agents, whose common goal is to enter a stationary target set, the defenders' goals depend upon where the attackers are at each time instant as well as where other defending agents are. 
+This restricts the type of generalization which can be realized.
+ 
+Adopting the notations introduced previously, we will consider a scenario with $N$ attacking agents and a single
+defending agent. The attacking agents and the defending agent both have the same objectives as stated in the previous subsection.
+The generalized open-loop lower value is then given by
+$\vLower_{multi}(\xjn) = \sup_{\cb^1 \in \Ub}\inf_{\ca^{i}\in\Ua, 1\le i \le N} \pay_{multi}(\xjn;\{{\ca^{i}}\}_{1\le i \le N};\cb^1)$.
+
+Each attacking agent $P_i^A$ has its own $\ts^{i}(\x;x_{Ai}^0)$ function, as introduced in Definition~\ref{lowerTStar} and the single defender has the function
+ $\wRset^{i}(\x;x_{D1}^0)$, as introduced in Definition~\ref{lowerWR}. Therefore, for each attacking agent $i$ and the defending agent, we can associate a corresponding set
+$\Rss_{i}$ similarly defined as in equation~\eqref{RStarStar}, and a function $\vLLower^{i}(x_{Ai}^0,x_{D1}^0)$ similarly defined as in equation~\eqref{lower_bound_maximal}, irrespective of 
+all the other attacking agents. 
+The following generalization can be then shown using a similar line of reasoning as presented in the proof to Theroem~\ref{bound}.
+\begin{thm}
+$\vLower_{multi}(\xjn) \ge \max_{1\le i \le N}\{\vLLower^{i}(x_{Ai}^0,x_{D1}^0)\}$
+\end{thm}
+%\begin{proof}
+%The proof follows from the proof for Theorem~\ref{multiUpper}.
+%\end{proof}
+
+
+

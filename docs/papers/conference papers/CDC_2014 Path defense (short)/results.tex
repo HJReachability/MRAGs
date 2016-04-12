@@ -1,0 +1,45 @@
+\section{Computational Results}
+\label{sec:results}
+We illustrate our path defense and maximum matching approach in the example below. The 2D slices of the 4D reach-avoid sets are calculated using our path defense approach. The example is shown in Figures \ref{fig:pd_ex}, \ref{fig:fixed_a_1}, and \ref{fig:max_matching_1}. In this example, there are four attackers and four defenders playing on a square domain with obstacles. All players have equal speeds. 
+
+Figure \ref{fig:pd_ex} illustrates the defense of a single path $\pathd$. The regions $\rpa,\rpb$ induced by $\pstar$ are shown in red. $\pstar$ is calculated based on the position of the attacker, shown as a red cross. Any defender within the region $\dr(\apa,\apb)$, shown in green, will be able to defend $\pathd$, and therefore defend the target set. Taking the union of all the defender winning regions for many paths, we obtain an approximation of the 2D slices shown in Figure \ref{fig:fixed_a_1}.
+
+Each subplot in Figure \ref{fig:fixed_a_1} shows the boundary of 2D slices for each fixed attacker position. Defenders, shown as blue stars, that are inside the boundary win against the particular attacker in each subplot. For example, in the top left subplot of Figure \ref{fig:fixed_a_1}, the defender at $(0.3, 0.5)$ wins against the attacker at $(-0.2, 0)$, while the other three defenders lose against the attacker at $(-0.2, 0)$.
+
+Figure \ref{fig:max_matching_1} shows the resulting bipartite graphs (thin solid blue lines) and the maximum matching (thick dashed blue lines) after applying the algorithm described in Section \ref{sec:max_match}. The maximum matching is of size 3, which means that at most 1 attacker is able to reach the target. Therefore, if $\m>1$ attackers getting to the target is required for the attackers to win, then the defenders are guaranteed to win. 
+
+%As the players play out the game and reach a new joint-configuration, the bipartite graph and the maximum matching can be recomputed to obtain new optimal pairings for the defending team.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.375\textwidth]{"fig/PD example"}
+	\caption{Defense of a single path that encloses the target set.}
+	\label{fig:pd_ex}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth]{"fig/fixed attacker PD 1"}
+	\caption{2D slices of reach-avoid sets at the positions of the four attackers. Defenders  inside the 2D slice boundary are guaranteed to win against the attacker in each subplot.}
+	\label{fig:fixed_a_1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.375\textwidth]{"fig/max matching PD 1"}
+	\caption{Bipartite graph and maximum matching. Each edge (thin solid blue line) connects a defender to an attacker against whom the defender is guaranteed to win, creating a bipartite graph. Dashed thick blue lines show a maximum matching. Here, a maximum matching of size 3 indicates that at most one attacker can reach the target.}
+	\label{fig:max_matching_1}
+\end{figure}
+
+Computations were done on a $200\times200$ grid, a grid resolution that was not possible when solving 4D HJI PDEs \cite{Chen2014}. 937 paths were used to compute the results in Figure \ref{fig:fixed_a_1}. Computation time varies with the number of paths we chose in steps \ref{step:createPath} and \ref{step:repeatCreatePath} in the algorithm in Section \ref{sec:reach_avoid}. Computations were done on a Lenovo T420s laptop with a Core i7-2640M processor.  %A summary of the performance of our algorithm is shown in Figure \ref{fig:alg_perf_1}. 
+
+Figure \ref{fig:alg_perf_1}(top) shows the area of the 2D slices as a function of the number of paths used for the computation. The areas are expressed as an average (over the four attacker positions) fraction of the 2D slices computed using 937 paths. Even with as few as 59 paths, the computed 2D slice covers more than 95\% of the area of the 2D slice computed using 937 paths.
+
+Figures \ref{fig:alg_perf_1}(middle) and \ref{fig:alg_perf_1}(bottom) show the paths computation and 2D slice computation times, denoted $C_1$ and $C_2$ respectively in Section \ref{sec:reach_avoid}. If one uses 59 paths to compute the 2D slices, we would have $C_1=3.2$ seconds, and $C_2=2.1$ seconds, with a resulting overall complexity of $3.2 + 2.1 \N$ \textit{seconds}. This is vastly superior to solving 4D HJI PDEs, whose complexity is $C_3\N^2$ with $C_3\approx30$ \textit{minutes} \cite{Chen2014}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.325\textwidth]{"fig/alg_perf_1"}
+	\caption{Performance of the Path Defense Solution}
+	\label{fig:alg_perf_1}
+\end{figure}

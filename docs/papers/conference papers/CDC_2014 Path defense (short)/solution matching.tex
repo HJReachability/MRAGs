@@ -1,0 +1,12 @@
+\section{Maximum Matching}
+\label{sec:max_match}
+We can determine whether the attackers can win the multiplayer reach-avoid game by combining the solution to the two-player game and maximum matching \cite{Schrjiver2004, Karpinski1998} from graph theory as follows:
+
+\begin{enumerate}
+\item Construct a bipartite graph with two sets of nodes $\pas,\pbs$. Each node represents a player.
+\item For each $\pbm{i}$, determine whether $\pbm{i}$ can win against $\pam{j}$, for all $j$ using strong path defense. 
+\item Form a bipartite graph: Draw an edge between $\pbm{i}$ and $\pam{j}$ if $\pbm{i}$ wins against $\pam{j}$.
+\item Run any matching algorithm to find a maximum matching in the graph. This can be done using, for example, a linear program \cite{Schrjiver2004}, or the Hopcroft-Karp algorithm \cite{Karpinski1998}.
+\end{enumerate}
+
+After finding a maximum matching, we can determine an upper bound for the number of attackers that can reach the target. If the maximum matching is of size $\mm$, then the defending team would be able to prevent at least $\mm$ attackers from reaching the target, and thus at most $\N-\mm$ attackers can reach the target. In particular, suppose that the attackers win when $\m$ of them reach the target. In this case, the defenders are guaranteed to win if they can prevent at least $\N-\m+1$ attackers from reaching the target. To achieve this, the size of the maximum matching would need to be of size $\mm = \N-\m+1$; this would give $\m-1$ as an upper bound for the number of attackers that are able to reach the target.

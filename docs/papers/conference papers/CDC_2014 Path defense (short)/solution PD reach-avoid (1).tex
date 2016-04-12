@@ -1,0 +1,30 @@
+\section{The Path Defense Solution to the Reach-Avoid Game}
+\label{sec:reach_avoid}
+In Section \ref{sec:formulation}, we formulated the two-player reach-avoid game, which can be solved by solving a 4D HJI PDE. We now present a more efficient way of solving the two-player reach-avoid game conservatively for the defender. This new method, the path defense solution, is based on the path defense game from Section \ref{sec:path_defense} and only involves 2D distance calculations, which can be solved efficiently using FMM. The path defense solution leverages the idea described in Section \ref{sec:path_defense}: If the target set is enclosed by some strongly defendable path $\pathd$ for some $\apa,\apb$, then the defender can win the game. 
+
+%In Section \ref{sec:path_defense}, we described the path defense game as a reach-avoid game with the target set $\target=\sac$ and computed a 2D slice. We now present the path defense solution to compute a 2D slice in for an arbitrary target set. 
+
+Naively, one could fix $\apa$, then search all other points on $\apb\in\boundary$ to find a strongly defendable path. If such a path is found, then the defender wins the game; if not, try another $\apa$. However, we can reduce the number of paths that needs to be checked by only checking only paths of defense $\pathd$ that touch the target set. In a simply connected domain, this reduction in the number of paths checked does not introduce any additional conservatism. Therefore, picking $\apa$ determines $\apb$. 
+
+If some strongly defendable path $\pathd$ encloses the target set, then the defender's strategy would be to first go to $\pstar\in\pathd$, then move towards $\xai(\apa)$ or $\xai(\apb)$ until the level set image is captured. Finally, the defender can simply track the captured level set image. This is a ``semi-open-loop" strategy. %The first part of the defender's control strategy is to move to $\pstar$ regardless of what the attacker does; this is an open-loop strategy. The second part of the defender's control strategy is to track the attacker's level set image, which depends on how the attacker moves; this is a closed-loop strategy.
+
+The following algorithm approximates a 2D slice conservatively towards the defender:
+
+Given attacker position,
+\begin{enumerate}
+\item Choose some point $\apa\in\boundary$, which defines $\apb$ to create a path of defense $\pathd$ that touches the target $\target$. \label{step:createPath}
+\item Repeat step \ref{step:createPath} for a desired set of points $\apa\in\boundary$. \label{step:repeatCreatePath}
+\item For some particular $\pathd$, determine the defender winning region $\dr(\apa,\apb;\xan)$.\label{step:dWinRegion}
+\item Repeat step \ref{step:dWinRegion} for all the paths created in step \ref{step:createPath}.
+\item The union $\bigcup_{\apa} \dr(\apa,\apb;\xan)$ gives the approximate 2D slice, representing the conservative winning region for the defender in the two-player reach-avoid game. \label{step:union}
+\end{enumerate}
+
+We will be using the solution to the two-player game as a building block for approximating the solution to the multiplayer game. To calculate the solution to many defender-attacker pairs, we add the following step to the algorithm: 
+\begin{enumerate}
+\setcounter{enumi}{5}
+\item Repeat steps \ref{step:dWinRegion} to \ref{step:union} for every attacker position.
+\end{enumerate}
+
+For a given domain, set of obstacles, and target set, steps \ref{step:createPath} and \ref{step:repeatCreatePath} only need to be performed once, regardless of the number of players in the game. In step \ref{step:dWinRegion}, the speeds of the defenders come in only through a single distance calculation from $\pstar$, and this calculation can needs to be done once per attacker position. Therefore, steps \ref{step:dWinRegion} to \ref{step:union} scales only with the number of attackers. Therefore, the total computation time required for the path defense solution to the multiplayer is on the order of $C_1 + C_2 \N$, where $C_1$ is the time required for steps \ref{step:createPath} and \ref{step:repeatCreatePath}, $C_2$ is the time required for steps \ref{step:dWinRegion} to \ref{step:union}, and $\N$ is the number of players on each team. 
+
+Compare this to the HJI approach in \cite{Chen2014}, whose computation time is $C_3 \N^2$, where $C_3$ is the time required to solve a 4D HJI PDE. Our new path defense solution not only scales linearly with the number of players, but as we will show in Section \ref{sec:results}, the constants $C_1,C_2$ are much smaller than $C_3$.

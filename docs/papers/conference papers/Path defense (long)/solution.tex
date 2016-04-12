@@ -1,0 +1,480 @@
+\section{Solution} \label{sec:solution}
+\subsection{Hamilton-Jacobi Reachability} \label{subsec:hj_background}
+The multiplayer reach-avoid game is a differential game in which two teams have competing objectives \cite{b:basar-olsder-1999}. By specifying the winning conditions, we can determine the winning regions of the attacker and the defender by numerically computing the HJ reachable sets. The numerical HJ computations allow us to consider games with arbitrary terrain, domain, obstacles, target set, and player velocities. Furthermore, the results of HJ computation assume a closed-loop strategy for both players given previous information of the other players.
+
+The setup for using HJ reachability to solve differential games can be found in \cite{j:mitchell-TAC-2005, LSToolbox, Huang2011}. In summary, we are given the continuous dynamics of the system state:
+
+\bq
+\dxj = f(\xj,u,d), \xj(0)=\xjn,
+\eq
+
+\noindent where $\xj\in\R^n$ is the system state, $u\in\mathbb{U}$ is the joint control input of the attacking team, and $d\in\mathbb{D}$ is the joint control input of the defending team. The sets $\mathbb{U}$ and $\mathbb{D}$ represent the sets of the joint admissible control inputs of the attacking team and the defending team, respectively. The attacking team selects a control input based on the past and the current joint states of all the players. The defending team then selects a control input based on the past and the present control inputs of the attacking team, in addition to
+the past and the current joint states. \textit{A priori}, this information pattern is conservative towards the attackers, as defenders have more information available. However, in the case that the system (described by the function $f$) is decoupled, which is
+true in our reach-avoid game defined in Equation~\eqref{eq:dynamics}, the Isaacs condition \cite{b:isaacs-1967} holds and the two information patterns yield the same optimal solutions for both the attackers and the defenders.
+
+To use the HJ reachability framework, we specify the terminal set $R$ (described in detail in the next subsection) as the attackers' winning condition, and propagate backwards this set subject to the constraint imposing that the attackers be outside the capture regions and the obstacles. This constraint is described by the avoid set $A$ in more detail in the next subsection. The result is a reachable set that partitions the state space into two regions. All points inside the reachable set represent the joint initial conditions from which the attacking team is guaranteed to win, and all points outside represent the joint initial conditions from which the defending team is guaranteed to win.
+
+More precisely, the HJ reachability calculation is as follows. 
+First, given a set $G$, the level set representation of $G$ is a function $\valsR_\set:\R^n \rightarrow \R$ such that $\set = \left\{\xj\in\R^n \mid \valsR_\set\le0\right\}$.
+In particular, the terminal set $R$ and the avoid set $A$ will be represented by the functions $\valsR_R$ and $\valsR_A$ respectively.
+
+ 
+Let $\Phi:\R^n\times[-\T,0]\rightarrow\R$ be the viscosity solution \cite{j:Crandall-TAMS-1983} to the constrained terminal value HJI PDE:
+\begin{equation}
+	\label{eq:HJ_PDE_reachavoid}
+	\frac{\partial \Phi}{\partial t} + \min \left[0, H\left(\xj,\frac{\partial \Phi}{\partial \xj}\right)\right] = 0,\;\Phi(\xj,0) = \valsR_R(\xj)	 
+\end{equation}
+subject to 
+$$\Phi(\xj,t) \geq -\valsR_A(\xj),$$
+where the optimal Hamiltonian is given by
+$$H\left(\xj,p\right) = \min_{u \in \mathbb{U}} \max_{d \in \mathbb{D}} p^T f(\xj,u,d).$$
+By the argument presented in \cite{j:mitchell-TAC-2005} and \cite{mitchell-thesis}, the set of initial conditions from which the attackers are guaranteed to win within time $T$ is given by 
+\bq
+\mathcal{RA}_T(R,A) := \left\{\xj\in \R^n \mid \Phi (\xj,-\T) \leq 0\right\}.
+\eq
+Hence, $\Phi (\xj,-\T)$ is the level set representation of $\mathcal{RA}_T(R,A)$.
+
+The optimal control input for the attacking team is given by \cite{j:Lygeros-automatica-1999, j:Tomlin-ProcIEEE-2000, Huang2011}:
+\bq \label{eq:opt_ctrl_u}
+  u^*(\xj,t) = \arg \min_{u \in \mathbb{U}} \max_{d \in \mathbb{D}} p(\xj,-t)^T f(\xj,u,d), \!\ t \in [0,T] 
+\eq
+where $p = \frac{\partial \Phi}{\partial \xj}$. 
+
+Similarly, an initial player configuration outside $\mathcal{RA}_T(R,A)$ guarantees that the defenders will win by using the optimal control input
+\bq \label{eq:opt_ctrl_d}
+  d^*(\xj,t) = \arg \max_{d \in \mathbb{D}} p(\xj,-t)^T f(\xj,u^*,d), \ t \in [0,T].
+\eq
+
+Taking $T\rightarrow\infty$, we obtain the set of initial conditions from which the attackers are guaranteed to win. We denote this set $\mathcal{RA}_\infty(R,A)$. The set of initial conditions from which the defenders are guaranteed to win is given by all points not in $\mathcal{RA}_\infty(R,A)$. Note that for an $\N$ vs. $\N$ game on a two-dimensional domain $\amb\subset\R^2$, the reachable set $\mathcal{RA}_\infty(R,A)$ is $4\N$-dimensional.
+
+A highly accurate numerical solution to Equation (\ref{eq:HJ_PDE_reachavoid}) can be computed using the Level Set Toolbox for MATLAB \cite{LSToolbox}.
+
+In the next two subsections, we will describe the terminal set and the avoid set for the multiplayer and the two player reach-avoid games.
+
+\subsection{Hamilton-Jacobi Reachability for the Multiplayer Game}
+\label{subsec:hj_multi}
+%NEED TO INCLUDE OBSTACLES HERE TOO
+In the multiplayer reach-avoid game, the goal of the attacking team is to send at least $\m$ attackers to the target set $\target$. For a particular set of $\m$ attackers, the goal set is given by each of the attackers being inside the target but outside of the capture radius of all the defenders. To obtain the terminal set $R$ for the game (i.e.\ at least $\m$ attackers reaching the target), we take the union of all $\begin{pmatrix} \N \\ \m \end{pmatrix}$ goal sets.
+%$\begin{pmatrix} \N \\ \m \end{pmatrix}$ ($\N$ choose $\m$) sets. 
+%To obtain the terminal set for at least $\m$ attackers reaching the target, one would take the union of the terminal sets for exactly $\m,\m+1,\ldots,\N$ attackers reaching the target without being captured.
+
+The avoid set is defined by the losing condition of the attackers: the attackers lose the game when at least $\N-\m+1$ of them have been captured by the defender. For a particular attacker $\pam{i}$, the individual keep-out set is given by $\bigcup_{j=1}^\N \avoid_{ij}$, corresponding to $\pam{i}$ being captured by any of the defenders $\pbm{j},j=1,2,\ldots,\N$. For a particular set of $\N-\m+1$ attackers, the joint keep-out set is characterized by each of these players being within the capture radius of some defender. The avoid set $\set_A$ for at least $\N-\m+1$ attackers being captured is the union of all $\begin{pmatrix} \N \\ \N-\m+1 \end{pmatrix}$ such joint keep-out sets. %The entire avoid set for at least $\N-\m+1$ attackers being captured would be the union of the avoid sets for $\N-\m+1, \N-\m+2, \ldots, \N$ attackers being captured.
+
+The HJ reachability calculation for the multiplayer reach-avoid game is not only cumbersome to set up, but also intractable computationally due to the HJI PDE being solved on a discrete grid, which makes the computation complexity scale exponentially with the number of dimensions. In general, an HJI PDE of dimensions higher than five cannot be solved practically. Thus, we are limited to only being able to solve the HJI PDE corresponding to a two player game in which each player's state space is two-dimensional. Instead of directly solving the HJI PDE corresponding to the $2\N$-player game, which is a $4\N$-dimensional problem, we will solve the multiplayer game by combining the solution to the two player game and maximum matching from graph theory. This approach is outlined below.
+
+\subsection{Hamilton-Jacobi Reachability for the Two Player Game}
+\label{subsec:hj_two}
+In the two-player reach-avoid game, the goal of the attacker is to reach the target set $\target$ while avoiding capture by the defender. This goal is represented by the attacker being inside $\target$ but outside of the defender's capture radius.. En route to $\target$, the attacker must avoid capture by the defender. This is represented by the set $\avoid$. 
+
+In addition, both players need to avoid the obstacles $\obs$, which can be considered as the locations in $\amb$ where the players have zero velocity. In particular, the defender wins if the attacker is in $\obs$, and vice versa. Therefore, we define the terminal set as 
+\bq
+\begin{aligned}
+R = & \left\{\xj\in\amb^2 \mid \xa\in\target \land \|\xa-\xb\|_2 > \Rc \right\} \\  
+&\cup \left\{\xj\in\amb^2\mid \xb\in\obs \right\}
+\end{aligned}
+\eq
+
+Similarly, we define the avoid set as
+\bq \begin{aligned}
+A &= \left\{\xj\in\amb^2 \mid \|\xa-\xb\|_2\le \Rc \right\} \cup \left\{\xj\in\amb^2\mid \xa\in\obs \right\} \\
+&= \avoid \cup \left\{\xj\in\amb^2\mid \xa\in\obs \right\}
+\end{aligned} \eq
+
+Given these sets, we can define the corresponding level set representations $\valsR_R,\valsR_A$, and solve (\ref{eq:HJ_PDE_reachavoid}). Assuming $\amb\subset\R^2$, the result is $\mathcal{RA}_\infty(R,A)\in\R^4$, a four dimensional reachable set with the level set representation $\Phi(\xj,-\infty)$. The attacker wins if and only if the joint initial condition is such that $(\xan,\xbn)=\xjn\in\mathcal{RA}_\infty(R,A)$.
+
+If $\xjn\in\mathcal{RA}_\infty(R,A)$, then the attacker is guaranteed to win the game by using the optimal control input given in (\ref{eq:opt_ctrl_u}). Applying Equation (\ref{eq:opt_ctrl_u}) to the two player game, we have that the attacker winning strategy satisfies 
+
+\bq \label{eq:opt_ctrl2_u_gen}
+  \ca^*(\xa,\xb,t) = \arg \min_{\ca \in \mathbb{U}} \max_{\cb \in \mathbb{D}} p(\xa,\xb,-t)^T f(\xa,\xb,\ca,\cb) 
+\eq
+
+\noindent for $t \in [0,T]$. The explicit winning strategy satisfying (\ref{eq:opt_ctrl2_u_gen}) is given in \cite{Huang2011} as
+
+\bq \label{eq:opt_ctrl2_a}
+\ca^*(\xa,\xb,t) = -\vela \frac{p_u(\xa,\xb,-t)}{\|p_u(\xa,\xb,-t)\|_2}.
+\eq
+
+\noindent where $p = (p_u,p_d) = \frac{\partial \Phi}{\partial (\xa,\xb)}$.  
+
+Similarly, if $\xjn\notin\mathcal{RA}_\infty(R,A)$, then the defender is guaranteed to win the game by using the optimal control input given in (\ref{eq:opt_ctrl_d}). Applying Equation (\ref{eq:opt_ctrl_d}) to the two player game, we have that the defender winning strategy satisfies 
+
+\bq \label{eq:opt_ctrl2_d_gen}
+  \cb^*(\xa,\xb,t) = \arg \max_{\cb \in \mathbb{D}} p(\xa,\xb,-t)^T f(\xa,\xb,\ca^*,\cb)
+\eq
+
+\noindent for $t \in [0,T]$. The explicit winning strategy satisfying (\ref{eq:opt_ctrl2_d_gen}) is given in \cite{Huang2011} as
+\bq \label{eq:opt_ctrl2_d}
+\cb^*(\xa,\xb,t) = \velb \frac{p_d(\xa,\xb,-t)}{\|p_d(\xa,\xb,-t)\|_2}.
+\eq
+
+\subsection{The Path Defense Solution to the Two Player Game}
+\label{sec:path_defense}
+The HJI solution to the two-player reach-avoid game involves gridding up a 4-dimensional space, and is thus time- and memory-intensive to compute. In this section, we introduce the path defense game, a specific type of reach-avoid games, describe how the path defense game can be approximately solved efficiently, and quantify the conservatism of the approximation. 
+
+\subsubsection{The path defense game}
+The path defense game is a two player reach-avoid game in which the target set is $\target=\sac$ for some given points on the boundary $\apa,\apb$. $\sa,\pathd,\apa,\apb$ are defined below.
+
+% Definitions
+\begin{defn} % Shortest path between two points
+\textbf{Path of defense}. Denote the shortest path between two points $\x,\y$ to be $\path(\x,\y)$. A path of defense, $\pathd$, is the shortest path between points $\apa$ and $\apb$ located on $\boundary$, the boundary of the domain. $\apa$ and $\apb$ are referred to as the anchor points of path $\pathd$. 
+\end{defn}
+
+\begin{defn} % Attacker's side of the path (needed?)
+\textbf{Attacker's side of the path}. A path of defense $\pathd$ partitions the domain $\amb$ into two regions, one of which contains the attacker. Define $\sa$ to be the region that contains the attacker, not including points on the path. The attacker seeks to reach the target set $\target=\sac$.
+\end{defn}
+
+The basic setup of the path defense game is illustrated in figure \ref{fig:pd_form} below.
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{"fig/pd game formulation"}
+\caption{An illustration of the components of a path defense game between two players.}
+\label{fig:pd_form}
+\end{figure}
+
+\subsubsection{Solving the path defense game}
+A path defense game can be solved by solving a 4-dimensional HJI corresponding to the problem as described in section \ref{sec:HJI_twop} with $\target=\sac$. However, the following definitions will allow us to solve the game conservatively for the defender without solving an HJI.
+
+% Definitions
+\begin{defn} % Defendable path
+\textbf{Defendable path}. Given initial conditions $\xjn=(\xan,\xbn)$, a path $\pathd$ is defendable if regardless of the attacker's actions, the defender has a control strategy $\cb$ to prevent the attacker from reaching $\pathd$ without being captured.
+\end{defn}
+
+\begin{defn} % Strongly defendable path
+\textbf{Strongly defendable path}. Given initial conditions $\xjn=(\xan,\xbn)$, a path $\pathd$ is strongly defendable if regardless of the attacker's actions, the defender has a control strategy $\cb$ to reach $\pathd$ after finite time and prevent the attacker from reaching $\pathd$ without being captured. Note that the defender is not explicitly required to stay on $\pathd$ after reaching it.
+\end{defn}
+
+\begin{rem}
+A path $\pathd$ is defendable if it is strongly defendable.
+\end{rem}
+
+Observe that checking whether a path $\pathd$ is defendable is exactly the path defense problem. Since solving the path defense problem involves a 4-dimensional HJI calculation, we instead consider the problem of checking whether a path $\pathd$ is strongly defendable.
+
+\begin{defn} % Level set image of attacker
+\textbf{Level set image of attacker}. Given attacker position $\xa(t)$, define the level set image of the attacker with respect to anchor point $\apa$ to be $\xai(t;\apa) = \{\x\in\pathd: \ta(\x,\apa) = \ta(\xa(t),\apa)\}$. $\xai$ is unique. Define $\xai(t;\apb)$ similarly.
+\end{defn}
+
+\begin{rem}
+\label{rem:image_of_a}
+$\xai(\apa)$ is closer to $\apb$ than $\xai(\apb)$.
+\end{rem}
+
+\begin{rem}
+Given some path of defense $\pathd$, if the defender's position coincides with the level set image of the attacker, i.e. $\xb(s) = \xai(s;\apa)$ (or $\xai(s;\apb)$) at some time $s$, then there exists a control for the defender to always remain on the level set image of the attacker thereafter, i.e. $\xb(t) = \xai(t;\apa)$ (or $\xai(t;\apb)$) $\forall t\ge s$.
+\end{rem}
+
+\begin{defn} % Winning regions for defender given path and point
+\label{def:d_win_region}
+\textbf{Regions induced by point $\ppath$ on path}. Given a point $\ppath$ on a path of defense $\pathd$, define a region $\rpa\left(\ppath\right)$ associated the point $\ppath$ and anchor point $\apa$ as follows:
+\bq
+\rpa\left(\ppath\right) = \left\{\x: \ta(\x,\apa) \leq \tb(\ppath,\apa) \right\}
+\eq
+
+Define $\rpb(\ppath)$ similarly.
+\end{defn}
+
+% Lemma involving winning regions for defender
+\begin{lem}
+\label{lem:d_winning_region}
+Suppose that the defender is on some point $\ppath$ on the path $\pathd$, i.e. $\xbn = \ppath$. Then, $\pathd$ is strongly defendable if and only if the attacker's initial position $\xan$ is outside the region induced by $\ppath$: $\xan\in\amb\backslash\left(\rpa \cup \rpb\right)$.
+\end{lem}
+
+\begin{IEEEproof} % This assumes speed of attacker is same as (or less than) speed of defender 
+% First, note that by definition, $\xa\in\sa$. Next, note that $\path(\xa,\pprime)$ where $\pprime$ is any point on the path of defense is contained in $\sa$ except for the point $\pprime$, and $\path(\ppath,\pprime)$ is contained in $\sac$. The paths $\path(\ppath,\pprime)$ and $\path(\xa,\pprime)$ do not cross.
+
+First, we show that if $\xan\in \rpa \cup \rpb$, then the attacker can reach $\apa$ or $\apb$ and hence $\sac$ without being captured. 
+
+Without loss of generality, suppose $\xan\in\rpa$. To capture the attacker, the defender must necessarily be on $\xai(\apa)$ or $\xai(\apb)$ at some time $t$. By definition \ref{def:d_win_region}, we have $\ta(\xan,\apa) < \tb(\ppath,\apa)$, so $\ta(\xai(\apa),\apa) < \tb(\ppath,\apa)$. By remark \ref{rem:image_of_a}, we also have $\tb(\ppath, \xai(\apa)) \leq \tb(\ppath, \xai(\apb))$, so it suffices to show that the defender never reaches $\xai(\apa)$ before the attacker reaches $\apa$. 
+
+If the attacker moves towards $\apa$ along $\path(\xan,\apa)$, then $\xai(\apa)$ will move towards $\apa$ along $\path(\xai(\apa),\apa)$. Since $\ta(\xa,\apa)=\ta(\xai(\apa),\apa)<\tb(\ppath,\apa)$, $\xai(\apa)$ will reach $\apa$ before $\xb$ does. Thus, the defender never captures the attacker's level set image. Therefore, no matter what the defender does, the attacker can reach $\sac$ by moving towards $\apa$ along $\path(\xa,\apa)$.
+
+Next, we show that if $\xa\in\sa\backslash\left(\rpa \cup \rpb\right)$, then the defender cannot reach $\sac$ without being captured.
+
+Suppose $\xa$ will reach some point $\pprime$ before $\xb$ does. Without loss of generality, assume $\pprime\in\path(\ppath,\apa)$, and note that $\tb(\xb,\apa)<\ta(\xa,\apa)$ since the attacker is not in $\rpa$. Since $\ta(\xa,\apa)$ is the minimum time for the attacker to reach $\apa$, we have
+\bq
+\begin{aligned}
+\ta(\xa,\apa) &\leq \ta(\xa,\pprime) + \ta(\pprime,\apa) \\
+&< \tb(\ppath,\pprime) + \ta(\pprime,\apa) \text{ (by assumption, $\ta(\xa,\pprime)<\tb(\ppath,\pprime)$)}\\ 
+&< \tb(\ppath,\pprime) + \tb(\pprime,\apa) \text{ (since defender is no slower than attacker)}\\ 
+& = \tb(\ppath,\apa) \\
+& < \ta(\xa,\apa)
+\end{aligned}
+\eq
+which is a contradiction. Therefore, the attacker cannot cross any point $\pprime$ on $\pathd$ without being captured.
+
+This proves lemma \ref{lem:d_winning_region}.
+
+\end{IEEEproof}
+
+The proof is illustrated in figure \ref{fig:lemma1}
+
+\begin{figure}[h]
+\centering
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{"fig/pd proof 1"}
+	\caption{Suppose the attacker is in $\rpa\cup\rpb$. If the attacker moves towards $e_a$, the defender can never capture the attacker's level set image.}
+	\end{subfigure} \quad
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{"fig/pd proof 2"}
+	\caption{Suppose the attacker is not $\rpa\cup\rpb$, there is no point $\pprime$ on $\pathd$ that the attacker can reach without being captured.}
+	\end{subfigure}
+\caption{An illustration of the proof of lemma \ref{lem:d_winning_region}.}
+\label{fig:lemma1}
+\end{figure}
+
+Given that the defender starts at $\ppath$ on $\pathd$, lemma \ref{lem:d_winning_region} partitions $\amb$ into two regions: if the attacker is initially in $\rpa \cup \rpb$, then $\pathd$ is not strongly defendable; otherwise, the path is strongly defendable.
+
+In general, the initial position of the defender, $\xbn$, may not be on $\pathd$. In this case, to strongly defend $\pathd$, the defender needs to first arrive at some point $\ppath\in\pathd$. When the defender arrives at $\ppath$, if the attacker is outside of $\rpa\cup\rpb$, then the path $\ppath$ is strongly defendable. 
+
+Thus, given initial conditions $\xjn = (\xan,\xbn)$, we can check whether a path $\pathd$ is strongly defendable by the following procedure:
+
+For all points on the path $\ppath\in\pathd$,
+\begin{enumerate}
+\item Compute the time it takes the defender to move from $\xbn$ to $\ppath$.
+\item Compute the time it takes the attacker to move from $\xan$ to $\rpa\cup\rpb$.
+\end{enumerate}
+If there exists a point $\ppath$ on $\pathd$ such that the defender can get to $\ppath$ before the attacker can get to the corresponding $\rpa\cup\rpb$, then the path is strongly defendable. Otherwise, the path is not strongly defendable.
+
+The above procedure requires two computations for every point on the path $\pathd$. The following lemma shows that it is necessary and sufficient to perform the computations for only one point.
+
+\begin{rem} \label{rem:time_to_region_a}
+It will be convenient to note that given $\ppath\in\pathd$, the time it takes the attacker to get to $\rpa(\ppath)$ is $\ta(\xan,\rpa(\ppath,\apa) = \ta(\xan,\apa) - \tb(\ppath,\apa)$. Similarly, $\ta(\xan,\rpb(\ppath) = \ta(\xan,\apb) - \tb(\ppath,\apb)$
+\end{rem}
+
+\begin{lem} \label{lem:pstar}
+Let a point $\pstar$ on the path $\pathd$ be such that the time it takes the attacker to get to $\rpa$ and the time it takes the attacker to get to $\rpb$ are equal. Then, $\pathd$ is strongly defendable if and only if the defender can defend $\pathd$ by first going to $\pstar$.
+\end{lem}
+
+\begin{IEEEproof}
+One direction is clear: if the defender can defend $\pathd$ by first going to $\pstar$, then $\pathd$ is strongly defendable by definition.
+
+We will show the other direction by showing its contrapositive: if the defender cannot defend $\pathd$ choosing  $\pstar$ as the first point of entry, then $\pathd$ is not strongly defendable. Equivalently, we will show that if choosing $\pstar$ as the first point of entry does not allow the defender to defend $\pathd$, then no other choice of $\ppath$ as the first point of entry does.
+
+Suppose that the defender cannot defend $\pathd$ by choosing $\pstar$ as the first point of entry, but can defend $\pathd$ by choosing another point $\pprime$ as the first point of entry. Without loss of generality, assume $\tb(\pstar,\apa)-\tb(\pprime,\apa)=\deltap>0$. Then, the time it takes the attacker to get to the regions induced by $\pstar$ and by $\pprime$ are related in the following way:
+
+\bq
+\begin{aligned}
+\ta(\xan,\rpa(\pstar)) & = \ta(\xan,\apa) - \tb(\pstar,\apa) \text{ (by remark \ref{rem:time_to_region_a})}\\
+\ta(\xan,\rpa(\pprime)) & = \ta(\xan,\apa) - \tb(\pprime,\apa) \text{ (by remark \ref{rem:time_to_region_a})}\\
+\ta(\xan,\rpa(\pprime)) - \ta(\xan,\rpa(\pstar) & = \tb(\pprime,\apa) - \tb(\pstar,\apa) \text{ (subtract above two equations)} \\
+& = \deltap \\
+\ta(\xan,\rpb(\pprime)) - \ta(\xan,\rpb(\pstar)) & = -\deltap \text{ (derived similarly)}
+\end{aligned}
+\eq
+
+\bq
+\begin{aligned}
+\tb(\xbn,\pstar) & \leq \tb(\xbn,\pprime) + \tb(\pprime,\pstar) \\
+\tb(\xbn,\pstar) - \tb(\xbn,\pprime) & \leq  \tb(\pstar,\pprime) 
+\end{aligned}
+\eq
+\end{IEEEproof}
+
+Lemmas \ref{lem:d_winning_region} and \ref{lem:pstar} give a simple algorithm to check whether a path of defense $\pathd$ is strongly defendable:
+\begin{enumerate}
+\item Given anchor points $\apa, \apb$ and attacker position $\xan$, compute the point $\pstar$ and the induced regions $\rpa,\rpb$.
+\item $\pathd$ is strongly defendable if and only if the defender can get to $\pstar$ before the attacker gets to the induced regions $\rpa,\rpb$, i.e. $\tb(\xbn,\pstar) \le \ta(\xan,\rpa \cup \rpb)$.
+
+Alternatively, one could compute the region around $\pstar$ such that the defender can get to $\pstar$ before the attacker gets to $\rpa\cup\rpb$, i.e. the set $\rpd := \left\{\x: \tb(\x,\pstar) \le \ta(\xan,\rpa \cup \rpb)\right\}$. $\pathd$ is strongly defendable if and only if $\xbn \in \rpd$. $\rpd$ will be referred to as the \textbf{defender's winning region} for the path $\pathd$.
+\end{enumerate}
+
+The computations in this algorithm can be efficiently computed by applying the fast marching method \cite{} on a two-dimensional grid. Thus, we have conservatively solved the path defense problem, orginally a four-dimensional HJI problem, using a series of two-dimensional fast marching calculations. 
+
+Figure \ref{fig:lemma2} illustrates the proof of lemma \ref{lem:pstar} and $\rpd$.
+\begin{figure}[h]
+\centering
+	\centering
+	\begin{subfigure}{0.45\textwidth}
+	\includegraphics[width=\textwidth]{"fig/pd proof 3"}
+	\caption{If the defender cannot defend $\pathd$ by first going to $\pstar$, then the defender cannot defend $\pathd$ by going to any other point $\ppath$.}
+	\end{subfigure} \quad
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{"fig/pd proof 4"}
+	\caption{Lemma \ref{lem:pstar} allows an easy computation of $\rpd$.}
+	\end{subfigure}
+	\caption{An illustration of the proof of lemma \ref{lem:pstar} and $\rpd$.}
+	\label{fig:lemma2}
+\end{figure}
+
+\subsubsection{Conservatism of strong path defense}
+To quantify how conservative strong path defense is, we consider the following question: what paths of defense are defendable, but not strongly defendable? One example of such a path is the Voronoi line between an attacker and a defender with equal speeds in a convex domain. This is shown in figure \ref{fig:voronoi_pod}.
+
+\begin{figure}[h]
+\centering
+
+\begin{subfigure}{\textwidth}
+\includegraphics[width=\textwidth]{"fig/voronoi path of defense"}
+\caption{}
+\label{subfig:vor_pod1}
+\end{subfigure}
+
+\begin{subfigure}{\textwidth}
+\includegraphics[width=\textwidth]{"fig/voronoi path of defense proof"}
+\caption{}
+\label{subfig:vor_pod2}
+\end{subfigure}
+
+\caption{\textbf{BE MORE CLEAR HERE.} The Voronoi line is a path of defense that is defendable but not strongly defendable. Figure \ref{subfig:vor_pod1}: by mirroring the attacker's movement direction, the defender can prevent the attacker from ever crossing the Voronoi line. \newline\newline The proof is shown in figure \ref{subfig:vor_pod2}: Suppose the defender can move to some point $p$ on the Voronoi line, and then defend the Voronoi line. By definition of the Voronoi line, the attacker and defender are equidistant to the anchor points. Thus, it would take the defender longer to first move to some point $p$ on the Voronoi line, and then to an anchor point. This implies that by the time the defender arrives at $p$, the attacker would already be inside the induced region. Therefore the Voronoi line is not strongly defendable.}
+\label{fig:voronoi_pod}
+\end{figure}
+
+To quantify the conservatism of strong path defense compared to path defense, we compute the defendable region and the strongly defendable region, defined below.
+
+First, observe that if a path is strongly defendable, any path ``behind" it on the defender's side is also strongly defendable. This is illustrated in figure \ref{fig:path_behind}. Suppose $\pathi$ is strongly defendable, then it is defendable. This necessarily implies that $\pathj$ is defendable, because if the defender defends $\pathi$, then the attacker can never cross $\pathi$ and thus never cross $\pathj$. Since $\pathi$ is strongly defendable, the defender can move to some point on $\pathi$, and then defend $\pathi$. However, on the way to $\pathi$, the defender would have crossed $\pathj$. Now, we have that the defender arrives at some point on $\pathj$ and can defend it afterwards; therefore $\pathj$ is strongly defendable.
+
+\begin{figure}[h]
+\includegraphics[width=\textwidth]{"fig/path_behind"}
+\caption{}
+\label{fig:path_behind}
+\end{figure}
+
+\begin{defn}
+Given joint initial condition $\xn$ and a (strongly) defendable path $\pathd$, call the region $\sac$ the \textbf{(strongly) defendable region given $\pathd$}. Define the union of all (strongly) defendable regions given paths to be the \textbf{(strongly) defendable region}, denoted ($\sdr$) $\dr$:
+\bq
+\begin{aligned}
+\dr &= \bigcup_{\pathd \text{ defendable}} \sac\\
+\sdr &= \bigcup_{\pathd \text{ strongly defendable}} \sac
+\end{aligned}
+\eq
+\end{defn}
+
+For a given joint initial condition $\xn$, we express the conservatism of strong path defense as the ratio $\text{area}(\dr) / \text{area}(\sdr)$. 
+
+\subsection{Reach-Avoid Games}
+\label{sec:reach_avoid}
+In section \ref{sec:2p_ra}, we formulated the two-player reach-avoid game, and in section \ref{sec:HJI_twop}, we described how to solve the game by solving a 4D HJI PDE. In this section, we will present an alternative, more efficient way of solving the two-player reach-avoid game conservatively. The new method we present is based on the path defense game from section \ref{sec:path_defense} and only involves solving the 2D Eikonal equation, which can be solved efficiently using the fast marching method.
+
+In section \ref{sec:path_defense}, we described the path defense game as a reach-avoid game with the target set $\target=\sac$. We now consider the case where the target set can be any arbitrary set. We will divide our analysis into three different cases depending on the domain: convex, simply connected non-convex, and general non-convex.
+
+\subsubsection{Convex Domain}
+In a convex domain, the two player reach-avoid game can be solved exactly without solving an HJI PDE.
+
+\begin{lem} \label{lem:cvx_domain}
+In a two player reach-avoid game in a convex domain $\amb$, the defender wins if and only if the target set is contained in the Voronoi cell of the defender.
+\end{lem}
+
+\begin{IEEEproof}
+Suppose part of the target set $\target$ lies in the attacker's Voronoi cell. Then, by definition of the Voronoi cell, the attacker can reach that part of $\target$ before the defender can exit the defender's Voronoi cell. Therefore, the attacker wins by simply taking the shortest path $\path(\xan,\target)$ to reach the target without being captured. The payoff of the game is $\ta(\xan,\target)$.
+
+For the other direction, first denote the orthogonal projection of the attacker's position and of the defender's position onto the Voronoi line $\xaop$ and $\xbop$, respectively. Note that $\xaop=\xbop$ initially. Consider the attacker's (defender's) velocity components in the direction $\path(\xa,\xaop)$, ($\path(\xb,\xbop)$, respectively) and in the direction perpendicular to it. Denote these components $\dotxapara$ and $\dotxaperp$ ($\dotxbpara$ and $\dotxbperp$ for the defender).
+
+Suppose the entire target set lies in the defender's Voronoi cell. The following defender strategy ensures that the attacker never crosses the Voronoi line (and hence the Voronoi line is defendable), and thus never reach the target. Given any $\dotxaperp$, choose $\dotxbperp=\dotxaperp$, and use the remaining speed in the direction $\dotxbpara$. This ensures that $\xaop=\xbop$ for all time, and that the Voronoi line does not change if $\dotxapara>=0$ and moves towards the attacker otherwise.
+\end{IEEEproof}
+
+Figure \ref{fig:cvx_domain} illustrates lemma \ref{lem:cvx_domain}.
+
+\begin{figure}[h]
+\centering
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{"fig/cvx domain 1"}
+	\caption{If part of the target set is in the attacker's Voronoi cell, the attack can win the game in minimum time by taking the shortest path to the target.}
+	\end{subfigure} \quad
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{"fig/cvx domain 2"}
+	\caption{If the target set is entirely within the Voronoi cell of the defender, the defender can ``mirror" the attacker's control to defend the Voronoi line, and thus prevent the attacker from reaching the target.}
+	\end{subfigure}
+\caption{An illustration of the proof of lemma \ref{lem:cvx_domain}.}
+\label{fig:cvx_domain}
+\end{figure}
+
+\subsubsection{Simply Connected Non-Convex Domain}
+In a non-convex domain, lemma \ref{lem:cvx_domain} no longer holds, because the orthogonal projection of the attacker may no longer be unique. Figure \ref{fig:non_uniq_proj} shows an example where $\xa$ is equidistant to all points on the Voronoi line along $\apa,e_c$, while the defender's orthogonal projection is on $e_c$. 
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{"fig/non cvx domain 1"}
+\caption{In a non-convex domain, the orthogonal projection of the attacker may not be unique. In this case, $\xa$ is equidistant to all points along the segment of the Voronoi line $\apa,e_c$.}
+\label{fig:non_uniq_proj}
+\end{figure}
+
+To solve the reach-avoid problem in a non-convex domain efficiently and conservatively for the defender, we introduce the path defense solution, which leverages the idea of path defense described in section \ref{sec:path_defense}: if the target set is enclosed by some defendable (in particular, strongly defendable) path $\pathd$ for some $\apa,\apb$, then the defender can win the game. 
+
+Naively, one could fix $\apa$, then search all other points on $\apb\in\boundary$ to find a defendable path. If a defendable path is found, then the defender wins the game; if not, try another $\apa$. However, in a simply-connect domain, only paths of defense $\pathd$ that touch the target set need to be checked. Therefore, we can pick $\apa$, which will determine $\apb$. Then, check whether $\pathd$ is defendable. 
+
+\textbf{Should just compute winning region for defender, instead of assuming a defender position.}
+
+As noted in section \ref{sec:path_defense}, checking whether a path of defense is defendable is computationally expensive. Instead, we check whether each path is strongly defendable. This adds more conservatism towards the defender, but makes computation much more tractable.
+
+\textbf{Need a lemma here?}
+\textbf{Need to specify defender strategy when a strongly defendable path is found.}
+
+\subsubsection{General Non-Convex Domain}
+\textbf{Currently, same as simply connected, except possibly more conservative, since some important paths of defense may not be checked.}
+
+\subsubsection{Conservatism of Path-Defense}
+The path defense solution of the reach-avoid game is conservative for the defender in the sense that if a strongly defendable path of defense that encloses the target set is not found, we cannot conclude that the defender has no strategy to win the game. 
+
+To quantify the conservatism, we first specify the initial position of the attacker $\xan$, and then compute the winning region for the defender given $\xan$, denoted $\wrd$. Using the path defense solution, this region is given by the union over all paths of defender's winning regions given a path:
+
+\bq
+\wrd = \bigcup_{\apa,\apb} (\rpd)
+\eq
+
+In a simply connected domain, the paths of defense are parameterized by only one anchor point, as the other anchor point is determined by the first. In this case, 
+
+\bq
+\wrd = \bigcup_{\apa(\apb)} (\rpd)
+\eq
+
+Ideally, we would like to compare the path defense winning region $\wrd$ to the winning region we obtain from the HJI solution by taking the ratio of the areas of the two regions. However, to reduce computation and avoiding solving an HJI PDE, we take the ratio of the area of $\wrd$ to the area of the entire domain as a measure of conservatism. This is a conservative estimate of how conservative the path defense solution is.
+
+\subsection{Maximum Matching}
+\label{subsec:max_match}
+We can determine whether the attacker can win the multiplayer reach-avoid game by combining the solution to the two player game, characterized by $\mathcal{RA}_\infty(R,A)$, and maximum matching \cite{Schrjiver2004, Karpinski1998} from graph theory as follows:
+
+\begin{enumerate}
+\item Compute $\mathcal{RA}_\infty(R,A)$
+\item Construct a bipartite graph with two sets of nodes $\pas,\pbs$, where each node represents a player.
+\item For each $\pbm{i}$, determine whether $\pbm{i}$ can win against $\pam{j}$, for all $j$. Given $\mathcal{RA}_\infty(R,A)$, we can determine the winner of the two player game for any given pair $(\xam{i},\xbm{j}) \forall (i,j)$.
+\item Form a bipartite graph: Draw an edge between $\pbm{i}$ and $\pam{j}$ if $\pbm{i}$ wins against $\pam{j}$
+\item Run any matching algorithm to find a maximum matching in the graph. This can be done using, for example, a linear program \cite{Schrjiver2004}, or the Hopcroft-Karp algorithm \cite{Karpinski1998}.
+\end{enumerate}
+
+After finding a maximum matching, we can determine whether the defending team can win as follows. After constructing the bipartite graph, if the maximum matching is of size $k$, then the defending team would be able to prevent $k$ attackers from reaching the target. In particular, if the maximum matching is of size at least $\N-\m+1$, then the attacking team would only be able to send at most $\m-1$ attackers to the target and thus the defending team would win. 
+
+The optimal strategy for the defenders can be obtained from (\ref{eq:opt_ctrl2_d}). If the \ith defender $\pbm{i}$ is assigned to defend against the \jth attacker $\pam{j}$ by the maximum matching, then the strategy that guarantees that $\pam{j}$ never reaches the target satisfies (\ref{eq:opt_ctrl2_d_gen}): 
+
+\bq \label{eq:opt_ctrl3_d_gen}
+  \cbm{i}^*(\xam{j},\xbm{i},t) = \arg \max_{\cbm{i} \in \mathbb{D}} p(\xam{j},\xbm{i},-t)^T f(\xam{j},\xbm{i},\cam{j}^*,\cbm{i})
+\eq
+
+\noindent for $t\in [0,T]$, where $\cam{j}^*$ is given in (\ref{eq:opt_ctrl2_a}) as
+
+\bq \label{eq:opt_ctrl2_a}
+\cam{j}^*(\xam{j},\xbm{i},t) = -\vela \frac{p_u(\xam{j},\xbm{i},-t)}{\|p_u(\xam{j},\xbm{i},-t)\|_2}.
+\eq
+
+\noindent where $p = (p_u, p_d) = \frac{\partial \Phi}{\partial (\xam{j},\xbm{i})}$. The explicit strategy is then similar to (\ref{eq:opt_ctrl2_d}):
+\bq \label{eq:opt_ctrl3_d}
+\cb^*(\xam{j},\xbm{i},t) = \velb \frac{p_d(\xam{j},\xbm{i},-t)}{\|p_d(\xam{j},\xbm{i},-t)\|_2}
+\eq
+
+The entire procedure of applying maximum matching to the 4D HJ reachability calculation is illustrated in Figure \ref{fig:general_procedure}.
+
+Our solution to the multiplayer reach-avoid game is an approximation to the optimal solution that would be obtained by directly solving the $4\N$ dimensional HJI PDE obtained in Section \ref{subsec:hj_multi}; it is conservative for the defending team because by creating defender-attacker pairs, each defender restricts its attention to only one opposing player. For example, if no suitable matching is found, the defending team is not guaranteed to lose, as the defending team could potentially win without using a strategy that creates defender-attacker pairs. Nevertheless, our solution is able to overcome the curse of dimensionality to approximate an intractable reachability calculation, and is useful in many game configurations.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.4\textwidth]{"fig/general procedure"}
+\caption{An illustration of using 4D HJ reachability and maximum matching to solve the multiplayer reach-avoid game. A bipartite graph is created based on results of the 4D HJ reachability calculation. Then, a maximum matching of the bipartite graph is found to optimally assign defender-attacker pairs.}
+\label{fig:general_procedure}
+\end{figure}
+
+\subsection{Time-Varying Defender-Attacker Pairings}
+\label{subsec:tvarp}
+The procedure outlined in Section \ref{subsec:max_match} assigns an attacker to each defender that is part of a maximum pairing in an open-loop manner: the assignment is done in the beginning of the game, and does not change during the course of the game. However, the bipartite graph and its corresponding maximum matching can be updated as the players change positions during the game. Because $\mathcal{RA}_\infty(R,A)$ captures the winning conditions for every joint defender-attacker configuration given $\amb,\obs,\target$, this update can be performed in real time by the following procedure:
+
+\begin{enumerate}
+\item Given the position of each defender $\xbm{i}$ and each attacker $\xam{j}$, determine whether $\xam{j}$ can win for all $j$. 
+\item Construct the bipartite graph and find its maximum matching to assign an attacker to each defender that is part of the maximum matching.
+\item For a short, chosen duration $\Delta$, compute the optimal control input and trajectory for each defender that is part of the maximum matching via Equation (\ref{eq:opt_ctrl2_d}). For the rest of the defenders and for all attackers, compute the trajectories assuming some control function.
+\item Repeat the procedure with the new player positions.
+\end{enumerate}
+
+As $\Delta\rightarrow 0$, the above procedure computes a bipartite graph and its maximum matching as a function of time. Whenever the maximum matching is not unique, the defenders can choose a different maximum matching and still be guaranteed to prevent the same number of attackers from reaching the target. As long as each defender uses the optimal control input given in Equation (\ref{eq:opt_ctrl2_d}), the size of the maximum matching can never decrease as a function of time. 
+
+On the other hand, it is possible for the size of the maximum matching to increase as a function of time. This occurs if the joint configuration of the players becomes such that the resulting bipartite graph has a bigger maximum matching than before, which may happen since the size of the maximum matching only gives an upper bound on the number of attackers that are able to reach the target. Furthermore, because of the curse of dimensionality, there is no numerically tractable way to compute the joint optimal control input for the attacking team, so a suboptimal strategy from the attacking team can be expected, making an increase of maximum matching size likely. Determining defender control strategies that optimally promote an increase in the size of the maximum matching would be an important step towards the investigation of cooperation, and will be part of our future work.

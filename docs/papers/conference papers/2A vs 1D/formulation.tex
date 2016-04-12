@@ -1,0 +1,33 @@
+\section{Problem Formulation}
+\label{sec:formulation}
+We consider a reach-avoid game between two attackers, $\pam{1}, \pam{2}$, and a defenders, $\pb$. Each player is confined in a bounded, open domain $\amb \subset \R^2$, which can be partitioned as follows: $\amb$ = $\free \cup \obs$. $\free$ is a compact set representing the free space in which the players can move, while $\obs = \amb \setminus \free$ represents the obstacles that obstruct movement in the domain. Let $\xam{1}, \xam{2}, \xb \in \R^2$ denote the states of the players $\pam{1}, \pam{2}, \pb$, respectively. Initial conditions of the players are denoted by $\xanm{1}, \xanm{2}, \xb \in \free$. We assume that the dynamics of the players are defined by the following decoupled system for $t \geq 0$:
+
+\bq\label{eq:dynamics}
+\begin{aligned}
+\dotxam{1}(t) &= \velai{1}\cam{1}(t), & \xam{1}(0) = \xanm{1},\\
+\dotxam{2}(t) &= \velai{2}\cam{2}(t), & \xam{2}(0) = \xanm{2}, \\
+\dotxb(t) &= \velb\cb(t), & \xb(0) = \xbn\\
+\end{aligned}
+\eq
+where $\cam{1}(\cdot),\cam{2}(\cdot),\cb(\cdot)$ represent the control functions of $\pam{1}, \pam{2}$, and $\pb$, respectively. The attackers $\pam{1}, \pam{2}$ have respective maximum speeds $\velai{1}$ and $\velai{2}$ and the defender $\pb$ has maximum speed $\velb$. We assume that the control functions $\cam{1}(\cdot),\cam{2}(\cdot),\cb(\cdot)$ are drawn from the set $\A = \{\sigma \colon [0,\infty)\rightarrow \unitball \mid \sigma \text{ is measurable}\}$, where $\unitball$ denotes the closed unit ball in $\R^2$. 
+As a clarification on the notation and terminology, the control functions (with a dot notation, e.g.\ $\cam{i}(\cdot), \cbm{i}(\cdot), u(\cdot)$ etc.\ ) which are the entire control trajectories, are distinguished from the control inputs (such as $\cam{i}, \cam{i}(t), \cbm{i}, \cbm{i}(t)$ etc.\ ) which are the instantaneous control inputs. Furthermore, given $\xanm{i}\in \free$, we define the admissible control function set for $\pam{i}$ to be the the set of all control functions such that $\xam{i}(t) \in \free, \forall i$, $\forall t \ge 0$. The admissible control function set for defenders $\pbm{i},i=1,2,\ldots,\N$ is defined similarly, given that $\xbnm{i}\in \free$. The joint state of all the players is denoted by $\xj = (\xam{1},\ldots\xam{\N}, \xbm{1},\ldots,\xbm{\N})$. The joint initial condition is denoted by $\xjn = (\xanm{1},\ldots,\xanm{N},\xbnm{1},\ldots,\xbnm{N})$.  
+
+In this reach-avoid game, the attacking team aims to reach the target $\target\subset\free$, a compact subset of the domain, without getting captured by the defenders. 
+The capture conditions are formally described by the capture sets $\avoid_{ij}\subset\amb^{2\N}$ for the pairs of the players $\left(\pam{i},\pbm{j}\right),i,j=1,\ldots,\N$. In general, $\avoid_{ij}$ can be an arbitrary compact subset of $\amb^{2\N}$, which represents the set of the joint player states $\xj$ at which $\pam{i}$ is captured by $\pbm{j}$. Hence, in the general case, the interpretation of capture is given by the set $\avoid_{ij}$, which in turn depends on the specific situation one wishes to model. In this paper, we define the capture sets to be $\avoid_{ij} = \left\{\xj\in\amb^{2\N} \mid \|\xam{i}-\xbm{j}\|_2\le\Rc \right\}$, the interpretation of which is that $\pam{i}$ is captured by $\pbm{j}$ if $\pam{i}$'s position is within $\Rc$ of $\pbm{j}$'s position. 
+%We now present definitions that characterize the setup of a game: 
+
+%\begin{defn} % Joint IC
+%Denote the joint initial conditions to be $\xjn = (\xjna, \xjnb) = (\xanm{1},\ldots,\xanm{N},\xbnm{1},\ldots,\xbnm{N})$.  
+%\end{defn}
+
+%\begin{defn}
+%The target $\target\subset\free$ is a compact subset of the domain that the attackers aim to reach, and that the defenders try to prevent the attackers from reaching
+%\end{defn}
+%
+%\begin{defn}
+%The avoid sets $\avoid_{ij}\subset\amb^2$ for the pairs of players $\left(\pam{i},\pbm{j}\right),i,j=1,\ldots,\N$ describe the capture conditions in the reach-avoid game between an attacker and a defender, namely the set of joint player states $(\xam{i},\xbm{j})$ at which $\pam{i}$ is captured by $\pbm{i}$. In this paper, we will define the avoid sets to be $\avoid_{ij} = \left\{(\xam{i},\xbm{j})\in\amb^2 \mid \|\xam{i}-\xbm{j}\|_2\le\Rc \right\}$, corresponding to a scenario in which $\pam{i}$ is captured if $\pam{i}$'s position is within the capture radius $\Rc$ of $\pbm{j}$'s position. 
+%\end{defn}
+
+In our multiplayer reach-avoid game, the team of the attackers $\pas$ wins when at least $\m$ attackers reach the target $\target$ without being captured. The team of the defenders $\pbs$ wins the game if they can delay at least $N-m+1$ attackers from reaching the target indefinitely. An illustration of the game setup is shown in Figure \ref{fig:mp_form}.
+
+With the above definitions, we now state the main question that this paper answers. Given the minimum number $m$ of the attackers that need to reach the target, the joint initial state $\xjn$ of all the players in domain $\amb$ with obstacles $\obs$, the target set $\target$, and the capture sets $\avoid_{ij}$, can the defenders be guaranteed to win?

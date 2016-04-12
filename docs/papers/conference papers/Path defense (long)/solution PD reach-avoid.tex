@@ -1,0 +1,80 @@
+\section{The Path Defense Solution to the Two Player Reach-Avoid Game}
+\label{sec:reach_avoid}
+In section \ref{sec:formulation}, we formulated the two-player reach-avoid game, and in section \ref{subsec:hj_multi}, we described how to solve the game by solving a 4D HJI PDE. In this section, we will present an alternative, more efficient way of solving the two-player reach-avoid game conservatively. The new method we present is based on the path defense game from section \ref{sec:path_defense} and only involves solving the 2D Eikonal equation, which can be solved efficiently using the fast marching method.
+
+In section \ref{sec:path_defense}, we described the path defense game as a reach-avoid game with the target set $\target=\sac$. We now consider the case where the target set can be any arbitrary set. We will divide our analysis into three different cases depending on the domain: convex, simply connected non-convex, and general non-convex.
+
+\subsection{Convex Domain}
+\textbf{Likely won't include this in the conference paper.}
+
+In a convex domain, the two player reach-avoid game can be solved exactly without solving an HJI PDE.
+
+\begin{lem} \label{lem:cvx_domain}
+In a two player reach-avoid game in a convex domain $\amb$, the defender wins if and only if the target set is contained in the Voronoi cell of the defender.
+\end{lem}
+
+\begin{IEEEproof}
+Suppose part of the target set $\target$ lies in the attacker's Voronoi cell. Then, by definition of the Voronoi cell, the attacker can reach that part of $\target$ before the defender can exit the defender's Voronoi cell. Therefore, the attacker wins by simply taking the shortest path $\path(\xan,\target)$ to reach the target without being captured. The payoff of the game is $\ta(\xan,\target)$.
+
+For the other direction, first denote the orthogonal projection of the attacker's position and of the defender's position onto the Voronoi line $\xaop$ and $\xbop$, respectively. Note that $\xaop=\xbop$ initially. Consider the attacker's (defender's) velocity components in the direction $\path(\xa,\xaop)$, ($\path(\xb,\xbop)$, respectively) and in the direction perpendicular to it. Denote these components $\dotxapara$ and $\dotxaperp$ ($\dotxbpara$ and $\dotxbperp$ for the defender).
+
+Suppose the entire target set lies in the defender's Voronoi cell. The following defender strategy ensures that the attacker never crosses the Voronoi line (and hence the Voronoi line is defendable), and thus never reach the target. Given any $\dotxaperp$, choose $\dotxbperp=\dotxaperp$, and use the remaining speed in the direction $\dotxbpara$. This ensures that $\xaop=\xbop$ for all time, and that the Voronoi line does not change if $\dotxapara\ge0$ and moves towards the attacker otherwise.
+\end{IEEEproof}
+
+Figure \ref{fig:cvx_domain} illustrates lemma \ref{lem:cvx_domain}.
+
+\begin{figure}[h]
+\centering
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{"fig/cvx domain 1"}
+	\caption{If part of the target set is in the attacker's Voronoi cell, the attack can win the game in minimum time by taking the shortest path to the target.}
+	\end{subfigure} \quad
+	\begin{subfigure}{0.45\textwidth}
+	\centering
+	\includegraphics[width=\textwidth]{"fig/cvx domain 2"}
+	\caption{If the target set is entirely within the Voronoi cell of the defender, the defender can ``mirror" the attacker's control to defend the Voronoi line, and thus prevent the attacker from reaching the target.}
+	\end{subfigure}
+\caption{An illustration of the proof of lemma \ref{lem:cvx_domain}.}
+\label{fig:cvx_domain}
+\end{figure}
+
+\subsection{Simply Connected Non-Convex Domain \label{subsec:non_cvx_domain}}
+\textbf{First paragraph not needed in conference paper.}
+
+(In a non-convex domain, lemma \ref{lem:cvx_domain} no longer holds, because the orthogonal projection of the attacker may no longer be unique. Figure \ref{fig:non_uniq_proj} shows an example where $\xa$ is equidistant to all points on the Voronoi line along $\apa,e_c$, while the defender's orthogonal projection is on $e_c$.) 
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{"fig/non cvx domain 1"}
+\caption{In a non-convex domain, the orthogonal projection of the attacker may not be unique. In this case, $\xa$ is equidistant to all points along the segment of the Voronoi line $\apa,e_c$.}
+\label{fig:non_uniq_proj}
+\end{figure}
+
+To solve the reach-avoid problem in a non-convex domain efficiently and conservatively for the defender, we introduce the path defense solution, which leverages the idea of path defense described in section \ref{sec:path_defense}: if the target set is enclosed by some defendable (in particular, strongly defendable) path $\pathd$ for some $\apa,\apb$, then the defender can win the game. 
+
+Naively, one could fix $\apa$, then search all other points on $\apb\in\boundary$ to find a defendable path. If a defendable path is found, then the defender wins the game; if not, try another $\apa$. However, by the argument in section \ref{subsec:pd_cons}, only paths of defense $\pathd$ that touch the target set need to be checked. Therefore, we can pick $\apa$, which will determine $\apb$. Then, check whether $\pathd$ is defendable. 
+
+As noted in section \ref{sec:path_defense}, checking whether a path of defense is defendable is computationally expensive. Instead, we check whether each path is strongly defendable. This adds more conservatism towards the defender, but makes computation much more tractable.
+
+If some strongly defendable path $\pathd$ encloses the target set, then the defender's strategy would be to first go to $\pstar\in\pathd$, then move towards $\xai{\apa}$ or $\xai{\apb}$ until the level set image is captured. Finally, the defender can simply track the captured level set image. Note that this is a ``semi-open-loop" strategy. The first part of the defender's control strategy is to move to $\pstar$ regardless of what the attacker does; this is an open-loop strategy. The second part of the defender's control strategy is to track the attacker's level set image, which depends on how the attacker moves; this is a closed-loop strategy.
+
+\subsection{General Non-Convex Domain}
+\textbf{Currently, same as simply connected, except possibly more conservative, since some important paths of defense may not be checked.}
+
+\subsection{Conservatism of Path-Defense}
+The path defense solution of the reach-avoid game is conservative for the defender in the sense that if a strongly defendable path of defense that encloses the target set is not found, we cannot conclude that the defender has no strategy to win the game. 
+
+To quantify the conservatism, we first specify the initial position of the attacker $\xan$, and then compute the winning region for the defender given $\xan$, denoted $\wrd$. Using the path defense solution, this region is given by the union over all paths of defender's winning regions given a path:
+
+\bq
+\wrd = \bigcup_{\apa,\apb} (\rpd)
+\eq
+
+In a simply connected domain, the paths of defense are parameterized by only one anchor point, as the other anchor point is determined by the first. In this case, 
+
+\bq
+\wrd = \bigcup_{\apa(\apb)} (\rpd)
+\eq
+
+Ideally, we would like to compare the path defense winning region $\wrd$ to the winning region we obtain from the HJI solution by taking the ratio of the areas of the two regions. However, to reduce computation and avoiding solving an HJI PDE, we take the ratio of the area of $\wrd$ to the area of the entire domain as a measure of conservatism. This is a conservative estimate of how conservative the path defense solution is.
