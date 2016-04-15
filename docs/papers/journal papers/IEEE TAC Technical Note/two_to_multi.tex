@@ -42,7 +42,7 @@ As $\Delta\rightarrow 0$, the above procedure continuously computes a bipartite 
 
 \subsection{Application to the Two-Player HJI Solution}
 \label{subusec:MMHJI}
-In general, solving $\N^2$ 4D HJI PDEs gives us the pairwise outcomes between every attacker-defender pair. The computation time required is thus $C \N^2$, where $C$ is the time required to solve a single 4D HJI PDE. The pairwise outcomes can then be merged together to approximate the $\N$ vs. $\N$ game. In the case where each team has a single maximum speed, solving \textit{one} 4D HJI PDE would characterize all pairwise outcomes.
+In general, solving $\NA\ND$ 4D HJI PDEs gives us the pairwise outcomes between every attacker-defender pair. The computation time required is thus $C \NA\ND$, where $C$ is the time required to solve a single 4D HJI PDE. The pairwise outcomes can then be merged together to approximate the $\NA$ vs. $\ND$ game. In the case where each team has a single maximum speed, solving \textit{one} 4D HJI PDE would characterize all pairwise outcomes.
 
 Since the solution to the 4D HJI PDE characterizes pairwise outcomes based on any attacker-defender joint-state, it allows for real-time updates of the maximum matching. As players move to new positions, the pairwise outcome can be updated by simply checking whether $(\xam{i}, \xbm{j})$ is in $\mathcal{RA}_\infty(R,A)$.
 
@@ -54,4 +54,6 @@ To use the pairwise outcomes determined by the path defense approach for approxi
 \item Repeat steps \ref{step:dWinRegion} to \ref{step:union} for every attacker position.
 \end{enumerate}
 
-For a given domain, set of obstacles, and target set, steps \ref{step:createPath} and \ref{step:repeatCreatePath} in Algorithm \ref{alg:PD_RA} only need to be performed once, regardless of the number of players. In step \ref{step:dWinRegion}, the speeds of defenders come in only through a single distance calculation from $\pstar$, which only needs to be done once per attacker position. Therefore, the total computation time required is on the order of $C_1 + C_2 \N$, where $C_1$ is the time required for steps \ref{step:createPath} and \ref{step:repeatCreatePath}, $C_2$ is the time required for steps \ref{step:dWinRegion} to \ref{step:union}. 
+For a given domain, set of obstacles, and target set, steps \ref{step:createPath} and \ref{step:repeatCreatePath} in Algorithm \ref{alg:PD_RA} only need to be performed once, regardless of the number of players. In step \ref{step:dWinRegion}, the speeds of defenders come in only through a single distance calculation from $\pstar$, which only needs to be done once per attacker position. Therefore, the total computation time required is on the order of $C_1 + C_2 \NA$, where $C_1$ is the time required for steps \ref{step:createPath} and \ref{step:repeatCreatePath}, $C_2$ is the time required for steps \ref{step:dWinRegion} to \ref{step:union}. 
+
+\subsection{Defender Cooperation}

@@ -10,3 +10,4 @@ code/nonconvexExample_fig2/
 *.tmp
 fig/OLgame2MP/
 fig/
+*.log

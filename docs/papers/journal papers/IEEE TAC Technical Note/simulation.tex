@@ -93,6 +93,8 @@ Computations were done on a $200\times200$ grid, and 937 paths were used to comp
 %	\label{fig:comp_ml}
 %\end{figure}
 
+\subsection{Defender Cooperation}
+
 \subsection{Real-Time Maximum Matching Updates}
 After determining all pairwise outcomes, pairwise outcomes of \textit{any} joint state of the attacker-defender pair are characterized by the HJI approach. This allows for updates of the bipartite graph and its maximum matching as the players play out the game in real time. Fig. \ref{fig:real_time_update} shows the maximum matching at several time snapshots of a 4 vs. 4 game. Each defender that is part of a maximum matching plays optimally against the paired-up attacker, and the remaining defender plays optimally against the closest attacker. The attackers' strategy is to move towards the target along the shortest path while steering clear of the obstacles by $0.125$ units. The maximum matching is updated every $\Delta=0.005$ seconds. At $t=0$ and $t=0.2$, the maximum matching is of size 3, which guarantees that at most one attacker will be able to reach the target. After $t=0.4$, the maximum matching size increases to 4, which guarantees that no attacker will be able to reach the target.
 

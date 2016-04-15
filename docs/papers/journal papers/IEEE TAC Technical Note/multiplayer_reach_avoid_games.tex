@@ -61,6 +61,9 @@
 
 %\usepackage{babel}
 
+\newcommand{\NA}{N_A}
+\newcommand{\ND}{N_D}
+
 \usepackage{"../../my_macros"}
 
 \title{Multiplayer Reach-Avoid Games via Pairwise Outcomes}
@@ -84,7 +87,7 @@
 
 
 \begin{abstract}
-A multiplayer reach-avoid game is a differential game between two adversarial teams, each of $\N$ cooperative players playing on a compact domain with obstacles. The attacking team aims to send $\m$ of the $\N$ attackers to some target location, while the defending team aims to prevent that by capturing attackers or indefinitely delaying attackers from reaching the target. The analysis of this game plays an important role in many applications. The optimal solution to this game is computationally intractable when $\N>1$. In this paper, we present two approaches for the $N=1$ case to determine pairwise outcomes, and a graph theoretic maximum matching approach to merge these pairwise outcomes for an $N>1$ solution that provides guarantees on the performance of the defending team. We will show that the four-dimensional Hamilton-Jacobi-Isaacs approach allows for real-time updates to the maximum matching, and that the two-dimensional ``path defense" approach is considerably more scalable with the number of players while maintaining defender performance guarantees.
+A multiplayer reach-avoid game is a differential game between an attacking team with $\NA$ attackers and a defending team with $\ND$ defenders playing on a compact domain with obstacles. The attacking team aims to send $\m$ of the $\NA$ attackers to some target location, while the defending team aims to prevent that by capturing attackers or indefinitely delaying attackers from reaching the target. The analysis of this game plays an important role in many applications. The optimal solution to this game is computationally intractable when $\NA>1$ or $\ND>1$. In this paper, we present two approaches for the $\NA=\ND=1$ case to determine pairwise outcomes, and a graph theoretic maximum matching approach to merge these pairwise outcomes for an $\NA,\ND>1$ solution that provides guarantees on the performance of the defending team. We will show that the four-dimensional Hamilton-Jacobi-Isaacs approach allows for real-time updates to the maximum matching, and that the two-dimensional ``path defense" approach is considerably more scalable with the number of players while maintaining defender performance guarantees.
 \end{abstract}
 
 \input{intro.tex} 
