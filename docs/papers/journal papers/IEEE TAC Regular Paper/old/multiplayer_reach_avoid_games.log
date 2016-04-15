@@ -1,0 +1,531 @@
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2012.9.1)  20 AUG 2014 09:24
+entering extended mode
+**D:/Dropbox/Game*theory/multiplayer_reach_avoid_games/docs/papers/journal*pape
+rs/old/multiplayer_reach_avoid_games.tex
+
+("D:/Dropbox/Game theory/multiplayer_reach_avoid_games/docs/papers/journal pape
+rs/old/multiplayer_reach_avoid_games.tex"
+LaTeX2e <2011/06/27>
+Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
+abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
+croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, ga
+lician, german, german-x-2009-06-19, greek, gujarati, hindi, hungarian, iceland
+ic, indonesian, interlingua, irish, italian, kannada, kurmanji, lao, latin, lat
+vian, lithuanian, malayalam, marathi, mongolian, mongolianlmc, monogreek, ngerm
+an, ngerman-x-2009-06-19, nynorsk, oriya, panjabi, pinyin, polish, portuguese, 
+romanian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swis
+sgerman, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, u
+senglishmax, welsh, loaded.
+("C:\Program Files\MiKTeX 2.9\tex\latex\ieeetran\IEEEtran.cls"
+Document Class: IEEEtran 2007/03/05 V1.7a by Michael Shell
+-- See the "IEEEtran_HOWTO" manual for usage information.
+-- http://www.michaelshell.org/tex/ieeetran/
+\@IEEEtrantmpdimenA=\dimen102
+\@IEEEtrantmpdimenB=\dimen103
+\@IEEEtrantmpcountA=\count79
+\@IEEEtrantmpcountB=\count80
+\@IEEEtrantmptoksA=\toks14
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 366.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1ptm.fd"
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+)
+-- Using 8.5in x 11in (letter) paper.
+-- Using PDF output.
+\@IEEEnormalsizeunitybaselineskip=\dimen104
+-- This is a 12 point document.
+\CLASSINFOnormalsizebaselineskip=\dimen105
+\CLASSINFOnormalsizeunitybaselineskip=\dimen106
+\IEEEnormaljot=\dimen107
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <6> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <8> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <9> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <14> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <20> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <20> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <22> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <22> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <24> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 724.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <24> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 724.
+\IEEEilabelindentA=\dimen108
+\IEEEilabelindentB=\dimen109
+\IEEEilabelindent=\dimen110
+\IEEEelabelindent=\dimen111
+\IEEEdlabelindent=\dimen112
+\IEEElabelindent=\dimen113
+\IEEEiednormlabelsep=\dimen114
+\IEEEiedmathlabelsep=\dimen115
+\IEEEiedtopsep=\skip41
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@IEEEsubequation=\count85
+\abovecaptionskip=\skip42
+\belowcaptionskip=\skip43
+\c@figure=\count86
+\c@table=\count87
+\@IEEEeqnnumcols=\count88
+\@IEEEeqncolcnt=\count89
+\@IEEEtmpitemindent=\dimen116
+\c@IEEEbiography=\count90
+\@IEEEtranrubishbin=\box26
+) ("C:\Program Files\MiKTeX 2.9\tex\latex\ams\math\amsmath.sty"
+Package: amsmath 2000/07/18 v2.13 AMS math features
+\@mathmargin=\skip44
+
+For additional information on amsmath, use the `?' option.
+("C:\Program Files\MiKTeX 2.9\tex\latex\ams\math\amstext.sty"
+Package: amstext 2000/06/29 v2.01
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\ams\math\amsgen.sty"
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks15
+\ex@=\dimen117
+))
+("C:\Program Files\MiKTeX 2.9\tex\latex\ams\math\amsbsy.sty"
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen118
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\ams\math\amsopn.sty"
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count91
+LaTeX Info: Redefining \frac on input line 211.
+\uproot@=\count92
+\leftroot@=\count93
+LaTeX Info: Redefining \overline on input line 307.
+\classnum@=\count94
+\DOTSCASE@=\count95
+LaTeX Info: Redefining \ldots on input line 379.
+LaTeX Info: Redefining \dots on input line 382.
+LaTeX Info: Redefining \cdots on input line 467.
+\Mathstrutbox@=\box27
+\strutbox@=\box28
+\big@size=\dimen119
+LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
+\macc@depth=\count96
+\c@MaxMatrixCols=\count97
+\dotsspace@=\muskip10
+\c@parentequation=\count98
+\dspbrk@lvl=\count99
+\tag@help=\toks16
+\row@=\count100
+\column@=\count101
+\maxfields@=\count102
+\andhelp@=\toks17
+\eqnshift@=\dimen120
+\alignsep@=\dimen121
+\tagshift@=\dimen122
+\tagwidth@=\dimen123
+\totwidth@=\dimen124
+\lineht@=\dimen125
+\@envbody=\toks18
+\multlinegap=\skip45
+\multlinetaggap=\skip46
+\mathdisplay@stack=\toks19
+LaTeX Info: Redefining \[ on input line 2666.
+LaTeX Info: Redefining \] on input line 2667.
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\amssymb.sty"
+Package: amssymb 2009/06/22 v3.00
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\amsfonts.sty"
+Package: amsfonts 2009/06/22 v3.00 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 96.
+))
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\trig.sty"
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\00miktex\graphics.cfg"
+File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\pdftex-def\pdftex.def"
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/message (HO)
+)
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
+Package: ltxcmds 2011/04/18 v1.20 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count103
+))
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks20
+)
+\Gin@req@height=\dimen126
+\Gin@req@width=\dimen127
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\color.sty"
+Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\00miktex\color.cfg"
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: pdftex.def on input line 130.
+)
+("C:\Program Files\MiKTeX 2.9\tex\latex\caption\subcaption.sty"
+Package: subcaption 2012/01/12 v1.1d Sub-captions (AR)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\caption\caption.sty"
+Package: caption 2012/02/19 v3.2f Customizing captions (AR)
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\caption\caption3.sty"
+Package: caption3 2012/01/12 v1.4b caption3 kernel (AR)
+\captionmargin=\dimen128
+\captionmargin@=\dimen129
+\captionwidth=\dimen130
+\caption@indent=\dimen131
+\caption@parindent=\dimen132
+\caption@hangindent=\dimen133
+Package caption Info: Unknown document class (or package),
+(caption)             standard defaults will be used.
+)
+
+Package caption Warning: Unsupported document class (or package) detected,
+(caption)                usage of the caption package is not recommended.
+See the caption package documentation for explanation.
+
+Package caption Info: \@makecaption = \long macro:#1#2->\ifx \@captype \@IEEEta
+blestring \footnotesize \begin {center}{\normalfont \footnotesize #1}\\{\normal
+font \footnotesize \scshape #2}\end {center}\@IEEEtablecaptionsepspace \else \@
+IEEEfigurecaptionsepspace \setbox \@tempboxa \hbox {\normalfont \footnotesize {
+#1.}~~ #2}\ifdim \wd \@tempboxa >\hsize \setbox \@tempboxa \hbox {\normalfont \
+footnotesize {#1.}~~ }\parbox [t]{\hsize }{\normalfont \footnotesize \noindent 
+\unhbox \@tempboxa #2}\else \ifCLASSOPTIONconference \hbox to\hsize {\normalfon
+t \footnotesize \hfil \box \@tempboxa \hfil }\else \hbox to\hsize {\normalfont 
+\footnotesize \box \@tempboxa \hfil }\fi \fi \fi .
+\c@ContinuedFloat=\count104
+)
+\c@subfigure=\count105
+\c@subtable=\count106
+)
+\c@rem=\count107
+\c@defn=\count108
+\c@prop=\count109
+\c@thm=\count110
+\c@lem=\count111
+
+("D:\Dropbox\Game theory\multiplayer_reach_avoid_games\docs\papers\my_macros.st
+y")
+("D:\Dropbox\Game theory\multiplayer_reach_avoid_games\docs\papers\journal pape
+rs\old\multiplayer_reach_avoid_games.aux")
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 78.
+LaTeX Font Info:    ... okay on input line 78.
+
+("C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count112
+\scratchdimen=\dimen134
+\scratchbox=\box29
+\nofMPsegments=\count113
+\nofMParguments=\count114
+\everyMPshowfont=\toks21
+\MPscratchCnt=\count115
+\MPscratchDim=\dimen135
+\MPnumerator=\count116
+\makeMPintoPDFobject=\count117
+\everyMPtoPDFconversion=\toks22
+)
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 80.
+ ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1pcr.fd"
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 80.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omspcr.fd"
+File: omspcr.fd 
+)
+LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 80.
+
+Underfull \hbox (badness 4531) in paragraph at lines 80--80
+[][][]\OT1/ptm/m/n/9 Z. Zhou is with the De-part-ment of Elec-tri-cal En-gi-nee
+r-ing, Stan-ford Uni-ver-sity, Stan-ford, CA 94305, USA
+ []
+
+LaTeX Font Info:    Try loading font information for U+msa on input line 86.
+("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
+File: umsa.fd 2009/06/22 v3.00 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 86.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
+File: umsb.fd 2009/06/22 v3.00 AMS symbols B
+)
+("D:\Dropbox\Game theory\multiplayer_reach_avoid_games\docs\papers\journal pape
+rs\old\intro.tex" [1{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
+[2] [3])
+("D:\Dropbox\Game theory\multiplayer_reach_avoid_games\docs\papers\journal pape
+rs\old\formulation.tex" [4]
+<../"fig/mp game formulation".pdf, id=28, 643.20299pt x 476.98201pt>
+File: ../"fig/mp game formulation".pdf Graphic file (type pdf)
+
+<use ../"fig/mp game formulation".pdf>
+Package pdftex.def Info: ../"fig/mp game formulation".pdf used on input line 23
+.
+(pdftex.def)             Requested size: 234.8775pt x 174.18068pt.
+ [5])
+("D:\Dropbox\Game theory\multiplayer_reach_avoid_games\docs\papers\journal pape
+rs\old\two_to_multi.tex" [6 <D:/Dropbox/Game theory/multiplayer_reach_avoid_gam
+es/docs/papers/journal papers/fig/mp game formulation.pdf>] [7]
+<../"fig/general procedure".pdf, id=61, 722.7pt x 289.08pt>
+File: ../"fig/general procedure".pdf Graphic file (type pdf)
+
+<use ../"fig/general procedure".pdf>
+Package pdftex.def Info: ../"fig/general procedure".pdf used on input line 26.
+(pdftex.def)             Requested size: 234.8775pt x 93.94987pt.
+ [8 <D:/Dropbox/Game theory/multiplayer_reach_avoid_games/docs/papers/journal p
+apers/fig/general procedure.pdf>])
+("D:\Dropbox\Game theory\multiplayer_reach_avoid_games\docs\papers\journal pape
+rs\old\solution_hji.tex" [9] [10] [11] [12])
+("D:\Dropbox\Game theory\multiplayer_reach_avoid_games\docs\papers\journal pape
+rs\old\solution PD game.tex" [13]
+<../"fig/path defense game".pdf, id=105, 578.16pt x 505.89pt>
+File: ../"fig/path defense game".pdf Graphic file (type pdf)
+
+<use ../"fig/path defense game".pdf>
+Package pdftex.def Info: ../"fig/path defense game".pdf used on input line 29.
+(pdftex.def)             Requested size: 140.92793pt x 123.30728pt.
+ [14] [15 <D:/Dropbox/Game theory/multiplayer_reach_avoid_games/docs/papers/jou
+rnal papers/fig/path defense game.pdf>]
+[16]
+Overfull \hbox (16.78423pt too wide) in paragraph at lines 127--128
+[]\OT1/ptm/m/n/12 Suppose $\OML/cmm/m/it/12 P[]$ \OT1/ptm/m/n/12 will reach som
+e point $\OML/cmm/m/it/12 p\OMS/cmsy/m/n/12 0$ \OT1/ptm/m/n/12 be-fore $\OML/cm
+m/m/it/12 D[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 P[]; t\OT1/cmr/m/n/12 )$ \OT1/pt
+m/m/n/12 does, i.e. $[]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 x[]; p\OMS/cmsy/m/n/12
+ 0\OT1/cmr/m/n/12 ) \OML/cmm/m/it/12 < []\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 D[]\
+OT1/cmr/m/n/12 (\OML/cmm/m/it/12 x[]\OT1/cmr/m/n/12 )\OML/cmm/m/it/12 ; p\OMS/c
+msy/m/n/12 0\OT1/cmr/m/n/12 ) =$
+ []
+
+[17] <../"fig/attacker in Ra".pdf, id=133, 650.43pt x 505.89pt>
+File: ../"fig/attacker in Ra".pdf Graphic file (type pdf)
+
+<use ../"fig/attacker in Ra".pdf>
+Package pdftex.def Info: ../"fig/attacker in Ra".pdf used on input line 147.
+(pdftex.def)             Requested size: 140.92793pt x 109.60562pt.
+
+<../"fig/attacker outside Ra U Rb".pdf, id=134, 650.43pt x 505.89pt>
+File: ../"fig/attacker outside Ra U Rb".pdf Graphic file (type pdf)
+
+<use ../"fig/attacker outside Ra U Rb".pdf>
+Package pdftex.def Info: ../"fig/attacker outside Ra U Rb".pdf used on input li
+ne 152.
+(pdftex.def)             Requested size: 140.92793pt x 109.60562pt.
+ [18 <D:/Dropbox/Game theory/multiplayer_reach_avoid_games/docs/papers/journal 
+papers/fig/attacker in Ra.pdf> <D:/Dropbox/Game theory/multiplayer_reach_avoid_
+games/docs/papers/journal papers/fig/attacker outside Ra U Rb.pdf>] [19]
+<../"fig/best point pstar".pdf, id=171, 650.43pt x 505.89pt>
+File: ../"fig/best point pstar".pdf Graphic file (type pdf)
+
+<use ../"fig/best point pstar".pdf>
+Package pdftex.def Info: ../"fig/best point pstar".pdf used on input line 238.
+(pdftex.def)             Requested size: 140.92793pt x 109.60562pt.
+
+<../"fig/defender winning pd".pdf, id=172, 650.43pt x 505.89pt>
+File: ../"fig/defender winning pd".pdf Graphic file (type pdf)
+
+<use ../"fig/defender winning pd".pdf>
+Package pdftex.def Info: ../"fig/defender winning pd".pdf used on input line 24
+3.
+(pdftex.def)             Requested size: 140.92793pt x 109.60562pt.
+)
+("D:\Dropbox\Game theory\multiplayer_reach_avoid_games\docs\papers\journal pape
+rs\old\solution PD reach-avoid.tex" [20] [21 <D:/Dropbox/Game theory/multiplaye
+r_reach_avoid_games/docs/papers/journal papers/fig/best point pstar.pdf> <D:/Dr
+opbox/Game theory/multiplayer_reach_avoid_games/docs/papers/journal papers/fig/
+defender winning pd.pdf>]
+<../"fig/path behind".pdf, id=213, 722.7pt x 289.08pt>
+File: ../"fig/path behind".pdf Graphic file (type pdf)
+
+<use ../"fig/path behind".pdf>
+Package pdftex.def Info: ../"fig/path behind".pdf used on input line 12.
+(pdftex.def)             Requested size: 211.3883pt x 84.55444pt.
+ [22 <D:/Dropbox/Game theory/multiplayer_reach_avoid_games/docs/papers/journal 
+papers/fig/path behind.pdf>])
+("D:\Dropbox\Game theory\multiplayer_reach_avoid_games\docs\papers\journal pape
+rs\old\comparison.tex" [23])
+("D:\Dropbox\Game theory\multiplayer_reach_avoid_games\docs\papers\journal pape
+rs\old\simulation.tex" [24]
+<../"fig/OLGame_pw_results_HJI_fixA".pdf, id=247, 483.8075pt x 324.21124pt>
+File: ../"fig/OLGame_pw_results_HJI_fixA".pdf Graphic file (type pdf)
+
+<use ../"fig/OLGame_pw_results_HJI_fixA".pdf>
+Package pdftex.def Info: ../"fig/OLGame_pw_results_HJI_fixA".pdf used on input 
+line 16.
+(pdftex.def)             Requested size: 234.8775pt x 157.39561pt.
+
+<../"fig/OLGame_pw_results_HJI_fixD".pdf, id=248, 483.8075pt x 324.21124pt>
+File: ../"fig/OLGame_pw_results_HJI_fixD".pdf Graphic file (type pdf)
+
+<use ../"fig/OLGame_pw_results_HJI_fixD".pdf>
+Package pdftex.def Info: ../"fig/OLGame_pw_results_HJI_fixD".pdf used on input 
+line 23.
+(pdftex.def)             Requested size: 234.8775pt x 157.39561pt.
+
+<../"fig/OLGame_mm_results_HJI".pdf, id=249, 482.80376pt x 307.1475pt>
+File: ../"fig/OLGame_mm_results_HJI".pdf Graphic file (type pdf)
+
+<use ../"fig/OLGame_mm_results_HJI".pdf>
+Package pdftex.def Info: ../"fig/OLGame_mm_results_HJI".pdf used on input line 
+30.
+(pdftex.def)             Requested size: 234.8775pt x 149.42096pt.
+ [25 <D:/Dropbox/Game theory/multiplayer_reach_avoid_games/docs/papers/journal 
+papers/fig/OLGame_pw_results_HJI_fixA.pdf>] [26 <D:/Dropbox/Game theory/multipl
+ayer_reach_avoid_games/docs/papers/journal papers/fig/OLGame_pw_results_HJI_fix
+D.pdf> <D:/Dropbox/Game theory/multiplayer_reach_avoid_games/docs/papers/journa
+l papers/fig/OLGame_mm_results_HJI.pdf>] <../"fig/PD Example".pdf, id=277, 407.
+5225pt x 282.05376pt>
+File: ../"fig/PD Example".pdf Graphic file (type pdf)
+
+<use ../"fig/PD Example".pdf>
+Package pdftex.def Info: ../"fig/PD Example".pdf used on input line 50.
+(pdftex.def)             Requested size: 234.8775pt x 162.56267pt.
+
+<../"fig/OLGame_pw_results_PD".pdf, id=278, 473.77pt x 321.2pt>
+File: ../"fig/OLGame_pw_results_PD".pdf Graphic file (type pdf)
+
+<use ../"fig/OLGame_pw_results_PD".pdf>
+Package pdftex.def Info: ../"fig/OLGame_pw_results_PD".pdf used on input line 5
+7.
+(pdftex.def)             Requested size: 234.8775pt x 159.23709pt.
+
+<../"fig/OLGame_mm_results_PD".pdf, id=279, 480.79625pt x 303.1325pt>
+File: ../"fig/OLGame_mm_results_PD".pdf Graphic file (type pdf)
+
+<use ../"fig/OLGame_mm_results_PD".pdf>
+Package pdftex.def Info: ../"fig/OLGame_mm_results_PD".pdf used on input line 6
+4.
+(pdftex.def)             Requested size: 234.8775pt x 148.08755pt.
+
+<../"fig/alg_perf_Rc".pdf, id=280, 388.45125pt x 395.4775pt>
+File: ../"fig/alg_perf_Rc".pdf Graphic file (type pdf)
+
+<use ../"fig/alg_perf_Rc".pdf>
+Package pdftex.def Info: ../"fig/alg_perf_Rc".pdf used on input line 71.
+(pdftex.def)             Requested size: 234.8775pt x 239.12885pt.
+ [27 <D:/Dropbox/Game theory/multiplayer_reach_avoid_games/docs/papers/journal 
+papers/fig/PD Example.pdf>] [28 <D:/Dropbox/Game theory/multiplayer_reach_avoid
+_games/docs/papers/journal papers/fig/OLGame_pw_results_PD.pdf> <D:/Dropbox/Gam
+e theory/multiplayer_reach_avoid_games/docs/papers/journal papers/fig/OLGame_mm
+_results_PD.pdf>] [29 <D:/Dropbox/Game theory/multiplayer_reach_avoid_games/doc
+s/papers/journal papers/fig/alg_perf_Rc.pdf>]
+<../"fig/OLGame_compare".pdf, id=316, 483.8075pt x 324.21124pt>
+File: ../"fig/OLGame_compare".pdf Graphic file (type pdf)
+
+<use ../"fig/OLGame_compare".pdf>
+Package pdftex.def Info: ../"fig/OLGame_compare".pdf used on input line 85.
+(pdftex.def)             Requested size: 234.8775pt x 157.39561pt.
+
+<../"fig/midLGame_compare".pdf, id=317, 483.8075pt x 324.21124pt>
+File: ../"fig/midLGame_compare".pdf Graphic file (type pdf)
+
+<use ../"fig/midLGame_compare".pdf>
+Package pdftex.def Info: ../"fig/midLGame_compare".pdf used on input line 92.
+(pdftex.def)             Requested size: 234.8775pt x 157.39561pt.
+ [30 <D:/Dropbox/Game theory/multiplayer_reach_avoid_games/docs/papers/journal 
+papers/fig/OLGame_compare.pdf> <D:/Dropbox/Game theory/multiplayer_reach_avoid_
+games/docs/papers/journal papers/fig/midLGame_compare.pdf>]
+<../"fig/time varying graph".pdf, id=334, 473.77pt x 340.27126pt>
+File: ../"fig/time varying graph".pdf Graphic file (type pdf)
+
+<use ../"fig/time varying graph".pdf>
+Package pdftex.def Info: ../"fig/time varying graph".pdf used on input line 104
+.
+(pdftex.def)             Requested size: 234.8775pt x 168.69179pt.
+)
+("D:\Dropbox\Game theory\multiplayer_reach_avoid_games\docs\papers\journal pape
+rs\old\conclusion.tex" [31 <D:/Dropbox/Game theory/multiplayer_reach_avoid_game
+s/docs/papers/journal papers/fig/time varying graph.pdf>])
+("D:\Dropbox\Game theory\multiplayer_reach_avoid_games\docs\papers\journal pape
+rs\old\multiplayer_reach_avoid_games.bbl" [32]
+Missing character: There is no ¸ in font ptmr7t!
+) [33]
+("D:\Dropbox\Game theory\multiplayer_reach_avoid_games\docs\papers\journal pape
+rs\old\multiplayer_reach_avoid_games.aux") ) 
+Here is how much of TeX's memory you used:
+ 4332 strings out of 494045
+ 67190 string characters out of 3148397
+ 124665 words of memory out of 3000000
+ 7533 multiletter control sequences out of 15000+200000
+ 43022 words of font info for 95 fonts, out of 3000000 for 9000
+ 715 hyphenation exceptions out of 8191
+ 42i,17n,40p,2198b,459s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Program Files/MiKTeX 2.9/fonts/
+enc/dvips/fontname/8r.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfo
+nts/cm/cmbx12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/c
+mbx8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb
+><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Pro
+gram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Program Fil
+es/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files/MiKTeX
+ 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.9/font
+s/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/p
+ublic/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/ams
+fonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/c
+mr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Progr
+am Files/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Program 
+Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.
+9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw
+/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pf
+b>
+Output written on multiplayer_reach_avoid_games.pdf (33 pages, 2191712 bytes).
+PDF statistics:
+ 409 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 91 words of extra memory for PDF output out of 10000 (max. 10000000)
+
