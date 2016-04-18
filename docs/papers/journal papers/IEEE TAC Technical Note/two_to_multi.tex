@@ -14,11 +14,11 @@ We piece together the outcomes of all attacker-defender pairs using maximum matc
 \end{enumerate}
 \end{alg}
 
-After finding a maximum matching, we can guarantee an upper bound on the number of attackers that will be able to reach the target. If the maximum matching is of size $\mm$, then the defending team would be able to prevent \textit{at least} $\mm$ attackers from reaching the target.% In other words, $\N-\mm$ is an upper bound on the number of attackers that can reach the target.
+After finding a maximum matching, we can guarantee an upper bound on the number of attackers that will be able to reach the target. If the maximum matching is of size $\mm$, then the defending team would be able to prevent \textit{at least} $\mm$ attackers from reaching the target, and thus $\N-\mm$ is an upper bound on the number of attackers that can reach the target. The maximum matching approach is illustrated in Fig. \ref{fig:general_procedure}.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.35\textwidth]{"fig/general procedure"}
+\includegraphics[width=0.4\textwidth]{"fig/general procedure"}
 \caption{An illustration of using maximum matching to conservatively approximate the multiplayer reach-avoid game.}
 \label{fig:general_procedure}
 \end{figure}
@@ -57,3 +57,6 @@ To use the pairwise outcomes determined by the path defense approach for approxi
 For a given domain, set of obstacles, and target set, steps \ref{step:createPath} and \ref{step:repeatCreatePath} in Algorithm \ref{alg:PD_RA} only need to be performed once, regardless of the number of players. In step \ref{step:dWinRegion}, the speeds of defenders come in only through a single distance calculation from $\pstar$, which only needs to be done once per attacker position. Therefore, the total computation time required is on the order of $C_1 + C_2 \NA$, where $C_1$ is the time required for steps \ref{step:createPath} and \ref{step:repeatCreatePath}, $C_2$ is the time required for steps \ref{step:dWinRegion} to \ref{step:union}. 
 
 \subsection{Defender Cooperation}
+One of the strengths of the maximum matching approach is its simplicity in the way teamwork among the defenders is incorporated from pairwise outcomes. Since the solution to the two-player reach-avoid game guarantees that certain defenders win against a set of attackers in a one vs. one setting, the pairwise outcomes provide each defender with the knowledge of the capability of each teammate in relation to each attacker. The maximum matching process then takes advantage of this knowledge of teammate competency to provide the optimal way for the defenders to pair up against the attackers. 
+
+In addition, the pairwise outcomes do not have to be obtained from the same method among the defenders. For example, some defenders may opt to use an optimal closed-loop strategy given by the two-player HJI solution, while others may opt to use a semi-open-loop strategy given by the two-player path defense solution. In fact, defenders could actually use \textit{any} strategy, including ones not presented in this paper, as long as the strategy provides pairwise guarantees. As long as the bipartite graph can be constructed from the pairwise outcomes, maximum matching can be applied, and an upper bound on the number of attackers who can reach the target can be guaranteed.

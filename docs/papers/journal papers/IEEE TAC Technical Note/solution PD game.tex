@@ -20,7 +20,7 @@ Denote the shortest path between \textit{any} two points $\x,\y\in\free$ to be $
 
 \begin{figure}
 \centering
-\includegraphics[width=0.2\textwidth]{"fig/path defense game"}
+\includegraphics[width=0.35\textwidth]{"fig/path defense game"}
 \caption{The components of a path defense game.}
 \label{fig:pd_form}
 \end{figure}
@@ -29,15 +29,15 @@ Denote the shortest path between \textit{any} two points $\x,\y\in\free$ to be $
 A path defense game can be directly solved by computing a 4D reach-avoid set. Since the direct solution is time- and memory- intensive, we propose an efficient approximation of 2D slices that is conservative towards the defender.
 
 % Definitions
-%\begin{defn} % Defendable path
-%\textbf{Defendable path}. Given $\xjn=(\xan,\xbn)$, a path $\pathd$ is defendable if regardless of the attacker's actions, the defender has a control function $\cb(\cdot)$ to prevent the attacker from reaching $\pathd$ without being captured.
-%\end{defn}
+\begin{defn} % Defendable path
+\textbf{Defendable path}. Given $\xjn=(\xan,\xbn)$, a path $\pathd$ is defendable if regardless of the attacker's actions, the defender has a control function $\cb(\cdot)$ to prevent the attacker from reaching $\pathd$ without being captured.
+\end{defn}
 
 \begin{defn} % Strongly defendable path
 \textbf{Strongly defendable path}. $\pathd$ is \textit{strongly} defendable if regardless of the attacker's actions, the defender has a control function $\cb(\cdot)$ to reach $\pathd$ after finite time and prevent the attacker from reaching $\pathd$.
 \end{defn}
 
-%Checking whether a path $\pathd$ is defendable involves a 4D reach-avoid set calculation, so instead we check whether a path $\pathd$ is strongly defendable. The following definitions lead to our first Lemma which describes how to determine strong defendability using 2D distance calculations; the definitions and Lemma are illustrated in Fig. \ref{fig:lemma1}.
+Checking whether a path $\pathd$ is defendable involves a 4D reach-avoid set calculation, so instead we check whether a path $\pathd$ is strongly defendable. The following definitions lead to our first Lemma which describes how to determine strong defendability using 2D distance calculations; the definitions and Lemma are illustrated in Fig. \ref{fig:lemma1}.
 
 \begin{defn} % Level set image of attacker
 \textbf{Attacker level set image}. Given attacker position $\xa(t)$, define the attacker level set image with respect to anchor point $\apa$ to be $\xai(t;\apa) = \{\x\in\pathd: \ta(\x,\apa) = \ta(\xa(t),\apa)\}$. $\xai$ is the unique point on $\pathd$ such that $\ta(\xai, \apa)=\ta(\xa,\apa)$. Define $\xai(t;\apb)$ similarly by replacing $\apa$ with $\apb$. For convenience, we sometimes omit the time argument and write $\xai(\apa)$.

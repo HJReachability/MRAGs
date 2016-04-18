@@ -33,7 +33,7 @@ Fig. \ref{fig:mm} shows the bipartite graph and maximum matching obtained from t
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.35\textwidth]{"fig/OLGame_compare"}
+	\includegraphics[width=0.45\textwidth]{"fig/OLGame_compare"}
 	\caption{Reach-avoid slices computed using the HJI approach and the path defense approach. }
 	\label{fig:comp_ol}
 \end{figure}
@@ -65,14 +65,14 @@ Computations were done on a $200\times200$ grid, and 937 paths were used to comp
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.45\textwidth]{"fig/OLGame_mm_results"}
+	\includegraphics[width=0.5\textwidth]{"fig/OLGame_mm_results"}
 	\caption{Merging pairwise outcomes with maximum matching.}
 	\label{fig:mm}
 \end{figure}
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.3\textwidth]{"fig/alg_perf_Rc"}
+	\includegraphics[width=0.35\textwidth]{"fig/alg_perf_Rc"}
 	\caption{Performance of the Path Defense Solution.}
 	\label{fig:pd_perf}
 \end{figure}
@@ -94,13 +94,16 @@ Computations were done on a $200\times200$ grid, and 937 paths were used to comp
 %\end{figure}
 
 \subsection{Defender Cooperation}
+To highlight the element of cooperation among the defenders, we examine Fig. \ref{fig:mm} more closely. For the maximum matching results from the two-player HJI solutions (left sub-figure), we see that the maximum matching creates the pairs $(\pbm{1}, \pam{1})$, $(\pbm{2}, \pam{4})$, $(\pbm{3}, \pam{2})$, and $(\pbm{4}, \pam{3})$. In general, such a pairing is not intuitively obvious. For example, it is not obvious, without knowledge of the pairwise outcomes, that $\pbm{1}$ can win against $\pam{1}$ in a one vs. one setting. If one were not sure whether $\pbm{1}$ can win against $\pam{1}$, then $(\pbm{2}, \pam{1})$ may seem like a reasonable pair; however, such a pairing may potentially be suboptimal. Likewise, the same observations can be made in many of the other pairings in both sub-figures.
+
+For the maximum matching results from the two-player path defense solutions (right sub-figure), since a semi-open-loop strategy is used, each defender is less capable of defending against attackers. However, since the path defense approach still provides pairwise guarantees for each defender, optimal pairings can still be constructed given the conservative strategy of each defender. Taking advantage of the pairwise outcomes, the maximum matching approach allows defenders to cooperatively minimize the number of attackers reaching the target.
 
 \subsection{Real-Time Maximum Matching Updates}
 After determining all pairwise outcomes, pairwise outcomes of \textit{any} joint state of the attacker-defender pair are characterized by the HJI approach. This allows for updates of the bipartite graph and its maximum matching as the players play out the game in real time. Fig. \ref{fig:real_time_update} shows the maximum matching at several time snapshots of a 4 vs. 4 game. Each defender that is part of a maximum matching plays optimally against the paired-up attacker, and the remaining defender plays optimally against the closest attacker. The attackers' strategy is to move towards the target along the shortest path while steering clear of the obstacles by $0.125$ units. The maximum matching is updated every $\Delta=0.005$ seconds. At $t=0$ and $t=0.2$, the maximum matching is of size 3, which guarantees that at most one attacker will be able to reach the target. After $t=0.4$, the maximum matching size increases to 4, which guarantees that no attacker will be able to reach the target.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.35\textwidth]{"fig/time varying graph"}
+	\includegraphics[width=0.4\textwidth]{"fig/time varying graph"}
 	\caption{Increasing maximum matching size over time.}
 	\label{fig:real_time_update}
 \end{figure}

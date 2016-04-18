@@ -1,10 +1,6 @@
 % !TEX root = multiplayer_reach_avoid_games.tex
 \section{The HJI Solution of the Two-Player Game} \label{sec:solution_hji}
-The HJI approach for solving differential games is outlined in \cite{Huang2011,j:mitchell-TAC-2005, LSToolbox}. The optimal joint closed-loop control strategies for the attacker and the defender in a two-player reach-avoid game can be obtained by solving a 4D HJI PDE. This solution allows us to determine whether the defender will win against the attacker in a 1 vs. 1 setting. 
-%\subsection{Hamilton-Jacobi-Isaacs Reachability} \label{subsec:hj_background}
-%Given the continuous dynamics of the system, we specify the terminal set $R$ as the attackers' winning condition, and propagate backwards this set for some time horizon according to an HJI PDE, subject to the constraint imposing that the attackers be outside the capture regions and the obstacles. This constraint is described by the avoid set $A$. Sets in the HJI approach are defined as the sub-zero-level set of implicit surface functions. The result of the backwards propagation is a reach-avoid set that partitions the state space into two regions. All points inside the reach-avoid set represent the joint initial conditions from which the attacking team is guaranteed to win within a certain time horizon, and all points outside represent the joint initial conditions from which the attacking team is guaranteed to not win within a certain time horizon.
-%\subsection{HJI Reachability for the Two-Player Game}
-%\label{subsec:hj_two}
+The HJI approach for solving differential games is outlined in \cite{Huang2011,j:mitchell-TAC-2005, LSToolbox}. The optimal joint closed-loop control strategies for the attacker and the defender in a two-player reach-avoid game can be obtained by solving a 4D HJI PDE. This solution allows us to determine whether the defender will win against the attacker in a one vs. one setting. 
 
 In the two-player game, the attacker aims to reach $\target$ while avoiding $\avoid$. Both players also avoid $\obs$. In particular, the defender wins if the attacker is in $\obs$, and vice versa. Therefore, we define the terminal set and avoid set to be
 

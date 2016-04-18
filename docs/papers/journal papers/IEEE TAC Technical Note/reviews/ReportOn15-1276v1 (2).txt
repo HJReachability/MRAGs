@@ -1,0 +1,17 @@
+... my opinion is that the method provided for reach-avoid games is not
+general enough to justify publication in TAC.
+
+The main reason I say this is related to Concerns 2 & 4. 
+
+In particular, the method proposed in this paper is based upon a
+maximum matching process (where a defender is matched with an
+attacker). I agree with the authors that a maximum matching can still
+be found when the number of attackers is larger. I also presume that an
+upper bound can be found in the number of attackers that enter the
+defense zone. However, given that the method is based on one-to-one
+matchings, the method ignores completely the potential of a
+collaborative action between the defenders (some sort of higher-level
+strategies). I understand that the problem in general is quite hard,
+but the introduced notion of one-to-one matchings is an
+oversimplification of the problem that completely removes the element
+of a "team".
