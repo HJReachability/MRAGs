@@ -1,0 +1,7 @@
+Based on the comments received from reviewers, we have made a number of changes to the paper.
+
+First, we reformatted the paper into a technical note. To do this, we shortened the introduction and problem formulation, combined Sections III-A and III-B into a single section III-B, omitting previously-presented Hamilton-Jacobi-Isaacs reachability formalism. 
+
+Next, we clarified reviewers' concern regarding assumed strategy of the opponent. In Sections III and IV-C, we added emphasis to say that the closed-loop control strategy derived from the HJI approach and the semi-open-loop strategy derived from the path defense approach both guarantee that the defender will win the two-player reach-avoid game, even if the attacker uses the optimal control. This clarification should help the reader to better understand why maximum matching based on pairwise outcomes places a hard upper bound on the number of attackers that can reach the target, and why the size of the maximum matching can never decrease if the defenders follow either the optimal closed-loop strategy from the HJI approach, or the semi-open-loop strategy from the path defense approach.
+
+Finally, we made other wording changes for general clarity. Most importantly, in Section V, the scaling of computation complexities with respect to the number of players for the two approaches we present should now be clearer.
