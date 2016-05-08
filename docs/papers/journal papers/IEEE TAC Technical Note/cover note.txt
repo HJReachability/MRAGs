@@ -1,1 +1,10 @@
+Version 2:
 This is a resubmission of the paper that was originally a full paper which was then converted into a technical note.
+
+Version 3:
+This is a resubmission of the previous version which used the
+"technote" document class in the IEEEtran template. As requested, the
+new (current) submission uses the "journal" document class in the
+IEEEtran template.
+
+Note that this is still meant to be submitted as a technical note.
