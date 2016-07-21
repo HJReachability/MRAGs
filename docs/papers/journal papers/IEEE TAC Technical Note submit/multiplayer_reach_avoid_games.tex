@@ -65,7 +65,7 @@
 \title{Multiplayer Reach-Avoid Games via Pairwise Outcomes}
 
 \author{Mo Chen, Zhengyuan Zhou and Claire J. Tomlin%
-\thanks{This work has been supported in part by NSF under CPS:ActionWebs (CNS-931843), by ONR under the HUNT (N0014-08-0696) and SMARTS (N00014-09-1-1051) MURIs and by grant N00014-12-1-0609, by AFOSR under the CHASE MURI (FA9550-10-1-0567).}% <-this % stops a space
+\thanks{This work has been supported in part by NSF under CPS:ActionWebs (CNS-931843), by ONR under the HUNT (N0014-08-0696) and SMARTS (N00014-09-1-1051) MURIs and by grant N00014-12-1-0609, by AFOSR under the CHASE MURI (FA9550-10-1-0567). Recommended by Senior Editor Edwin K. P. Chong.}% <-this % stops a space
 \thanks{M.~Chen, and C.~J.~Tomlin are with the Department of Electrical Engineering and Computer Sciences,
         University of California, Berkeley, CA 94720, USA
         {\tt\small \{mochen72,tomlin\}@eecs.berkeley.edu}}
@@ -86,7 +86,9 @@
 A multiplayer reach-avoid game is a differential game between an attacking team with $\NA$ attackers and a defending team with $\ND$ defenders playing on a compact domain with obstacles. The attacking team aims to send $\m$ of the $\NA$ attackers to some target location, while the defending team aims to prevent that by capturing attackers or indefinitely delaying attackers from reaching the target. Although the analysis of this game plays an important role in many applications, the optimal solution to this game is computationally intractable when $\NA>1$ or $\ND>1$. In this paper, we present two approaches for the $\NA=\ND=1$ case to determine pairwise outcomes, and a graph theoretic maximum matching approach to merge these pairwise outcomes for an $\NA,\ND>1$ solution that provides guarantees on the performance of the defending team. We will show that the four-dimensional Hamilton-Jacobi-Isaacs approach allows for real-time updates to the maximum matching, and that the two-dimensional ``path defense" approach is considerably more scalable with the number of players while maintaining defender performance guarantees.
 \end{abstract}
 
-% A multiplayer reach-avoid game is a differential game between an attacking team with NA attackers and a defending team with ND defenders playing on a compact domain with obstacles. The attacking team aims to send M of the NA attackers to some target location, while the defending team aims to prevent that by capturing attackers or indefinitely delaying attackers from reaching the target. The analysis of this game plays an important role in many applications. The optimal solution to this game is computationally intractable when NA>1 or ND>1. In this paper, we present two approaches for the NA=ND=1 case to determine pairwise outcomes, and a graph theoretic maximum matching approach to merge these pairwise outcomes for an NA,ND>1 solution that provides guarantees on the performance of the defending team. We will show that the four-dimensional Hamilton-Jacobi-Isaacs approach allows for real-time updates to the maximum matching, and that the two-dimensional "path defense" approach is considerably more scalable with the number of players while maintaining defender performance guarantees.
+\begin{IEEEkeywords}
+Agents and autonomous systems, cooperative control, game theory, computational methods, nonlinear systems.
+\end{IEEEkeywords}
 
 \input{intro.tex} 
 % Motivation and significance of result
