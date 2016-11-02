@@ -1,0 +1,337 @@
+% Useful commands
+\newcommand{\bq}{\begin{equation}}
+\newcommand{\eq}{\end{equation}}
+\newcommand{\bmat}{\left[\begin{matrix}}
+\newcommand{\emat}{\end{matrix}\right]}
+\newcommand{\ith}{$i$\textsuperscript{th} }
+\newcommand{\jth}{$j$\textsuperscript{th} }
+
+%Multiplayer Notation
+%\newcommand{multiInit}{x_{A1}^0,...,x_{AN}^0;x_{D1}^0,...,x_{DM}^0}
+
+% Notations
+\newcommand{\R}{\mathbb{R}} %% set of real number
+\newcommand{\y}{y} %% generic point
+\newcommand{\x}{x} %% generic point
+\newcommand{\unitball}{\overline{B}_2} % unit ball
+\newcommand{\Rc}{R_C} % Capture radius
+\newcommand{\Dc}{D_C} % capture set
+
+% domain parameters
+\newcommand{\amb}{\Omega}
+\newcommand{\obs}{\Omega_{\text{obs}}}
+\newcommand{\free}{\Omega_{\text{free}}}
+\newcommand{\boundary}{\partial\amb}
+
+% Multiplayer parameters
+\newcommand{\N}{N} % number of players
+\newcommand{\pam}[1]{P_{A_{#1}}} % attackers
+\newcommand{\pbm}[1]{P_{D_{#1}}} % defenders
+\newcommand{\pas}{\left\{\pam{i}\right\}_{i=1}^{\NA}}% set of attackers
+\newcommand{\pbs}{\left\{\pbm{i}\right\}_{i=1}^{\ND}}% set of defenders
+
+\newcommand{\m}{M} % first m attackers reach target
+\newcommand{\mm}{m} % size of maximum matching
+\newcommand{\xam}[1]{x_{A_{#1}}}
+\newcommand{\xbm}[1]{x_{D_{#1}}}
+\newcommand{\xanm}[1]{x_{A_{#1}}^0}
+\newcommand{\xbnm}[1]{x_{D_{#1}}^0}
+\newcommand{\dotxam}[1]{\dot{x}_{A_{#1}}}
+\newcommand{\dotxbm}[1]{\dot{x}_{D_{#1}}}
+\newcommand{\cam}[1]{a_{#1}} % control for A
+\newcommand{\cbm}[1]{d_{#1}} % control for D
+\newcommand{\cas}{\left\{\cam{i}\right\}_{i=1}^\N} % control for team A
+\newcommand{\cbs}{\left\{\cbm{i}\right\}_{i=1}^\N} % control for team D
+
+\newcommand{\pasf}{P_A^\m} % first m attackers to target
+\newcommand{\xjf}{\xj^m}
+\newcommand{\xja}{\xj_A} % joint state of attackers
+\newcommand{\xjb}{\xj_D} % joint state of defenders
+\newcommand{\xjna}{\xj_A^0} % joint IC of attackers
+\newcommand{\xjnb}{\xj_D^0} % joint IC of defenders
+
+% 2 player parameters
+\newcommand{\pa}{P_A} % player 1: the minimizer (attacker)
+\newcommand{\pb}{P_D} % player 2: the maximizer (defender)
+\newcommand{\xa}{x_A}
+\newcommand{\xb}{x_D}
+\newcommand{\dotxa}{\dot{x}_A}
+\newcommand{\dotxb}{\dot{x}_D}
+
+\newcommand{\xaop}{\xa^{op}} % Orthogonal projection onto Voronoi line
+\newcommand{\xbop}{\xb^{op}}
+
+\newcommand{\dotxapara}{\dotxa^{\parallel}} % Velocity components parallel and perpendicular to orthogonal projection
+\newcommand{\dotxaperp}{\dotxa^{\perp}}
+\newcommand{\dotxbpara}{\dotxb^{\parallel}}
+\newcommand{\dotxbperp}{\dotxb^{\perp}}
+
+\newcommand{\xan}{\xa^0}
+\newcommand{\xbn}{\xb^0}
+\newcommand{\fa}{f_A} % Speed profile of attacker
+\newcommand{\fb}{f_D} % Speed profile of defender
+\newcommand{\f}{f} % Speed profile (if they're the same for attacker and defender)
+\newcommand{\vela}{v_A} % speed of attacker (constant speed profile)
+\newcommand{\velb}{v_D} % speed of defender (constant speed profile)
+\newcommand{\velai}[1]{v_{A_{#1}}} % speed of attacker (constant speed profile)
+\newcommand{\velbi}[1]{v_{D_{#1}}} % speed of defender (constant speed profile)
+\newcommand{\A}{\Sigma} % control set
+\newcommand{\OCa}{\Sigma^*_{\pa}} %set of optimal controls for P1
+\newcommand{\OCb}{\Sigma^*_{\pb}} %set of optimal controls for P2
+\newcommand{\Ua}{\Sigma_A} % control set for A
+\newcommand{\Ub}{\Sigma_D} % control set for D
+\newcommand{\Uam}[1]{\Sigma_{A_{#1}}} % control set for A
+\newcommand{\Ubm}[1]{\Sigma_{D_{#1}}} % control set for D
+\newcommand{\ca}{a} % control for A
+\newcommand{\cb}{d} % control for D
+\newcommand{\cab}{\bar{a}} % control
+\newcommand{\cbb}{\bar{b}} % control
+\newcommand{\ua}{\vala_1} % optimal control value function
+\newcommand{\ub}{\vala_2} % optimal control value function
+\newcommand{\cva}{a} % arbitrary control value
+\newcommand{\cvb}{b} % arbitrary control value
+\newcommand{\ra}{\mathcal{R}_1} % reach set of P1 
+\newcommand{\rb}{\mathcal{R}_2} % reach set of P2
+
+% path parameters
+\newcommand{\path}{\mathcal{P}} % shortest path between two points
+\newcommand{\ppath}{p} % point on the path that induces winning regions
+\newcommand{\pprime}{p\prime} % another point on the path
+\newcommand{\pstar}{p^*} % best point for strong defense
+\newcommand{\deltap}{\Delta_p} % time it takes to move between two points on the path
+\newcommand{\xai}{\xa\prime} % level set image of attacker
+\newcommand{\apa}{e_a} % anchor point a
+\newcommand{\apb}{e_b} % anchor point b
+\newcommand{\apai}{e_{a,j}} % anchor point a
+\newcommand{\apbi}{e_{b,j}} % anchor point b
+\newcommand{\apaj}{e_{a,j}} % anchor point a
+\newcommand{\apbj}{e_{b,j}} % anchor point b
+\newcommand{\pathd}{\bar{\mathcal{P}}(\apa,\apb)} % shortest path between two boundary
+\newcommand{\pathdi}{\bar{\mathcal{P}}_i(\apai,\apbi)} % shortest path between two boundary
+\newcommand{\pathdj}{\bar{\mathcal{P}}_j(\apaj,\apbj)} % shortest path between two boundary
+\newcommand{\rpa}{\mathcal{R}_a} % winning region A (winning for attacker)
+\newcommand{\rpb}{\mathcal{R}_b} % winning region B
+\newcommand{\sa}{\mathcal{S}_A\left(\pathd\right)} % Attacker side of a path
+\newcommand{\sac}{\amb\backslash\sa}
+\newcommand{\ta}{t_A} % Attacker time (between two sets)
+\newcommand{\tb}{t_D} % Defender time
+\newcommand{\rpd}{\mathcal{G}\left(\apa,\apb\right)} % winning region for defender given path
+\newcommand{\wrd}{\mathcal{D}} % winning region of defender (union over paths)
+\newcommand{\pathds}[1]{\bar{\mathcal{P}}_{#1}} % Multiple paths of defense
+\newcommand{\sdr}{\mathcal{D}_S} % strongly defendable region
+\newcommand{\dr}{\mathcal{D}} % defendable region
+\newcommand{\dist}{\text{dist}} % Distance
+
+% joint player parameters
+\newcommand{\xj}{\mathbf{x}} % joint state space
+\newcommand{\xjn}{\mathbf{x^0}} % joint state space init cond
+
+
+% game parameters
+\newcommand{\target}{\mathcal{T}} % target set
+\newcommand{\avoid}{\mathcal{C}} % avoid set
+\newcommand{\capture}{\mathcal{C}}
+\newcommand{\pay}{\mathcal{J}} % payoff function
+\newcommand{\vUpper}{\overline{v}}  % Upper value
+\newcommand{\vLower}{\underline{v}} % Lower value
+\newcommand{\vLLower}{\underline{\underline{v}}}% Lower Bound for Lower value
+\newcommand{\vHJI}{V}%feedback strategy value (HJI solution)
+\newcommand{\vHJIUpper}{\overline{V}}%feedback strategy value (HJI solution)
+\newcommand{\vHJILower}{\underline{V}}%feedback strategy value (HJI solution)
+%\newcommand{\avoida}{\avoid_{p}} % avoid set of P1 for a fixed P2 state
+\newcommand{\avoida}{\avoid}
+\newcommand{\midval}{g}
+\newcommand{\F}{\mathcal{F}} % feedback set
+\newcommand{\FA}{\mathcal{F}_A} % feedback set for A
+\newcommand{\FB}{\mathcal{F}_D} % feedback set for D
+\newcommand{\feed}{\gamma} % a feedback strategy
+
+\newcommand{\set}{G} % Generic set
+
+% t-star, r-star, etc.
+%\newcommand{\ts}{{\underline{t^*}}}
+\newcommand{\ts}{{\underline{t}}}
+\newcommand{\Rset}{{R}} % arbitrary set
+%\newcommand{\Rs}{{R^*}}
+%\newcommand{\Rss}{R^{**}}
+\newcommand{\Rs}{{\mathcal{Z}}}
+\newcommand{\Rss}{\Rs^{*}}
+\newcommand{\wRset}{\underline{w_\Rset}}
+\newcommand{\wRs}{\underline{w_\Rs}}
+\newcommand{\wRss}{\underline{w_{\Rss}}}
+\newcommand{\xbCurrent}{\xb^{current}}
+\newcommand{\bqs}{\begin{equation*}}
+\newcommand{\eqs}{\end{equation*}}
+
+%Algorithm
+
+\newcommand{\tij}{\ts_{(i,j)}}
+\newcommand{\wij}{\wRs^{(i,j)}}
+\newcommand{\Tij}{T_{(i,j)}}
+\newcommand{\Wij}{W_{(i,j)}}
+\newcommand{\Aij}{\avoida_{(i,j)}}
+
+%H's Macros
+
+
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Nat}{\mathbb{N}}     % Naturals
+\newcommand{\zo}{$\{0,1\}$}       % zero-one, binary, indicator
+\newcommand{\norm}[1]{\left\Vert\left\Vert#1\right\Vert\right\Vert}
+\newcommand{\abs}[1]{\left\vert#1\right\vert}
+\newcommand{\diag}{\mbox{diag}}
+
+\newcommand{\tr}{\text{${}^{\text{T}}$}}	
+\newcommand{\mat}{\mathbf}
+\newcommand{\vect}{\mathbf}
+
+
+\newcommand{\dx}{\dot{x}}
+\newcommand{\dxj}{\dot{\xj}}
+\newcommand{\ddx}{\ddot{x}}
+\newcommand{\uv}{\mathbf{u}}
+\def\sign{\operatorname{sign}}
+\def\atan2{\operatorname{atan2}}
+\def\argmax{\operatornamewithlimits{arg\,max}}
+\def\argmax{\operatorname{arctan2}}
+\def\argmin{\operatornamewithlimits{arg\,min}}
+\def\minimize{\operatornamewithlimits{minimize}}
+
+\newcommand{\todo}[1]{\bigskip\noindent {\bf To Do ---} {#1}\bigskip}
+
+\def\quarterframe{\includegraphics[trim = 0.05in 0.00in 0.3in 0.1in, clip, width=2.5in]}
+
+% cost function definitions
+\newcommand{\Jhji}{J}
+\newcommand{\J}{\mathcal{V}}
+
+\newcommand{\vs}{\overline{\mathcal{V}}} 
+\newcommand{\vhj}{\overline{\mathcal{V}}^{\text{f}}}
+
+
+% state definitions
+
+\newcommand{\xd}{x_d}
+%\newcommand{\xa}{\mathbf{a}}
+%\newcommand{\xd}{\mathbf{d}}
+
+\newcommand{\fd}{f_d}
+\newcommand{\dxa}{\dot{x}_a}
+\newcommand{\dxd}{\dot{x}_d}
+\newcommand{\txa}{\tilde{x}_a}
+\newcommand{\txd}{\tilde{x}_d}
+\newcommand{\xn}{\mathbf{x}^0}
+%\newcommand{\xan}{x^0_a}
+\newcommand{\xdn}{x^0_d}
+\newcommand{\xaf}{x^f_A}
+\newcommand{\xdf}{x^f_D}
+
+\newcommand{\p}{x_p}
+\newcommand{\e}{x_e}
+
+% reach avoid definitions
+\newcommand{\RA}{\mathcal{RA}}
+\newcommand{\reach}{\mathcal{R}} % set of points that can reach a set in finite time
+%\newcommand{\A}{\mathcal{A}}
+
+% game/input/strategy definitions
+%\newcommand{\ca}{u} % open-loop control sequence
+\newcommand{\cd}{d} % open-loop disturbance sequence
+%\newcommand{\ua}{u} % control input
+\newcommand{\ud}{d} % disturbance input
+\newcommand{\ustrat}{\mu} % control strategy
+\newcommand{\dstrat}{\gamma} % disturbance strategy
+\newcommand{\ut}{u} % control input
+\newcommand{\dt}{d} % disturbance input
+
+\newcommand{\vel}{v}
+
+
+\newcommand{\tca}{\tilde{\ca}} 
+\newcommand{\tcd}{\tilde{\cd}} 
+\newcommand{\rc}{r_c}
+\newcommand{\Cset}{C}
+\newcommand{\Cmask}{\tilde{C}}
+
+
+\newcommand{\U}{\mathbb{U}} % set of control inputs
+\newcommand{\D}{\mathbb{D}} % set of disturbance inputs
+\newcommand{\Us}{{U}} % set of possible control strategies
+\newcommand{\Ds}{{D}} % set of possible disturbance strategies
+\newcommand{\Uo}{\mathbb{U}_o} % set of control inputs
+\newcommand{\Do}{\mathbb{D}_o} % set of disturbance inputs
+
+
+\newcommand{\Jkruz}{\mathcal{U}}
+
+% set definitions for games
+\newcommand{\domain}{\Omega} % game domain
+\newcommand{\domainJ}{\domain^2} %joint game domain
+%\newcommand{\target}{\mathcal{T}}
+%\newcommand{\avoid}{K}
+\newcommand{\inits}{\mathcal{O}}
+
+
+\newcommand{\va}{c_a}
+\newcommand{\vd}{c_b}
+%\newcommand{\A}{\mathcal{A}}
+
+%\newcommand{\target}{\mathcal{T}}
+
+% time horizons
+\newcommand{\T}{T}
+
+% backflip stuff
+\newcommand{\thrust}{\mathcal{F}}
+
+\newcommand{\Pathset}{\mathcal{Y}}
+\newcommand{\fstra}{\zeta}
+\newcommand{\fsset}{\mathcal{F}}
+
+%\newcommand{\bqs}{\begin{equation*}}
+%\newcommand{\eqs}{\end{equation*}}
+\newcommand{\timeset}{\Delta}
+\newcommand{\Dpoly}{\Phi}
+\newcommand{\viter}{v_{\timeset}^{\text{st}}}
+\newcommand{\valsM}{\overline{w_\mathcal{M}}}
+\newcommand{\vals}{\overline{w_\safereach}}
+\newcommand{\valsR}{\phi}
+\newcommand{\valsRa}{\valsR_A} % Value function for attacker
+\newcommand{\valsRb}{\valsR_D} % Value function for defender
+%\newcommand{\valsi}{\overline{w_\safereach}}
+
+\newcommand{\valsRi}{\overline{w_{\Rset_i}}}
+\newcommand{\valsSi}{\overline{w_{\safereach_i}}}
+\newcommand{\valss}{\overline{w_\Rset}}
+%\newcommand{\vald}{\overline{t^*}}
+\newcommand{\vald}{\overline{t}}
+\newcommand{\td}{\phi_D}
+\newcommand{\vala}{\varphi}
+\newcommand{\xat}{\xa^1}
+\newcommand{\safereach}{\mathcal{S}}
+\newcommand{\valsy}{\varphi}
+\newcommand{\grid}{\mathcal{G}} % grid
+
+\newcommand{\apath}{\mathcal{P}}
+%\newcommand{\attacker}{A}
+%\newcommand{\defender}{B}
+
+% pursuit-evasion specific stuff
+\newcommand{\dmin}{\delta_{min}}
+\newcommand{\En}{E}
+\newcommand{\Ne}{{\cal N}_e}
+\newcommand{\vor}{S}
+
+
+
+
+
+% quadrotor search definitions
+\newcommand{\xq}{x_q} % quadrotor position
+\newcommand{\rd}{\mathcal{R}_D} % set of points the defender can get to before the quadrotor
+\newcommand{\Wv}{Z} % points that can reach visible parts of W_D
+\newcommand{\Wi}{\tilde{Z}} % points that can reach invisible parts of W_D but not visible parts
+\newcommand{\vis}{V} % visibility regions
+
+
+

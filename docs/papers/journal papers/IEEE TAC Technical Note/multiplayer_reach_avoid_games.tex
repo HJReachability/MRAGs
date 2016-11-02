@@ -8,7 +8,7 @@
 %\usepackage{amsthm}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{graphics}
+%\usepackage{graphics}
 \usepackage{graphicx}
 %\usepackage{enumitem}
 \usepackage{color}
@@ -60,9 +60,9 @@
 \newcommand{\NA}{N_A}
 \newcommand{\ND}{N_D}
 
-\usepackage{"../../my_macros"}
+\usepackage{my_macros}
 
-\title{Multiplayer Reach-Avoid Games via Pairwise Outcomes}
+\title{\LARGE Multiplayer Reach-Avoid Games via Pairwise Outcomes}
 
 \author{Mo Chen, Zhengyuan Zhou and Claire J. Tomlin%
 \thanks{This work has been supported in part by NSF under CPS:ActionWebs (CNS-931843), by ONR under the HUNT (N0014-08-0696) and SMARTS (N00014-09-1-1051) MURIs and by grant N00014-12-1-0609, by AFOSR under the CHASE MURI (FA9550-10-1-0567). Recommended by Senior Editor Edwin K. P. Chong.}% <-this % stops a space
@@ -104,14 +104,14 @@ Agents and autonomous systems, cooperative control, game theory, computational m
 \input{solution_hji.tex}
 
 %% THEORY
-\input{"solution PD game.tex"}
+\input{"solution_PD_game.tex"}
 % Path defense game as special case of general 2-player reach-avoid
 % Alternate way of solving path defense game through strong defense
 	% lemma 1: winning regions for defender once defender is on the path
 	% lemma 2: optimal point on the path for defender to go to
 % Conservatism of strong path defense (insight beyond HJI)
 
-\input{"solution PD reach-avoid.tex"} 
+\input{"solution_PD_reach-avoid.tex"} 
 % Properties of strong path defense
 	% Rotating paths backwards
 % 2 player reach-avoid using path defense

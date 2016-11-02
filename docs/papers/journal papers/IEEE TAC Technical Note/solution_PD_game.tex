@@ -5,14 +5,14 @@ We approximate 2D slices of the 4D reach-avoid set (or simply ``2D slices") in t
 
 \subsection{The Path Defense Game}
 \label{subsec:pd_game}
-The \textit{Path Defense Game} is a two-player reach-avoid game in which the boundary of the target set is the shortest path between two points on $\boundary$, and the target set is on one side of that shortest path (Fig. \ref{fig:pd_form}). We denote the target set as $\target=\sac$ for two given points on the boundary $\apa,\apb$. $\sa$ and $\pathd$ are defined below. 
+The \textit{Path Defense Game} is a two-player reach-avoid game in which the boundary of the target set is the shortest path between two points on $\boundary$, and the target set is on one side of that shortest path (Fig. \ref{fig:pd_form}). We denote the target set as $\target=\sac$ for two given points on the boundary $\apa,\apb$. $\sa$ and $Anal.d$ are defined below. 
 
 % Definitions
 \begin{defn} % Shortest path between two points
-\textbf{Path of defense}. A path of defense, $\pathd$, is the shortest path between two boundary points $\apa,\apb\in\boundary$. $\apa$ and $\apb$ are called the \textbf{anchor points} of path $\pathd$. 
+\textbf{Path of defense}. A path of defense, $Anal.d$, is the shortest path between two boundary points $\apa,\apb\in\boundary$. $\apa$ and $\apb$ are called the \textbf{anchor points} of path $\pathd$. 
 \end{defn}
 
-Denote the shortest path between \textit{any} two points $\x,\y\in\free$ to be $\path(\x,\y)$, with length $\dist(\x,\y)$, and requiring the attacker and defender durations of $\ta(\x, \y),\tb(\x,\y)$ to traverse, respectively. We will also use $\dist(\cdot,\cdot)$ with one or both arguments being sets in $\amb$ to denote the shortest distance between the arguments.
+Denote the shortest path between \textit{any} two points $\x,\y\in\free$ to be $\spath(\x,\y)$, with length $\dist(\x,\y)$, and requiring the attacker and defender durations of $\ta(\x, \y),\tb(\x,\y)$ to traverse, respectively. We will also use $\dist(\cdot,\cdot)$ with one or both arguments being sets in $\amb$ to denote the shortest distance between the arguments.
 
 \begin{defn} % Attacker's side of the path (needed?)
 \textbf{Attacker's side of the path}. A path of defense $\pathd$ partitions the domain $\amb$ into two regions. Define $\sa$ to be the region that contains the attacker, not including points on the path $\pathd$. The attacker seeks to reach the target set $\target=\sac$.
@@ -20,7 +20,7 @@ Denote the shortest path between \textit{any} two points $\x,\y\in\free$ to be $
 
 \begin{figure}
 \centering
-\includegraphics[width=0.35\textwidth]{"fig/path defense game"}
+\includegraphics[width=0.35\textwidth]{"fig/path_defense_game"}
 \caption{The components of a path defense game.}
 \label{fig:pd_form}
 \end{figure}
@@ -106,9 +106,9 @@ See Fig. \ref{fig:lemma1}. Assume $\xan \notin \target = \sac$, otherwise the at
 
 First, we show that if $\xan\in \rpa \cup \rpb$, then the attacker can reach $\apa$ or $\apb$ and hence $\sac$ without being captured. Without loss of generality (WLOG), suppose $\xan\in\rpa$. To capture the attacker, the defender's capture set must contain $\xai(\apa)$ or $\xai(\apb)$ at some time $t$. By Definition \ref{def:d_win_region}, we have $\dist(\xan,\apa) < \dist(\Dc(\ppath),\apa)$, so $\ta(\xai(\apa),\apa) < \tb(\Dc(\ppath),\apa)$. By Proposition \ref{rem:image_of_a}, $\dist(\xai(\apb),\apa) \le \dist(\xai(\apa),\apa)$, so it suffices to show that the defender's capture set cannot reach $\xai(\apa)$ before the attacker reaches $\apa$. 
 
-If the attacker moves towards $\apa$ along $\path(\xan,\apa)$ with maximum speed, then $\xai(\apa)$ will move towards $\apa$ along $\path(\xai(\apa),\apa)$ at the same speed. Since $\ta(\xa,\apa)=\ta(\xai(\apa),\apa)<\tb(\Dc(\ppath),\apa)$, $\xa$ will reach $\apa$ before the defender capture set $\Dc(\xb,t)$ does. 
+If the attacker moves towards $\apa$ along $\spath(\xan,\apa)$ with maximum speed, then $\xai(\apa)$ will move towards $\apa$ along $\spath(\xai(\apa),\apa)$ at the same speed. Since $\ta(\xa,\apa)=\ta(\xai(\apa),\apa)<\tb(\Dc(\ppath),\apa)$, $\xa$ will reach $\apa$ before the defender capture set $\Dc(\xb,t)$ does. 
 
-Next we show, by contradiction, that if $\xa\notin\rpa \cup \rpb$, then the attacker cannot reach $\sac$ without being captured. Suppose $\pa$ will reach some point $\pprime$ before $\Dc(\pb,t)$ does, i.e. $\dist(\xan,\pprime)<\dist(\Dc(\xbn),\pprime)=\dist(\Dc(\ppath),\pprime)$. WLOG, assume $\pprime\in\path(\ppath,\apb)$, and note that $\dist(\Dc(\ppath),\apb)<\dist(\xan,\apb)$ since the attacker is not in $\rpb$. Starting with the definition of the shortest path, we have
+Next we show, by contradiction, that if $\xa\notin\rpa \cup \rpb$, then the attacker cannot reach $\sac$ without being captured. Suppose $\pa$ will reach some point $\pprime$ before $\Dc(\pb,t)$ does, i.e. $\dist(\xan,\pprime)<\dist(\Dc(\xbn),\pprime)=\dist(\Dc(\ppath),\pprime)$. WLOG, assume $\pprime\in\spath(\ppath,\apb)$, and note that $\dist(\Dc(\ppath),\apb)<\dist(\xan,\apb)$ since the attacker is not in $\rpb$. Starting with the definition of the shortest path, we have
 \bq
 \begin{aligned}
 \dist(\xan,\apb) &\le \dist(\xan,\pprime) + \dist(\pprime,\apb) \\
@@ -124,7 +124,7 @@ This is a contradiction. Therefore, the attacker cannot cross any point $\pprime
 
 \begin{figure}
 \centering
-\includegraphics[width=0.45\textwidth]{"fig/Ra Rb"}
+\includegraphics[width=0.45\textwidth]{fig/Ra_Rb}
 \caption{Left: If the attacker is in $\rpa\cup\rpb$ and moves towards $e_a$, he  will be able to reach $\apa$ without being captured. Right: If the attacker is not in $\rpa\cup\rpb$, there is no point on the path $\pprime\in\pathd$ that the he can reach without being captured.}
 \label{fig:lemma1}
 \end{figure}
@@ -205,7 +205,7 @@ The computations in this algorithm can be efficiently done by solving a series o
 
 \begin{figure}
 \centering
-\includegraphics[width=0.45\textwidth]{"fig/winning regions"}
+\includegraphics[width=0.45\textwidth]{"fig/winning_regions"}
 \caption{Left: If the defender cannot defend $\pathd$ by first going to $\pstar$, then he cannot defend $\pathd$ by going to any other point $\ppath$. Right: Defender winning region $\dr$.}
 \label{fig:lemma2}
 \end{figure}
